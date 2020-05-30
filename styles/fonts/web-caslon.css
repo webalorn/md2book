@@ -1,0 +1,21 @@
+@font-face {
+  font-family: "caslon";
+  font-style: normal;
+  font-weight: normal;
+  font-display: swap;
+  src: url("[SCRIPT_PATH]/fonts/caslon/librecaslontext-regular.otf");
+}
+@font-face {
+  font-family: "caslon";
+  font-style: normal;
+  font-weight: bold;
+  font-display: swap;
+  src: url("[SCRIPT_PATH]/fonts/caslon/librecaslontext-bold.otf");
+}
+@font-face {
+  font-family: "caslon";
+  font-style: italic;
+  font-weight: normal;
+  font-display: swap;
+  src: url("[SCRIPT_PATH]/fonts/caslon/librecaslontext-italic.otf");
+}

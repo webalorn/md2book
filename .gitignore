@@ -1,0 +1,9 @@
+*.DS_Store
+*.pdf
+__pycache__/*
+*.pyc
+tmp_compile/*
+*.docx
+*.html
+generated/*
+*default_settings.yml
