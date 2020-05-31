@@ -67,12 +67,37 @@ def template_filler(code, values):
 
 	return TemplateEngine(values).format(code)
 
-def main():
-	values = {
-		't' : 42,
-	}
-	engine = TemplateEngine(values)
-	print(engine.format("test {{t}} {t} {{chapter:counter:1}} {{chapter:counter}}"))
+# -------------------- GENERATED TEMPLATES --------------------
 
-if __name__ == '__main__':
-	main()
+def get_titlepage_template(target):
+	if not target['titlepage']:
+		return ''
+	meta = target['metadata']
+
+	titlepage = [
+		'<span style="font-family: ' + target['default-font'] + '"></span>', # Workaround for issue in wkhtmltopdf
+		'<div id="titlePage">'
+		'<div id="bookTitle">' + str(target['title']) + '</div>'
+	]
+	if target['subtitle']:
+		titlepage.append('<div id="bookSubtitle">' + str(target['subtitle']) + '</div>')
+
+	if meta['author']:
+		author = meta['author']
+		if isinstance(author, list):
+			author = ", ".join(author)
+		titlepage.append('<div id="bookAuthor">' + str(author) + '</div>')
+
+	if target['title-image']:
+		path = target['base_path'].parent / target["title-image"]
+		titlepage.append('<img id="bookTitleImage" src="' + str(path.resolve()) + '" alt="Title image" />')
+
+	if meta['thanks']:
+		titlepage.append('<div id="bookThanks">' + str(meta['thanks']) + '</div>')
+
+	if meta['abstract']:
+		titlepage.append('<div id="bookAbstract">' + str(meta['abstract']) + '</div>')
+
+	titlepage.append("</div>")
+
+	return "\n".join(titlepage)

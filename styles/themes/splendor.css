@@ -1,0 +1,180 @@
+/* Adapted from https://github.com/markdowncss  */
+
+@media print {
+  *,
+  *:before,
+  *:after {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
+
+  abbr[title]:after {
+    content: " (" attr(title) ")";
+  }
+
+  a[href^="#"]:after,
+  a[href^="javascript:"]:after {
+    content: "";
+  }
+
+  pre,
+  blockquote {
+    border: 1px solid #999;
+    page-break-inside: avoid;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+
+  img {
+    max-width: 100%;
+  }
+
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+}
+
+body {
+  line-height: 1.85;
+}
+
+h1, h2, h3, h4 {
+  margin: 1.414rem 0 .5rem;
+  font-weight: inherit;
+  line-height: 1.42;
+}
+
+h1 {
+  margin-top: 0;
+  font-size: 2.5em;
+}
+
+h2 {
+  font-size: 2em;
+}
+
+h3 {
+  font-size: 1.5em;
+}
+
+h4 {
+  font-size: 1.3em;
+}
+
+h5 {
+  font-size: 1.12em;
+}
+
+h6 {
+  font-size: .88em;
+}
+
+small {
+  font-size: .707em;
+}
+
+/* https://github.com/mrmrs/fluidity */
+
+img,
+canvas,
+iframe,
+video,
+svg,
+select,
+textarea {
+  max-width: 100%;
+}
+
+@import url(http://fonts.googleapis.com/css?family=Merriweather:300italic,300);
+
+html {
+  font-size: 18px;
+  max-width: 100%;
+}
+
+blockquote p {
+  font-size: 1.5em;
+  font-style: italic;
+  margin: 1em auto 1em;
+}
+
+li {
+  margin-left: 2rem;
+}
+
+p {
+  color: #555;
+  height: auto;
+  line-height: 1.45;
+}
+
+pre,
+code {
+  font-family: Menlo, Monaco, "Courier New", monospace;
+}
+
+pre {
+  background-color: #fafafa;
+  font-size: .8rem;
+  overflow-x: scroll;
+  padding: 1.125em;
+}
+
+a,
+a:visited {
+  color: #3498db;
+}
+
+a:hover,
+a:focus,
+a:active {
+  color: #2980b9;
+}
+
+body {
+  color: #444;
+  /*color: rgb(42, 42, 42);*/
+  font-family: 'Merriweather', Georgia, serif;
+}
+
+
+blockquote {
+  padding: 0 2em;
+  color: #6a737d;
+  border-left: .25em solid #dfe2e5;
+  margin-left: 0px;
+}
+
+table {
+  min-width: 80%;
+  text-align: center;
+}
+td, th {
+  text-align: center;
+}

@@ -2,8 +2,10 @@ import yaml, fnmatch, argparse, tempfile
 import subprocess, os, platform, re
 from pathlib import Path
 from copy import deepcopy as copy
-from convert import *
-from config import *
+from .convert import *
+from .config import *
+from .mdhtml import pre_parse_md
+from .templates import get_titlepage_template
 from datetime import datetime
 
 # -------------------- UTILITY --------------------
@@ -38,6 +40,12 @@ def create_css_file(content):
 
 def create_default_font_file(default_font):
 	return create_css_file(FONT_CSS.replace('FONT-HERE', default_font))
+
+def ensure_with_unit(val, default_unit='px'):
+	try:
+		return str(int(val)) + default_unit
+	except:
+		return val
 
 # -------------------- FIND AND LOAD FILES --------------------
 
@@ -82,20 +90,41 @@ def complete_target(conf, book_path): # Generate metadata and complete informati
 	# Main datas
 	if conf.get('title', None) is None:
 		conf['title'] = conf['name']
+
+	# Styles applied
+	custom_css = ""
 	conf['css'] = [str((book_path.parent / p).resolve()) for p in conf['css']]
 	if conf['theme']:
-		conf['theme'] = SCRIPT_PATH / 'styles' / 'theme-{}.css'.format(conf['theme'])
+		conf['theme'] = SCRIPT_PATH / 'styles' / 'themes' / '{}.css'.format(conf['theme'])
+	if conf['center-blocks']:
+		conf['css'].append(str(SCRIPT_PATH / 'styles' / 'centerblocks.css'))
+	if conf['chapter-level']:
+		custom_css += "h" + str(conf['chapter-level']).strip() + " { page-break-before: always;}"
 
 	# Fonts
-	default_font_path = Path(SCRIPT_PATH / 'styles' / 'fonts' / ('web-' + conf['default-font'] + '.css'))
-	if conf['default-font'] not in conf['fonts'] and default_font_path.exists():
-		conf['fonts'].append(conf['default-font'])
+	if conf['default-font']:
+		default_font_path = Path(SCRIPT_PATH / 'styles' / 'fonts' / ('web-' + conf['default-font'] + '.css'))
+		if conf['default-font'] not in conf['fonts'] and default_font_path.exists():
+			conf['fonts'].append(conf['default-font'])
 
 	fonts = [str((SCRIPT_PATH / 'styles' / 'fonts' / ('web-' + f + '.css'))) for f in conf['fonts']]
-	fonts.append(create_default_font_file(conf['default-font']))
+	if conf['default-font']:
+		custom_css += FONT_CSS.replace('FONT-HERE', conf['default-font'])
+		# fonts.append(create_default_font_file(conf['default-font']))
 
 	if conf['font-size']:
-		fonts.append(create_css_file('body { font-size: ' + conf['font-size'] + ';}'))
+		custom_css += 'body { font-size: ' + ensure_with_unit(conf['font-size'], 'px') + ';}'
+		# fonts.append(create_css_file('body { font-size: ' + conf['font-size'] + ';}'))
+	if conf['indent']:
+		custom_css += 'body > p, section > p {text-indent : ' + ensure_with_unit(conf['indent'], 'em') + ';}'
+	if conf['paragraph-spacing'] is not True:
+		spacing = conf['paragraph-spacing']
+		if not spacing:
+			spacing = "0px"
+		custom_css += 'body > p, section > p {margin : ' + ensure_with_unit(spacing, 'px') + ' 0px;}'
+
+	if custom_css:
+		fonts.append(create_css_file(custom_css))
 	conf['css'] = fonts + conf['css']
 
 	# Metadatas
@@ -109,9 +138,11 @@ def complete_target(conf, book_path): # Generate metadata and complete informati
 	if meta.get('author', None) is None and conf['by']:
 		meta['author'] = conf['by']
 	if meta.get('date', None) == 'current':
-		meta['date'] = datetime.now().strftime("%Y/%m/%d")
+		# meta['date'] = datetime.now().strftime("%Y/%m/%d")
+		meta['date'] = datetime.now().strftime("%d/%m/%Y")
 
-	conf['metadata'] = {key : val for key, val in meta.items() if val is not None}
+	# conf['metadata'] = {key : val for key, val in meta.items() if val is not None}
+	conf['metadata'] = meta
 	return conf
 
 def get_target(targets_list, target, root=False):
@@ -131,38 +162,19 @@ def get_target(targets_list, target, root=False):
 	del targets_list[target]['current']
 	return conf
 
-REGEX_IMG_MD = r'!\[(.*?)\]\((.*?)\)'
-REGEX_IMG_HTML1 = r'<img(.*?)src="(.*?)"'
-REGEX_IMG_HTML2 = r"<img(.*?)src='(.*?)'"
-
-def pre_parse_md(content, dir_path):
-	# Change relative paths to absolute
-	def replace_md_images(match):
-		return "![{}]({})".format(match.group(1), str(dir_path / match.group(2)))
-	def replace_html_images1(match):
-		return '<img{}src="{}"'.format(match.group(1), str(dir_path / match.group(2)))
-	def replace_html_images2(match):
-		return '<img{}src="{}"'.format(match.group(1), str(dir_path / match.group(2)))
-
-	# <img src="cat.jpg"
-	content = re.sub(REGEX_IMG_MD, replace_md_images, content)
-	content = re.sub(REGEX_IMG_HTML1, replace_html_images1, content)
-	content = re.sub(REGEX_IMG_HTML2, replace_html_images2, content)
-	return content
-
 def get_target_md_code(book_path, target):
 	path = book_path.resolve().parent
 	chapters = []
 	for chap_name in target['chapters']:
 		try:
 			with open(str(path / chap_name), "r", encoding="utf-8") as f:
-				content = f.read()
+				content = f.read().strip()
 		except FileNotFoundError as e:
 			raise ConfigError(book_path, "Chapter {} not found".format(chap_name))
 
 		content = pre_parse_md(content, (path / chap_name).parent.resolve())
 		chapters.append(content)
-	md_code = target['between_chapters'].join(chapters)
+	md_code = target['between-chapters'].join(chapters)
 	return md_code
 
 def compile_book(book_path, target_name='main', output_dir=None):
@@ -234,6 +246,3 @@ def main():
 			print(str(e))
 		except ParsingError as e:
 			print(str(e))
-
-if __name__ == '__main__':
-	main()

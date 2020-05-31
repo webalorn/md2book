@@ -4,3 +4,32 @@ body {
   padding: 0px;
   margin: 0px;
 }
+h1, h2, h3 {
+	page-break-before: auto!important;
+}
+
+#toc ol {
+  list-style-type: decimal;
+}
+#toc > ol {
+  list-style-type: upper-roman;
+}
+
+#toc-title {
+	display: none;
+}
+.titlepage h1.main { /* Title */
+	
+}
+.titlepage h1.subtitle { /* Subtitle */
+	font-weight: normal!important;
+	border: 0px;
+	font-size: 1.1em;
+}
+.titlepage p.author { /* Author */
+	color : #565656;
+	font-style: italic;
+}
+.titlepage p.date { /* Date */
+	display: none;
+}

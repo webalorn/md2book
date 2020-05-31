@@ -1,8 +1,9 @@
 from pathlib import Path
+from .mdhtml import MarkdownExtended, TasklistExtension
 # -------------------- PATHS --------------------
 
 TMP_DIRS = []
-SCRIPT_PATH = Path(__file__).parent.resolve()
+SCRIPT_PATH = Path(__file__).parent.parent.resolve()
 DEFAULT_SETTINGS = SCRIPT_PATH / "default_settings.yml"
 EMBED_FONTS_REL = {
 	'opensans' : 'opensans/OpenSans-*.ttf',
@@ -35,16 +36,21 @@ DEFAULT_TARGET = {
 	'by' : "Unknown",
 
 	'format' : 'pdf',
+	'titlepage' : True,
+	'title-image' : None,
 	'fonts' : [], # Additional fonts
 	'default-font' : 'opensans', # Font used as default font
 	'font-size' : None, # or ??px, ??em, ??pt, ...
-	'between_chapters' : "\n\n",
+	'between-chapters' : "\n\n",
 	'css' : [],
 	'theme' : 'github', # Set 'no' for no theme. Available : github
 	'enable-toc' : None, # If not set, enabled if [TOC] is found in the document
 	'toc-level' : 6,
 	'cover' : None,
 	'chapter-level' : 1, # or 2, 3 : level where to split into chapters
+	'center-blocks' : True,
+	'indent' : False,
+	'paragraph-spacing' : True,
 
 	'metadata' : {
 		'title' : [], # Title and subtitle from the config. You can add short, collection, edition, extended
@@ -56,12 +62,16 @@ DEFAULT_TARGET = {
 		'subject' : None, # [...]
 		'description' : None, # Or text
 		'rights' : None,
+		'thanks' : None,
 	}
 }
 
 # -------------------- CONVERTING --------------------
 
-MD_EXTENSIONS = ['extra', 'nl2br', 'sane_lists', 'smarty', 'toc']
+MD_EXTENSIONS = [
+	'extra', 'nl2br', 'sane_lists', 'smarty', 'toc',
+	MarkdownExtended(), TasklistExtension()
+]
 MD_CONFIG = {
 	'toc' : {
 		'toc_depth' : 6,

@@ -2,9 +2,10 @@ from pathlib import Path
 from urllib.request import urlopen
 from copy import deepcopy as copy
 import markdown, random, string, shutil, pdfkit, yaml
-import os, subprocess
-from config import *
-from templates import *
+import os, subprocess, re
+from .config import *
+from .templates import *
+from .mdhtml import *
 
 # -------------------- UTILITY --------------------
 
@@ -140,11 +141,13 @@ class PureCodeData(CodeData):
 
 class MarkdownCode(PureCodeData):
 	EXT = ".md"
+	REGEX_IMG_HTML = r"<img(.*?)src=['\"](.*?)['\"](.*?)>"
 	
 	def __init__(self, code="", metadata={}):
 		self.code = code
 		self.meta_code = ""
 		if metadata:
+			metadata = {key : val for key, val in metadata.items() if val is not None}
 			self.meta_code = "---\n" + yaml.dump(metadata) + "\n---\n"
 
 	def extract_config(self, target_config):
@@ -154,14 +157,26 @@ class MarkdownCode(PureCodeData):
 
 	def clear_for(self, target_format):
 		""" Remove parts that are not needed in some documents """
-		if target_format in ['odt', 'epub', 'docx']:
+		if target_format in ['odt', 'epub', 'docx', 'html_light']:
 			self.code = self.code.replace("[TOC]", "")
+		if target_format in ['docx']:
+			self.purify_code()
+		if target_format in ['epub']:
+			self.code = post_process_html(self.code)
 
 	def get(self):
 		return self.meta_code + self.code
 
 	def get_base_code_only(self):
 		return self.code
+
+	def purify_code(self):
+		""" Change some HTML element into markdown """
+		def replace_image(match):
+			attributes = match.group(1) + " " + match.group(3)
+			return '![]({})'.format(match.group(2))
+
+		self.code = re.sub(self.REGEX_IMG_HTML, replace_image, self.code)
 
 class HtmlCode(PureCodeData):
 	EXT = ".html"
@@ -203,10 +218,11 @@ class HtmlCode(PureCodeData):
 		for p in paths:
 			self.addStyle(p, base_path)
 
-	def output(self, filepath):
+	def output(self, filepath=None):
 		self.addStyleList(BASE_STYLES['pure_html'])
-		super().output(filepath)
+		filepath = super().output(filepath)
 		self.headers.pop()
+		return filepath
 
 	def get(self):
 		code = HTML_STRUCTURE.format(
@@ -217,6 +233,12 @@ class HtmlCode(PureCodeData):
 		code = code.replace("[SCRIPT_PATH]", str(SCRIPT_PATH.resolve()))
 		return code
 
+class HtmlMdCode(MarkdownCode):
+	""" Represent a markdown document where most of the markdown is represented in html """
+	def __init__(self, html_code, md_code):
+		self.code = html_code.code
+		self.meta_code = md_code.meta_code
+
 # -------------------- CONVERSION FUNCTIONS --------------------
 
 def md2html(code, target_config):
@@ -226,7 +248,13 @@ def md2html(code, target_config):
 	extensions = MD_EXTENSIONS
 	extension_configs['toc']['toc_depth'] = target_config['toc-level']
 
-	html = markdown.markdown(code.get_base_code_only(), extensions=extensions, extension_configs=extension_configs)
+	# First we transform the markdown into html
+	html = markdown.markdown(code.get_base_code_only(),
+		extensions=extensions,
+		extension_configs=extension_configs)
+	# Then we alter the html code
+	html = get_titlepage_template(target_config) + post_process_html(html)
+
 	code = HtmlCode(html, target_config['title'])
 	code.set_conf(target_config)
 
@@ -238,10 +266,18 @@ def html2pdf(code, target_config):
 	pdf_code = PdfFileCode()
 
 	options = copy(PDF_OPTIONS)
+	options['title'] = target_config['title']
 	dest = pdf_code.getStrPath()
 	pdfkit.from_string(code.get(), dest, options=options)
 
 	return pdf_code
+
+def md2htmlmd(md_code, target_config):
+	md_code.assertLang(MarkdownCode)
+	md_code.clear_for('html_light')
+	html = md2html(md_code, target_config)
+
+	return HtmlMdCode(html, md_code)
 
 # ---------- Using pandoc
 
@@ -281,6 +317,13 @@ def md2epub_pandoc(code, target_config):
 
 	return pandoc(code, epubDoc)
 
+def htmlmd2epub_pandoc(code, target_config):
+	code.assertLang(HtmlMdCode)
+	epubDoc = EpubFileCode()
+	epubDoc.set_conf(target_config)
+
+	return pandoc(code, epubDoc)
+
 # -------------------- EXTERNAL FUNCTIONS --------------------
 
 ALLOWED_FORMATS = {
@@ -290,6 +333,7 @@ ALLOWED_FORMATS = {
 	'docx' : [md2docx_pandoc],
 	'odt' : [md2odt_pandoc],
 	'epub' : [md2epub_pandoc],
+	# 'epub' : [md2htmlmd, htmlmd2epub_pandoc],
 
 	'word' : 'docx',
 	'libreoffice' : 'odt',

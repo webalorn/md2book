@@ -1,0 +1,173 @@
+img {
+	max-width: 100%;
+}
+.pageBreak, div.toc {
+  page-break-before: always;
+}
+body {
+  max-width: 860px;
+  padding: 30px;
+  margin: 10px auto;
+  text-align: justify;
+  word-break: normal;
+  word-wrap: break-word;
+}
+
+div.toc {
+  margin-bottom: 5em;
+  /*border-left: 5px solid #d4d4d4;*/
+  /*padding-left: 20px;*/
+  padding: 20px 30px;
+  border-top : 2px solid #6f6f6f;
+  border-bottom : 2px solid #6f6f6f;
+  overflow:hidden;
+}
+div.toc ul {
+  list-style-type: decimal;
+}
+div.toc > ul {
+  list-style-type: upper-roman;
+}
+div.toc {
+  font-size: 1.2em;
+}
+div.toc ul ul {
+  font-size: 0.92em;
+}
+div.toc a {
+  text-decoration: none;
+  color: #022046;
+}
+div.toc li > a {
+    position:relative;
+    background: white;
+    display: inline-block;
+    padding-right: 10px;
+    /*width:330px;*/
+}
+div.toc li > a:after {
+    /*font-family: Times New Roman;*/
+    /*font-size: 120%;*/
+    /*content:"............................................................";*/
+    content: "┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈";
+    /*content: "╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶";*/
+    /*content: "....................................................................................................................................................................................";*/
+    text-indent: -1px;
+    display:block;
+    /*letter-spacing:34px;*/
+    position:absolute;
+    left:0px;
+    top:0px;
+    z-index:-1;
+    font-weight:bold;
+}
+div.toc li > a:after {
+    /*font-family: Times New Roman;*/
+    font-size: 0.4em;
+    content: "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────";
+    text-indent: -1px;
+    display:block;
+    /*letter-spacing:34px;*/
+    position:absolute;
+    left:0px;
+    top:1.3em;
+    z-index:-1;
+    font-weight:bold;
+}
+
+
+mark {
+  background: #b6e8ff;
+}
+code {
+    padding: .2em .4em;
+    margin: 0;
+    font-size: 85%;
+    background-color: rgba(27,31,35,.05);
+    border-radius: 3px;
+}
+pre > code {
+    padding: 0em;
+    margin: 0;
+    font-size: 1em;
+    background-color: transparent;
+    border-radius: 0px;
+}
+hr {
+  width: 60%;
+  height: 2px;
+  border: 0;
+  border-top: 2px solid #c2c2c2;
+  margin: 24px auto;
+}
+li.task-list-item {
+  list-style-type: none;
+}
+
+/* table */
+table {
+  border-collapse: collapse;
+  margin: 10px 0px;
+  break-inside : avoid;
+}
+
+table, th, td {
+  border: 1px solid black;
+}
+th, td {
+  padding: 4px 10px;
+}
+
+/* Some special classes */
+img.circle {
+  border-radius: 50%;
+  height: 200px;
+  margin: 0 auto;
+  width: 200px;
+}
+
+@media print {
+  #titlePage {
+    margin-bottom: 0em;
+  }
+  div.toc {
+    margin-top: 8em;
+  }
+  div.toc + * {
+    margin-top: 6em;
+  }
+}
+#titlePage {
+  text-align: center;
+  margin-bottom: 8em;
+}
+#bookTitle {
+  margin-top: 4rem;
+  font-weight: bold;
+  font-size: 2.6em;
+}
+#bookSubtitle {
+  margin-top: 0.8rem;
+  color: #676767;
+  font-size: 1.1em;
+}
+#bookAuthor {
+  color: #909090;
+  font-style: italic;
+  margin-top: 2rem;
+}
+#bookTitleImage {
+  display: block;
+  max-height: 400px;
+  margin: auto;
+  margin-top: 2rem;
+}
+#bookThanks {
+  text-align: left;
+  margin-top: 4rem;
+  font-style: italic;
+  font-size: small;
+}
+#bookAbstract {
+  margin-top: 4rem;
+}
