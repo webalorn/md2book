@@ -43,8 +43,14 @@ class CodeData:
 		filepath.parent.mkdir(parents=True, exist_ok=True)
 		return filepath
 
+	def getStrPath(self):
+		return str(self.getStorageFile())
+
 	def getPandocOutputOptions(self):
 		return []
+
+	def set_conf(self, target_config):
+		pass
 
 # ----- File-based
 
@@ -69,6 +75,7 @@ class OutFileCode(CodeData):
 
 	def set_conf(self, target_config):
 		self.toc_enabled = bool(target_config['enable-toc'])
+		self.toc_depth = target_config['toc-level']
 
 	def getPandocOutputOptions(self):
 		params = super().getPandocOutputOptions()
@@ -77,6 +84,7 @@ class OutFileCode(CodeData):
 			params.append('--reference-doc=' + str(SCRIPT_PATH / 'templates' / ('ref' + self.EXT)))
 		if self.toc_enabled:
 			params.append("--toc")
+			params.append('--toc-depth=' + str(self.toc_depth))
 		return params
 
 class PdfFileCode(OutFileCode):
@@ -157,7 +165,7 @@ class MarkdownCode(PureCodeData):
 
 	def clear_for(self, target_format):
 		""" Remove parts that are not needed in some documents """
-		if target_format in ['odt', 'epub', 'docx', 'html_light']:
+		if target_format in ['odt', 'epub', 'docx', 'html_light', 'txt']:
 			self.code = self.code.replace("[TOC]", "")
 		if target_format in ['docx']:
 			self.purify_code()
@@ -177,6 +185,9 @@ class MarkdownCode(PureCodeData):
 			return '![]({})'.format(match.group(2))
 
 		self.code = re.sub(self.REGEX_IMG_HTML, replace_image, self.code)
+
+class TxtCode(PureCodeData):
+	EXT = ".txt"
 
 class HtmlCode(PureCodeData):
 	EXT = ".html"
@@ -282,16 +293,25 @@ def md2htmlmd(md_code, target_config):
 # ---------- Using pandoc
 
 def pandoc(origin, dest, *add_params):
+	origin_out = origin.output()
 	dest_out = dest.output()
 	add_params = dest.getPandocOutputOptions() + list(add_params)
 
-	r = subprocess.run(["pandoc", str(origin.output()),
-		"-o", str(dest.filepath)] + add_params)
+	r = subprocess.run(['pandoc', origin_out, '-o', dest_out] + add_params)
 	if r.returncode:
 		raise ParsingError("Error while converting with pandoc : {}".format(r.stderr))
 
 	dest.load_from(dest_out)
 	return dest
+
+def any2txt_pandoc(code, target_config):
+	# code.assertLang(MarkdownCode)
+	if isinstance(code, MarkdownCode):
+		code.clear_for('txt')
+	txtcode = TxtCode()
+	txtcode.set_conf(target_config)
+
+	return pandoc(code, txtcode)
 
 def md2docx_pandoc(code, target_config):
 	code.assertLang(MarkdownCode)
@@ -333,6 +353,8 @@ ALLOWED_FORMATS = {
 	'docx' : [md2docx_pandoc],
 	'odt' : [md2odt_pandoc],
 	'epub' : [md2epub_pandoc],
+	'txt' : [any2txt_pandoc],
+	# 'txt' : [any2txt_pandoc],
 	# 'epub' : [md2htmlmd, htmlmd2epub_pandoc],
 
 	'word' : 'docx',
@@ -340,6 +362,7 @@ ALLOWED_FORMATS = {
 	'ebook' : 'epub',
 	'md' : 'markdown',
 	'web' : 'html',
+	'text' : 'txt',
 }
 
 def convertBook(code, target_config, out_format, out_dir):

@@ -131,10 +131,12 @@ def complete_target(conf, book_path): # Generate metadata and complete informati
 	if conf['cover']:
 		meta['cover-image'] = str((book_path.parent / conf['cover']).resolve())
 		meta['image'] = meta['cover-image']
-	if conf['title']:
-		meta['title'].append({'type' : 'main', 'text' : conf['title']})
+	# if conf['title']:
+		# meta['title'].append({'type' : 'main', 'text' : conf['title']})
+	meta['title'] = conf['title'].strip()
 	if conf['subtitle']:
-		meta['title'].append({'type' : 'subtitle', 'text' : conf['subtitle']})
+		# meta['title'].append({'type' : 'subtitle', 'text' : conf['subtitle']})
+		meta['subtitle'] = conf['subtitle'].strip()
 	if meta.get('author', None) is None and conf['by']:
 		meta['author'] = conf['by']
 	if meta.get('date', None) == 'current':

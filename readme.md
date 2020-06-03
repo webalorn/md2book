@@ -41,6 +41,7 @@ The following formats are supported, and are given with the format name(s) you c
 - Microsoft Office Word documents : `docx`, `word`
 - LibreOffice document : `odt`, `libreoffice`
 - EBook with epub3 : `ebook`, `epub`
+- Text file : `txt`, `text`
 
 ## Command line reference
 
@@ -124,7 +125,7 @@ targets:
       - "custom2.css"
     theme : 'github' # The theme set the majority of the styles. Write 'no' for no theme. See the "themes" section.
     enable-toc : null # See below
-    toc-level : 6
+    toc-level : 2 # Depth of titles included in the table of contents
     cover : relative/path/to/the/image/cover
     chapter-level : 1 # 1, 2, or 3 : level of titles where to split into chapters
     center-blocks : yes # Center the images and tables (yes / no)
@@ -186,7 +187,7 @@ targets:
     css : []
     theme : 'github'
     enable-toc : null
-    toc-level : 6
+    toc-level : 3
     cover : null
     chapter-level : 1
     center-blocks : yes
@@ -197,7 +198,7 @@ targets:
       author : null
       keywords : null
       abstract : null
-      date : current
+      date : null
       lang : null
       subject : null
       description : nul
@@ -255,6 +256,7 @@ If you want to disable the theme, set the theme to `no`. Otherwise, simply set `
 - `github` (default theme)
 - `splendor` (Try with `default-font: no` for better results)
 - `retro` (Try with `default-font: no` for better results)
+  - Has some problems due to the dark background - see "Known issues"
 - `air` (Try with `default-font: opensans` for better results)
 - `modest` (Try with `default-font: no` for better results)
 
@@ -266,4 +268,5 @@ TODO...
 
 - LaTeX is not currently supported
 - Tables width in docx documents is too small (width of 1 character in each column)
-- odt documents have strange grey areas
+- odt documents have strange grey areas and are not well formated
+- Problems with background color if the background is not white in pdf and ebook. It is recomended to use a white / transparent background for better support by ebook readers.

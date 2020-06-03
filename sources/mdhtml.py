@@ -15,6 +15,7 @@ class MarkdownExtended(Extension):
 	REGEX_MARK = r'(==)(.*?)=='
 	REGEX_SUP = r'(\^)(.*?)\^'
 	REGEX_SUB = r'(~)(.*?)~'
+	REGEX_SKIP = r'\[SKIP\]'
 
 	def extendMarkdown(self, md):
 		del_tag = SimpleTagPattern(self.REGEX_DEL, 'del')

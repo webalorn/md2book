@@ -21,15 +21,18 @@ h1, h2, h3 {
 .titlepage h1.main { /* Title */
 	
 }
-.titlepage h1.subtitle { /* Subtitle */
+.titlepage h1.subtitle, .titlepage p.subtitle { /* Subtitle */
 	font-weight: normal!important;
 	border: 0px;
 	font-size: 1.1em;
+	text-indent: 0px;
 }
 .titlepage p.author { /* Author */
 	color : #565656;
 	font-style: italic;
+	text-indent: 0px;
 }
 .titlepage p.date { /* Date */
 	display: none;
+	text-indent: 0px;
 }

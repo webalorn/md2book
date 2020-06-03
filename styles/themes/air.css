@@ -201,3 +201,6 @@ div.toc > ul {
   padding: 0px;
   display: inline-block;
 }
+div.toc li > a:after {
+    content: "";
+}

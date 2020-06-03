@@ -192,3 +192,13 @@ hr {
 mark {
     background: #5cb985;
 }
+div.toc li > a {
+    background: #222223;
+    color: #2da951;
+}
+#bookTitle {
+  color: #38bb5e;
+}
+#bookSubtitle {
+    color: #2f6a3f;
+}

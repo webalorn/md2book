@@ -45,7 +45,7 @@ DEFAULT_TARGET = {
 	'css' : [],
 	'theme' : 'github', # Set 'no' for no theme. Available : github
 	'enable-toc' : None, # If not set, enabled if [TOC] is found in the document
-	'toc-level' : 6,
+	'toc-level' : 3,
 	'cover' : None,
 	'chapter-level' : 1, # or 2, 3 : level where to split into chapters
 	'center-blocks' : True,
@@ -53,11 +53,12 @@ DEFAULT_TARGET = {
 	'paragraph-spacing' : True,
 
 	'metadata' : {
-		'title' : [], # Title and subtitle from the config. You can add short, collection, edition, extended
+		# 'title' : [], # Title and subtitle from the config. You can add short, collection, edition, extended
+		# 'subtitle' : "",
 		'author' : None, # [ author1, author2, ...]
 		'keywords' : None, # [...]
 		'abstract' : None, # Text
-		'date' : 'current', # current will be replaced by the current date. Otherwise, None, or YYYY-MM-DD.
+		'date' : None, # current will be replaced by the current date. Otherwise, None, or YYYY-MM-DD.
 		'lang' : None,
 		'subject' : None, # [...]
 		'description' : None, # Or text
@@ -97,6 +98,15 @@ PDF_OPTIONS = { # https://wkhtmltopdf.org/usage/wkhtmltopdf.txt
 	'margin-right': '0.7in',
 	'margin-bottom': '0.7in',
 	'margin-left': '0.75in',
+	'encoding': "UTF-8",
+	'quiet': '',
+}
+
+PDF_OPTIONS = { # https://wkhtmltopdf.org/usage/wkhtmltopdf.txt
+	'margin-top': '0in',
+	'margin-right': '0in',
+	'margin-bottom': '0in',
+	'margin-left': '0in',
 	'encoding': "UTF-8",
 	'quiet': '',
 }

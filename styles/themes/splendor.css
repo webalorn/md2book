@@ -127,6 +127,9 @@ blockquote p {
 li {
   margin-left: 2rem;
 }
+div.toc li {
+  margin-left: 0px;
+}
 
 p {
   color: #555;
