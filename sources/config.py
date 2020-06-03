@@ -52,6 +52,8 @@ DEFAULT_TARGET = {
 	'indent' : False,
 	'paragraph-spacing' : True,
 
+	'remove-images' : False,
+
 	'metadata' : {
 		# 'title' : [], # Title and subtitle from the config. You can add short, collection, edition, extended
 		# 'subtitle' : "",
@@ -65,6 +67,17 @@ DEFAULT_TARGET = {
 		'rights' : None,
 		'thanks' : None,
 	}
+}
+
+SIMPLE_TARGET = { # Field in a generated configuration file
+	'name' : 'book',
+	'title' : None,
+	'subtitle' : None,
+	'by' : None,
+
+	'default-font' : 'opensans',
+	'font-size' : None,
+	'theme' : 'github',
 }
 
 # -------------------- CONVERTING --------------------
@@ -98,15 +111,6 @@ PDF_OPTIONS = { # https://wkhtmltopdf.org/usage/wkhtmltopdf.txt
 	'margin-right': '0.7in',
 	'margin-bottom': '0.7in',
 	'margin-left': '0.75in',
-	'encoding': "UTF-8",
-	'quiet': '',
-}
-
-PDF_OPTIONS = { # https://wkhtmltopdf.org/usage/wkhtmltopdf.txt
-	'margin-top': '0in',
-	'margin-right': '0in',
-	'margin-bottom': '0in',
-	'margin-left': '0in',
 	'encoding': "UTF-8",
 	'quiet': '',
 }

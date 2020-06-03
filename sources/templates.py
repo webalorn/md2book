@@ -64,6 +64,7 @@ def template_filler(code, values):
 	values['datetime'] = now.strftime("%d/%m/%Y %H:%M:%S")
 	values['time'] = now.strftime("%H:%M:%S")
 	values['hour'] = now.strftime("%H:%M")
+	values['SKIP'] = '<div class="pageBreak"></div>'
 
 	return TemplateEngine(values).format(code)
 

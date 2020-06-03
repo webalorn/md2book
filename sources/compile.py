@@ -55,6 +55,8 @@ def get_cmd_args():
 	parser.add_argument('-t', '--target', type=str, help='Target to be compiled [main, user defined, or {}]'.format(targets), default='main')
 	parser.add_argument('-o', '--output', type=str, help='Output directory', default=None)
 	parser.add_argument('--open', help='Open newly created files', action='store_true', default=False)
+	parser.add_argument('--remove-images', help='Remove all images in the document', action='store_true', default=False)
+
 	parser.add_argument('path', nargs='?', type=str, help='Path from where to search for the books (optional, the default path is the current directory)', default='.')
 
 	return parser.parse_args()
@@ -71,20 +73,9 @@ def find_all_books(path):
 	path = Path(path)
 	return list(find_files_matching(path, BOOK_FILE_NAMES))
 
-# -------------------- COMPILE --------------------
+# -------------------- GENERATE METADATA - COMPLETE INFORMATIONS --------------------
 
-def merge_targets(t1, t2):
-	new_target = copy(t1)
-	for key in t2:
-		if key not in ['metadata']:
-			new_target[key] = copy(t2[key])
-		else:
-			for sub_key in t2[key]:
-				new_target[key][sub_key] = copy(t2[key][sub_key])
-
-	return new_target
-
-def complete_target(conf, book_path): # Generate metadata and complete informations
+def create_final_target(conf, book_path):
 	meta = conf['metadata']
 
 	# Main datas
@@ -147,6 +138,44 @@ def complete_target(conf, book_path): # Generate metadata and complete informati
 	conf['metadata'] = meta
 	return conf
 
+# -------------------- COMPILE --------------------
+
+def get_real_book_path(p):
+	p = Path(p)
+	if p.is_file() and p.name.endswith(".md") and p.exists():
+		conf = p.with_suffix(".book.yml")
+		print("Markdown file detected. The configuration file {} will be used instead".format(str(conf)))
+		if not conf.exists():
+			name = p.with_suffix("").name
+			title = re.findall(r"[a-zA-Z0-9']+", name)
+			title = " ".join(title).capitalize()
+
+			print("{} doesn't exists and will be created".format(str(conf)))
+			print("- title =", title)
+			print("- file name =", name)
+
+			conf_content = {'targets' : {'main' : {
+				**SIMPLE_TARGET, **{
+				'chapters' : [str(p.parts[-1])],
+				'name' : name,
+				'title' : title,
+			}}}}
+			with open(str(conf), 'w') as file:
+				yaml.dump(conf_content, file)
+		return conf
+	return p
+
+def merge_targets(t1, t2):
+	new_target = copy(t1)
+	for key in t2:
+		if key not in ['metadata']:
+			new_target[key] = copy(t2[key])
+		else:
+			for sub_key in t2[key]:
+				new_target[key][sub_key] = copy(t2[key][sub_key])
+
+	return new_target
+
 def get_target(targets_list, target, root=False):
 	conf = DEFAULT_TARGET
 	if targets_list[target].get('current', False):
@@ -162,6 +191,7 @@ def get_target(targets_list, target, root=False):
 
 	conf = merge_targets(conf, targets_list[target])
 	del targets_list[target]['current']
+
 	return conf
 
 def get_target_md_code(book_path, target):
@@ -179,13 +209,15 @@ def get_target_md_code(book_path, target):
 	md_code = target['between-chapters'].join(chapters)
 	return md_code
 
-def compile_book(book_path, target_name='main', output_dir=None):
+def compile_book(book_path, target_name='main', output_dir=None, alt_target={}):
 	with open(str(book_path), "r", encoding="utf-8") as f:
 		try:
 			config = yaml.load(f, Loader=yaml.FullLoader)
 		except:
-			raise ConfigError(book_path, "Invalid yaml format")
+			raise ConfigError(book_path, 'Invalid yaml format')
 	
+	# Extract informations from the config
+
 	compile_dir = book_path.parent / config.get('compile_in', DEFAULT_GEN_DIR)
 	if output_dir:
 		compile_dir = Path(output_dir)
@@ -199,25 +231,34 @@ def compile_book(book_path, target_name='main', output_dir=None):
 
 	compile_dir.mkdir(parents=True, exist_ok=True)
 
+	# Check if the config is valid
+
+	for t in targets_dict:
+		for key in targets_dict[t]: # This can help if a key is mispelled
+			if key not in DEFAULT_TARGET:
+				raise ConfigError(book_path, 'The configuration field "{}" doesn\'t exists (target "{}")'.format(key, t))
 	if 'main' not in targets_dict:
-		raise ConfigError(book_path, "The target 'main' must be defined")
+		raise ConfigError(book_path, 'The target \'main\' must be defined')
 	if target_name not in targets_dict:
-		raise ConfigError(book_path, "The target {} is to be built but is not defined".format(target_name))
+		raise ConfigError(book_path, 'The target {} is to be built but is not defined'.format(target_name))
+
+	# Get the target
 
 	target = get_target(targets_dict, target_name, root=True)
-	target = complete_target(target, book_path)
+	target = merge_targets(target, alt_target)
+	target = create_final_target(target, book_path)
 
 	code = get_target_md_code(book_path, target)
 	out_format = target['format']
 
 	if out_format not in ALLOWED_FORMATS:
-		raise ConfigError(book_path, "The target {} is to be built but is not defined".format(target_name))
+		raise ConfigError(book_path, 'The format {} doesn\' exists'.format(target_name))
 
 	target['base_path'] = book_path
-	print("========== Compile {} to {}".format(str(book_path), out_format))
+	print('========== Compile {} to {}'.format(str(book_path), out_format))
 	try:
 		out_file = convertBook(code, target, out_format, compile_dir)
-		print("Success : ", out_file)
+		print('Success : ', out_file)
 	except ParsingError as e:
 		e.where = book_path
 		raise e
@@ -231,11 +272,15 @@ def main():
 		try:
 			load_settings()
 			args = get_cmd_args()
-			books = find_all_books(args.path)
+			path = get_real_book_path(args.path)
+			books = find_all_books(path)
+
+			alt_target = {}
+			if args.remove_images:
+				alt_target['remove-images'] = True
 
 			for book in books:
-				filepath = compile_book(book, args.target, args.output)
-				print(filepath)
+				filepath = compile_book(book, args.target, args.output, alt_target)
 				if args.open:
 					if platform.system() == 'Darwin':       # macOS
 						subprocess.call(('open', filepath))

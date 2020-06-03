@@ -8,7 +8,7 @@ This project is written in python3, and is a interface to pandoc, wkhtmltopdf an
 
 ## Installation
 
-To get started, download the repository, for example with `git clone [URL]`. Undex linux / MacOS, if you want to use this tool, it is recommended to add an alias in your `.bashrc`, `.zshrc` or any other configuration file. In this readme, I will use `md2book` instead of `python3 /..path../md2book.py`.
+To get started, download the repository, for example with `git clone https://github.com/webalorn/md2book`. Under linux / MacOS, if you want to use this tool, it is recommended to add an alias in your `.bashrc`, `.zshrc` or any other configuration file. In this readme, I will use `md2book` instead of `python3 /..path../md2book.py`.
 
 ```
 alias md2book = "python3 /path/where/you/downloaded/md2book.py"
@@ -25,7 +25,33 @@ brew install Caskroom/cask/wkhtmltopdf
 brew install pandoc
 ```
 
-<!-- ## Quick start -->
+## Quick start
+
+Create an empty directory and create a file name `my_super_book.md`, and put text in the file. Then use:
+```bash
+md2book my_super_book.md -t html --open
+```
+
+(You might have to replace `md2book` by `python3 path/to/md2book/md2book.py`)
+
+A configuration file has been created, named `my_super_book.book.yml`, and the preview of you book is opened in your browser. Your first book has been compiled, congratulations ! The html file is located in a subfolder named `generated`.
+
+You can simply rename `my_super_book.book.yml` into `book.yml`. Now, create another file named 'chapter2.md', and put text in it. Replace the content of `book.yml` by :
+
+```yaml
+targets:
+  main:
+    chapters:
+      - chapters/my_super_book.md
+      - chapters/chapter2.md
+    name : my_super_book
+    title : "My super book"
+    font-size : 14px
+    theme : github
+    default-font: opensans
+```
+
+Then, use ```md2book -t html --open```. You will have a book with both contents.
 
 ## Usage notes
 
@@ -56,7 +82,10 @@ Giving a path to the command (`md2book some/path/`) will compile all the files i
 `-o [OUTPUT]`, `--output [OUTPUT]` : Change the output directory of md2book, and create the files in this directory.
  
 `--open` : Automaticly open the document created by md2book with the default software of your system. Usefull to have a quick preview of the documents or of the changes.
-	
+
+### Compiling directly a markdown file
+
+If the path given to the command is a markdown file, a simple configuration file with the same name, ending in ".book.yml" will be created and used the first time. You can simply change the settings in this file and add new settings.
 
 ## Configuration reference
 
@@ -132,6 +161,8 @@ targets:
     indent : 2em # remove to disable ; You can use ??px, ??em, etc...
     paragraph-spacing : 2px # Control the space between paragraphs. You can set ??px, ??em, or yes to leave it as it's default value, and no to remove any space between paragraphs
 
+    remove-images : no # Remove all images in the content of the document
+
     metadata : # Used in ebooks and to create cover pages
       author : [ "name of author 1", "name of author 2", ...] # if not set, it takes the value of the "by" parameter
       keywords : ["keyword1", "keyword2", ...]
@@ -193,6 +224,8 @@ targets:
     center-blocks : yes
     indent : no
     paragraph-spacing : yes
+
+    remove-images : no
 
     metadata :
       author : null

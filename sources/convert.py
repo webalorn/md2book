@@ -150,18 +150,28 @@ class PureCodeData(CodeData):
 class MarkdownCode(PureCodeData):
 	EXT = ".md"
 	REGEX_IMG_HTML = r"<img(.*?)src=['\"](.*?)['\"](.*?)>"
+	REGEX_RM_IMG= r"<img.*?>|!\[.*?\]\(.*?\)"
 	
-	def __init__(self, code="", metadata={}):
+	def __init__(self, code=""):
 		self.code = code
 		self.meta_code = ""
-		if metadata:
-			metadata = {key : val for key, val in metadata.items() if val is not None}
-			self.meta_code = "---\n" + yaml.dump(metadata) + "\n---\n"
 
 	def extract_config(self, target_config):
 		""" Complete the configuration with the document content """
 		if target_config['enable-toc'] is None:
 			target_config['enable-toc'] = '[TOC]' in self.code
+
+	def set_conf(self, target_config):
+		self.fill_template(target_config)
+		self.extract_config(target_config)
+
+		metadata = target_config['metadata']
+		if metadata:
+			metadata = {key : val for key, val in metadata.items() if val is not None}
+			self.meta_code = "---\n" + yaml.dump(metadata) + "\n---\n"
+
+		self.remove_images = bool(target_config['remove-images'])
+
 
 	def clear_for(self, target_format):
 		""" Remove parts that are not needed in some documents """
@@ -171,6 +181,9 @@ class MarkdownCode(PureCodeData):
 			self.purify_code()
 		if target_format in ['epub']:
 			self.code = post_process_html(self.code)
+
+		if self.remove_images:
+			self.code = re.sub(self.REGEX_RM_IMG, '', self.code)
 
 	def get(self):
 		return self.meta_code + self.code
@@ -222,10 +235,13 @@ class HtmlCode(PureCodeData):
 			try:
 				f = open(str(Path(base_path) / path))
 			except:
-				raise ParsingError("Can't find {}".format(path))
+				if 'styles/themes/' in path:
+					theme = path.split('/')[-1].split('.')[0]
+					raise ParsingError('The theme "{}" doesn\'t exists'.format(theme))
+				raise ParsingError('Can\'t find the stylesheet {}'.format(path))
 		self.addHeader('style', f.read())
 
-	def addStyleList(self, paths, base_path=""):
+	def addStyleList(self, paths, base_path=''):
 		for p in paths:
 			self.addStyle(p, base_path)
 
@@ -254,6 +270,7 @@ class HtmlMdCode(MarkdownCode):
 
 def md2html(code, target_config):
 	code.assertLang(MarkdownCode)
+	code.clear_for('html')
 
 	extension_configs = copy(MD_CONFIG)
 	extensions = MD_EXTENSIONS
@@ -366,13 +383,13 @@ ALLOWED_FORMATS = {
 }
 
 def convertBook(code, target_config, out_format, out_dir):
-	code = MarkdownCode(code, metadata=target_config['metadata'])
+	code = MarkdownCode(code)
 	form = out_format
 	while isinstance(form, str):
 		form = ALLOWED_FORMATS[form]
 
-	code.fill_template(target_config)
-	code.extract_config(target_config)
+	code.set_conf(target_config)
+
 	for fct in form:
 		code = fct(code, target_config)
 
