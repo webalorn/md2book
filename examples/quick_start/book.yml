@@ -1,0 +1,10 @@
+targets:
+  main:
+    chapters:
+      - my_super_book.md
+      - chapter2.md
+    name : my_super_book
+    title : "My super book"
+    font-size : 14px
+    theme : github
+    default-font: opensans

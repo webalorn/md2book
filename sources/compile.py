@@ -5,7 +5,7 @@ from copy import deepcopy as copy
 from .convert import *
 from .config import *
 from .mdhtml import pre_parse_md
-from .templates import get_titlepage_template
+from .templates import get_titlepage_template, TemplateError
 from datetime import datetime
 
 # -------------------- UTILITY --------------------
@@ -19,18 +19,43 @@ class ConfigError(Exception):
 	def __str__(self):
 		return "\u001b[31m[ERROR] \u001b[35m{} \u001b[0m: {}".format(str(self.where), str(self.error))
 
+def merge_settings(settings, overwride):
+	for key, val in overwride.items():
+		if isinstance(val, dict) and isinstance(settings.get(key, None), dict):
+			merge_settings(settings[key], val)
+		else:
+			settings[key] = val
+	return settings
+
 def load_settings():
 	try:
 		f = open(DEFAULT_SETTINGS, "r")
+		try:
+			settings = yaml.load(f, Loader=yaml.FullLoader)
+		except:
+			raise ConfigError(DEFAULT_SETTINGS, "Invalid yaml format in settings")
 	except FileNotFoundError:
-		return
-	try:
-		settings = yaml.load(f, Loader=yaml.FullLoader)
-	except:
-		raise ConfigError(DEFAULT_SETTINGS, "Invalid yaml format in settings")
+		settings = {}
 
-	for key, val in settings.get("default_target", {}).items():
-		DEFAULT_TARGET[key] = val
+	# Check the settings
+	if not isinstance(settings, dict):
+		settings = {}
+
+	settings["default_target"] = settings.get("default_target", {})
+	def_target = settings["default_target"]
+
+	for key, val in DEFAULT_TARGET.items():
+		if isinstance(val, dict) and not isinstance(def_target.get(key, None), dict):
+			def_target[key] = {}
+		elif isinstance(val, list) and not isinstance(def_target.get(key, None), list):
+			def_target[key] = []
+
+	# Merge settings, and save the file
+	DEFAULT_SETTINGS.touch()
+	with open(GENERATED_SETTINGS_FILE, 'w') as f:
+		yaml.dump({'default_target': DEFAULT_TARGET}, f)
+	merge_settings(DEFAULT_TARGET, def_target)
+
 
 def create_css_file(content):
 	filepath = str(TMP_DIRS[0] / ("font-" + rand_str(10) + ".css"))
@@ -168,7 +193,7 @@ def get_real_book_path(p):
 def merge_targets(t1, t2):
 	new_target = copy(t1)
 	for key in t2:
-		if key not in ['metadata']:
+		if key not in ['metadata', 'variables']:
 			new_target[key] = copy(t2[key])
 		else:
 			for sub_key in t2[key]:
@@ -292,4 +317,6 @@ def main():
 		except ConfigError as e:
 			print(str(e))
 		except ParsingError as e:
+			print(str(e))
+		except TemplateError as e:
 			print(str(e))

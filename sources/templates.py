@@ -2,12 +2,17 @@ import string
 from copy import deepcopy as copy
 from datetime import datetime
 
-class TemplateVar():
-	pass
+class TemplateError(Exception):
+	def __init__(self, error):
+		self.error = error
+		super().__init__(self.error)
+
+	def __str__(self):
+		return "\u001b[31m[ERROR IN TEMPLATE] \u001b[0m {}".format(str(self.error))
 
 class TemplateEngine(string.Formatter):
 	"""
-		Template engine : replace things like {...}
+		Template engine : replace things like {{...}}
 			- "?" indicates an optional parameter
 			- <...> indicates an arbitrary value <=int>, <=str>, <=function> if there is a type
 
@@ -26,17 +31,24 @@ class TemplateEngine(string.Formatter):
 	def get_field(self, field_name, args, kwargs):
 		return field_name, field_name
 
+	def get_value_of(self, val):
+		d = self.values
+		val_tab = val.split('.')[::-1]
+		while val_tab:
+			if val_tab[-1] in d:
+				d = d[val_tab.pop()]
+			else:
+				raise TemplateError("Nonexistent variable: " + str(val))
+		return d
+
 	def format_field(self, val, spec):
 		real_val, real_spec = val, spec
 
 		params = [s.strip() for s in spec.split(':')][::-1]
-		if isinstance(val, TemplateVar):
-			val = params.pop()
-			real_val, real_spec = val, ":".join(params[::-1])
 		action = params.pop() if params else ''
 		
 		if action == 'call':
-			return self.values[val](*params)
+			return self.get_value_of(val)(*params)
 		elif action == 'set':
 			self.values[val] = params.pop()
 		elif action == 'counter':
@@ -44,8 +56,13 @@ class TemplateEngine(string.Formatter):
 				self.values[val] = int(params.pop())-1 if params else 0
 			self.values[val] = int(self.values[val]) + 1
 			return str(self.values[val])
+		elif not spec:
+			v = self.get_value_of(val)
+			if isinstance(v, list):
+				v = ", ".join([str(e) for e in v])
+			return str(v)
 		else:
-			return super().format_field(self.values[real_val], real_spec)
+			raise TemplateError("Template invalide")
 		return ''
 
 	def format(self, txt):

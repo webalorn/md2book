@@ -1,3 +1,5 @@
+[TOC]
+
 # Your first book with md2book
 
 ## Markdown

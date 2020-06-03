@@ -5,6 +5,7 @@ from .mdhtml import MarkdownExtended, TasklistExtension
 TMP_DIRS = []
 SCRIPT_PATH = Path(__file__).parent.parent.resolve()
 DEFAULT_SETTINGS = SCRIPT_PATH / "default_settings.yml"
+GENERATED_SETTINGS_FILE = SCRIPT_PATH / "generated_default_settings.yml"
 EMBED_FONTS_REL = {
 	'opensans' : 'opensans/OpenSans-*.ttf',
 }
@@ -29,11 +30,12 @@ FONT_CSS = 'body { font-family: "FONT-HERE","Clear Sans","Helvetica Neue",Helvet
 DEFAULT_TARGET = {
 	'inherit' : [],
 	'chapters' : [],
+	'variables' : {},
 
 	'name' : 'book', # Name of the file created
 	'title' : None, # Displayed name or title. Default is the name
 	'subtitle' : None, # Disaplayed name or title. Default is the name
-	'by' : "Unknown",
+	'by' : None,
 
 	'format' : 'pdf',
 	'titlepage' : True,

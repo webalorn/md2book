@@ -27,7 +27,7 @@ brew install pandoc
 
 ## Quick start
 
-Create an empty directory and create a file name `my_super_book.md`, and put text in the file. Then use:
+Create an empty directory and create a file name `my_super_book.md`, and put [this content](https://raw.githubusercontent.com/webalorn/md2book/master/examples/quick_start/my_super_book.md) in the file. Then use:
 ```bash
 md2book my_super_book.md -t html --open
 ```
@@ -36,14 +36,14 @@ md2book my_super_book.md -t html --open
 
 A configuration file has been created, named `my_super_book.book.yml`, and the preview of you book is opened in your browser. Your first book has been compiled, congratulations ! The html file is located in a subfolder named `generated`.
 
-You can simply rename `my_super_book.book.yml` into `book.yml`. Now, create another file named 'chapter2.md', and put text in it. Replace the content of `book.yml` by :
+You can simply rename `my_super_book.book.yml` into `book.yml`. Now, create another file named 'chapter2.md', and put [this content](https://raw.githubusercontent.com/webalorn/md2book/master/examples/quick_start/chapter2.md) in it. Replace the content of `book.yml` by :
 
 ```yaml
 targets:
   main:
     chapters:
-      - chapters/my_super_book.md
-      - chapters/chapter2.md
+      - my_super_book.md
+      - chapter2.md
     name : my_super_book
     title : "My super book"
     font-size : 14px
@@ -51,11 +51,20 @@ targets:
     default-font: opensans
 ```
 
-Then, use ```md2book -t html --open```. You will have a book with both contents.
+Then, use ```md2book -t html --open```. You will have a book containing both `my_super_book.md` and `chapter2.md`. You can add as many files as you want. You can also compile into another format, by changing the target (`-t`).
+
+```
+md2book -t pdf # To generate in pdf. Add --open to open it automaticly
+md2book -t docx # Microsoft office word document
+md2book -t ebook # epub document
+```
+
+For more informations, read the next sections.
 
 ## Usage notes
 
-- The markdown and html documents are not portable, because they reference the fonts and images.
+- The markdown and html documents generated are not always portable, because they reference the fonts and images that are external files on your system.
+- Generating pdf takes some time, this is the expected behavior, because they are generated using webkit from the html document.
 
 ## Supported formats
 
@@ -191,63 +200,21 @@ targets:
 
 - `enable-toc` : A table of content will be inserted in the documents if `[TOC]` is found in the file. This field overwrite this behavior if set to `yes` or `no`.
 - `toc-level` can be 0 (disable TOC), 1, 2, 3, 4, 5 or 6. If it is lower, more titles are included int the table of cotent.
-- `chapter-level` is used in ebooks to split the book into chapters. The chapters are NOT split 
+- `chapter-level` is used in ebooks to split the book into chapters. The chapters are NOT split
 
-### Default configuration file
+### Default settings
 
-```yaml
-compile_in : generated
+The file `generated_default_settings.yml`, located at the root of the project, contains all default settings, and is generated the first time you use the `md2book` command. Do not change this file, it will be overwride every time you use md2book !
 
-targets:
-  main:
-    inherit : []
-    chapters : []
-
-    name : 'book'
-    title : null
-    subtitle : null
-    by : 'Unknown'
-
-    format : 'pdf'
-    titlepage : yes
-    title-image : null
-    fonts' : []
-    default-font : 'opensans',
-    font-size : null
-    between-chapters : "\n\n"
-    css : []
-    theme : 'github'
-    enable-toc : null
-    toc-level : 3
-    cover : null
-    chapter-level : 1
-    center-blocks : yes
-    indent : no
-    paragraph-spacing : yes
-
-    remove-images : no
-
-    metadata :
-      author : null
-      keywords : null
-      abstract : null
-      date : null
-      lang : null
-      subject : null
-      description : nul
-      rights : null
-      thanks : null
-```
-
-### Change default settings
-
-You can create a file named `default_settings.yml` at the root of the project containing some overwrides for the default target. For example, you can put this in the file:
+Instead, you can overwride these settings by writting your own configuration into `default_settings.yml`. It will replace the default file. For examples, this kind of settings can be usefull :
 
 ```yaml
 default_target:
-  format: docx
+  format: ebook
   by: "Your name"
 ```
+
+You can always remove this file, it will be regenerated.
 
 ## Fonts
 
@@ -293,9 +260,71 @@ If you want to disable the theme, set the theme to `no`. Otherwise, simply set `
 - `air` (Try with `default-font: opensans` for better results)
 - `modest` (Try with `default-font: no` for better results)
 
+## Markdown support
+
+The markdown syntax supported is :
+- The basic markdown syntax
+- The additional simple syntax used by [typora](https://typora.io/) :
+  - `==hihighlighted text==`
+  - `~~striked~~`
+  - `inline code`
+  - sub~script~ and super^script^
+  - (Underlined with HTML : `<u>underlined</u>`)
+- The differents tables
+- HTML elements
+- Simple line break are kept (transformed into the `<br />` HTML element)
+
 ## Templates
 
-TODO...
+You can use templates into your documents. The templates elements are surrounded by `{{` and `}}`, and replaced during the compilation. It includes a system to create and assign variables, create counters, etc...
+
+### Simple usage
+
+#### Predefined variables
+
+Simply write the `code` into your markdown file, and they will be replaced by the specified value.
+
+- `{{SKIP}}` : inserting this code will force a page break in pdf and ebooks
+- Date and time
+  - `{{date}}` : insert current date in the format "DAY/MONTH/YEAR"
+  - `{{datetime}}` : format "DAY/MONTH/YEAR HOUR:MINUTES:SECONDS"
+  - `{{time}}` : format "HOUR:MINUTES:SECONDS"
+  - `{{hour}}` : format "HOUR:MINUTES"
+
+#### Using your configuration file
+
+You can insert any variable defined into your configuration file. For example, `{{title}}` will insert the title of the book, and `{{metadata.abstract}}` will insert the absctract.
+
+You can also add a field `variables` in your `default_settings.yml` or your `book.yml` files :
+
+```yaml
+default_target:
+  ...
+  variables:
+    variable1 : 42
+    another_variable : "The value of the variable"
+```
+
+Here are some usage examples :
+
+  - `{{title}}` (titre), `{{by}}` (name of the author), `{{subtitle}}`
+  - `{{metadata.abstract}}`, `{{metadata.keywords}}`
+  - `{{variables.variable1}}` (with the previous configuration, it should print 42)
+
+#### Simple use cases
+
+- Auto numbering chapter : put `{{chapter:counter}}` and it will increase each time it is used. For example, `c{{chapter:counter}} c{{chapter:counter}} c{{chapter:counter}}` will print `c1 c2 c3`
+
+### Complete reference
+
+emplate engine : replace templates formated as `{{...}}`
+- "?" indicates an optional parameter
+- <...> indicates an arbitrary value <=int>, <=str>, <=function> if there is a type
+
+Syntax :
+- {{<var_name>}} -> Prints the variable
+- {{<var_name>:set:<value>}} -> set the variable "var_name" with "value"
+- {{<var_name>:counter:?start-value}} -> Print the counter value and add 1. If is doesnt exists, create a variable containing 1, or "start-value"
 
 ## Known issues
 
