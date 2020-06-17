@@ -55,6 +55,7 @@ DEFAULT_TARGET = {
 	'paragraph-spacing' : True,
 
 	'remove-images' : False,
+	'sep' : "*   *   *",
 
 	'metadata' : {
 		# 'title' : [], # Title and subtitle from the config. You can add short, collection, edition, extended

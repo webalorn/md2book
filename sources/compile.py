@@ -111,7 +111,7 @@ def create_final_target(conf, book_path):
 	custom_css = ""
 	conf['css'] = [str((book_path.parent / p).resolve()) for p in conf['css']]
 	if conf['theme']:
-		conf['theme'] = SCRIPT_PATH / 'styles' / 'themes' / '{}.css'.format(conf['theme'])
+		conf['theme_path'] = SCRIPT_PATH / 'styles' / 'themes' / '{}.css'.format(conf['theme'])
 	if conf['center-blocks']:
 		conf['css'].append(str(SCRIPT_PATH / 'styles' / 'centerblocks.css'))
 	if conf['chapter-level']:
@@ -300,6 +300,9 @@ def main():
 			path = get_real_book_path(args.path)
 			books = find_all_books(path)
 
+			if not books:
+				print("\u001b[31m[WARNING] No book found under: \u001b[0m{}".format(str(path)))
+
 			alt_target = {}
 			if args.remove_images:
 				alt_target['remove-images'] = True
@@ -314,9 +317,5 @@ def main():
 					else:                                   # linux variants
 						subprocess.call(('xdg-open', filepath))
 
-		except ConfigError as e:
-			print(str(e))
-		except ParsingError as e:
-			print(str(e))
-		except TemplateError as e:
+		except (ConfigError, ParsingError, TemplateError) as e:
 			print(str(e))

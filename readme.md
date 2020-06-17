@@ -1,6 +1,8 @@
 # md2book
 
-The md2book projet aims to convert books written with markdown within multiple files into a single standalone file, and to allow exporting in markdown, pdf, docx, odt or epub (and in the future, maybe some other types). This projects makes it easy by simply using configuration files written in yaml. You can add your own stylesheets, but the most usefull styles can be directly configured with the configuration file (eg the space between paragraphs, the font and the size of the text, etc...)
+The md2book projet aims to convert books written with markdown within multiple files into a single standalone file, and to allow exporting in markdown, pdf, docx, odt or epub... This projects makes it easy by simply using configuration files written in yaml. You can add your own stylesheets, but the most usefull styles can be directly configured with the configuration file (eg the space between paragraphs, the font and the size of the text, etc...)
+
+Md2book is designed to be used by users that are comfortable with the command line interface and want a simple, free and fully customizale tool to manage theirs writings. If you want a more easy-to-use tool, with a GUI, check out [scrivener](https://www.literatureandlatte.com/scrivener/overview) or fr online alternatives. If you want to use md2book, you will only need a markdown editor, like the great [typora](https://typora.io/) editor.
 
 This project is written in python3, and is a interface to pandoc, wkhtmltopdf and some python packages.
 
@@ -59,7 +61,7 @@ md2book -t docx # Microsoft office word document
 md2book -t ebook # epub document
 ```
 
-For more informations, read the next sections.
+This documents contains a reference of most of the styles and templates you can use in a document, and is the rendered version is available here. For more informations, read the next sections.
 
 ## Usage notes
 
@@ -171,6 +173,7 @@ targets:
     paragraph-spacing : 2px # Control the space between paragraphs. You can set ??px, ??em, or yes to leave it as it's default value, and no to remove any space between paragraphs
 
     remove-images : no # Remove all images in the content of the document
+    sep : "* * *" # Text used as separator when using {{sep}}
 
     metadata : # Used in ebooks and to create cover pages
       author : [ "name of author 1", "name of author 2", ...] # if not set, it takes the value of the "by" parameter
@@ -268,9 +271,9 @@ The markdown syntax supported is :
   - `==hihighlighted text==`
   - `~~striked~~`
   - `inline code`
-  - sub~script~ and super^script^
+  - `sub~script~` and `super^script^`
   - (Underlined with HTML : `<u>underlined</u>`)
-- The differents tables
+- Tables
 - HTML elements
 - Simple line break are kept (transformed into the `<br />` HTML element)
 
@@ -284,7 +287,9 @@ You can use templates into your documents. The templates elements are surrounded
 
 Simply write the `code` into your markdown file, and they will be replaced by the specified value.
 
-- `{{SKIP}}` : inserting this code will force a page break in pdf and ebooks
+- `{{skip}}` : inserting this code will force a page break in pdf and ebooks
+- `{{sep}}` : create a simple separation in the text
+  - The default separator is `*   *   *`, but here are other great symbols you can use, by setting `sep` in the configuration file : `✧ ✦ ♢ ♦︎ ☓ ・ ● ■ ✶ ✷ ✸ ✽`
 - Date and time
   - `{{date}}` : insert current date in the format "DAY/MONTH/YEAR"
   - `{{datetime}}` : format "DAY/MONTH/YEAR HOUR:MINUTES:SECONDS"
@@ -322,9 +327,10 @@ emplate engine : replace templates formated as `{{...}}`
 - <...> indicates an arbitrary value <=int>, <=str>, <=function> if there is a type
 
 Syntax :
-- {{<var_name>}} -> Prints the variable
+- {{<var_name>}} -> Print the variable
 - {{<var_name>:set:<value>}} -> set the variable "var_name" with "value"
 - {{<var_name>:counter:?start-value}} -> Print the counter value and add 1. If is doesnt exists, create a variable containing 1, or "start-value"
+- {{<file_path>:include}} -> Include the given file
 
 ## Known issues
 

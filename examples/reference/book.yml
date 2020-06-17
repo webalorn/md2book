@@ -1,0 +1,16 @@
+targets:
+  main:
+    chapters:
+      - book.md
+      - next_chapter.md
+    by : webalorn
+    name : reference
+    title : "Reference document"
+    
+    variables:
+      names:
+        character1 : "This is a custom variable"
+      todo:
+        - item1
+        - item2
+        - item3

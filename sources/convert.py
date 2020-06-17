@@ -110,7 +110,7 @@ class EpubFileCode(OutFileCode):
 		target_css = [path.replace("fonts/web-", "fonts/epub-") for path in target_css]
 
 		self.css_files = (BASE_STYLES['default']
-						+ ([target_config['theme']] if target_config['theme'] else [])
+						+ ([target_config['theme_path']] if target_config['theme'] else [])
 						+ BASE_STYLES['epub']
 						+ target_css)
 		self.chapter_level = target_config['chapter-level']
@@ -212,7 +212,7 @@ class HtmlCode(PureCodeData):
 
 	def set_conf(self, target_config):
 		if target_config['theme']:
-			self.addStyle(target_config['theme'])
+			self.addStyle(target_config['theme_path'])
 		for style in target_config['css']:
 			self.addStyle(style)
 
