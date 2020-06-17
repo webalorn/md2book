@@ -1,8 +1,10 @@
 # md2book
 
-The md2book projet aims to convert books written with markdown within multiple files into a single standalone file, and to allow exporting in markdown, pdf, docx, odt or epub... This projects makes it easy by simply using configuration files written in yaml. You can add your own stylesheets, but the most usefull styles can be directly configured with the configuration file (eg the space between paragraphs, the font and the size of the text, etc...)
+The md2book projet aims to convert books written with markdown within multiple files into a single standalone file, and to allow exporting in markdown, pdf, docx, odt or epub... This projects makes it easy by simply using configuration files written in yaml. You can add your own stylesheets, but the most usefull styles can be directly configured with the configuration file (eg the space between paragraphs, the font and the size of the text, etc...).
 
-Md2book is designed to be used by users that are comfortable with the command line interface and want a simple, free and fully customizale tool to manage theirs writings. If you want a more easy-to-use tool, with a GUI, check out [scrivener](https://www.literatureandlatte.com/scrivener/overview) or fr online alternatives. If you want to use md2book, you will only need a markdown editor, like the great [typora](https://typora.io/) editor.
+Because an example is better than words, [here is a document generated](https://github.com/webalorn/md2book/blob/master/examples/reference/generated/reference.pdf) using md2book. (The links don't work in pdf with github, so you can download the pdf, or use [the markdown file](https://github.com/webalorn/md2book/blob/master/examples/reference/book.md)).
+
+Md2book is designed to be used by users that are comfortable with the command line interface and want a simple, free and fully customizale tool to manage theirs writings. If you want a more easy-to-use tool, with a GUI, check out [scrivener](https://www.literatureandlatte.com/scrivener/overview) or online alternatives. If you want to use md2book, you will only need a markdown editor, like the great [typora](https://typora.io/) editor.
 
 This project is written in python3, and is a interface to pandoc, wkhtmltopdf and some python packages.
 
@@ -61,7 +63,7 @@ md2book -t docx # Microsoft office word document
 md2book -t ebook # epub document
 ```
 
-This documents contains a reference of most of the styles and templates you can use in a document, and is the rendered version is available here. For more informations, read the next sections.
+[This documents contains](https://github.com/webalorn/md2book/blob/master/examples/reference/generated/reference.pdf) a reference of most of the styles and templates you can use in a document, and is the rendered version is available here. For more informations, read the next sections.
 
 ## Usage notes
 

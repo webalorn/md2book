@@ -95,7 +95,7 @@ def template_filler(code, values):
 	values['hour'] = now.strftime("%H:%M")
 
 	values['skip'] = '<div class="pageBreak"></div>'
-	values['sep'] = '<div class="sep">' + values['sep'] + '</div>'
+	values['sep'] = '<div class="sep"><span class="sepcontent"></span></div>'
 
 	return TemplateEngine(values).format(code)
 

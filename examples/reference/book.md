@@ -2,7 +2,7 @@
 
 # Introduction
 
-This document contains various styles and formating options. You can look at the source code [in the repository](https://github.com/webalorn/md2book/blob/master/examples/reference/book.md), and the rendered document [here in pdf](https://github.com/webalorn/md2book/blob/master/examples/reference/generated/reference.pdf). You can also insert any valid html in your markdown code, and it will be rendered. The configuration file used is :
+This document contains various styles and formating options. You can look at the source code [in the repository](https://raw.githubusercontent.com/webalorn/md2book/master/examples/reference/book.md), and the rendered document [here in pdf](https://github.com/webalorn/md2book/blob/master/examples/reference/generated/reference.pdf). You can also insert any valid html in your markdown code, and it will be rendered. The configuration file used is :
 
 ```yaml
 {{book.yml:include}}
@@ -125,7 +125,7 @@ Ut id tempor ut duis qui ut officia cillum deserunt. Duis dolore est sunt repreh
 
 ## Skip
 
-Using skip will force a page break.
+Using skip will force a page break. The default behavior is to also insert a page break between every level 1 title, but it can be overwride with the configuration file.
 
 Laboris irure culpa irure dolore dolor nostrud minim dolor ex nostrud quis mollit non in velit mollit. Reprehenderit reprehenderit nostrud commodo eu sunt aliqua in magna ut consequat voluptate incididunt quis qui velit reprehenderit incididunt laborum nostrud qui ut laboris est labore.
 

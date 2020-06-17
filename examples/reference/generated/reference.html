@@ -1238,7 +1238,9 @@ h1, h2, h3, h4, h5, h6 {
   font-display: swap;
   src: url("/Users/webalorn/Documents/info/projects/md2book/fonts/opensans/OpenSans-ExtraBoldItalic.ttf");
 }</style>
-<style>h1 { page-break-before: always;}body { font-family: "opensans","Clear Sans","Helvetica Neue",Helvetica,Arial,sans-serif;}</style>
+<style>.sepcontent::before{content : "*   *   *"}
+h1 { page-break-before: always;}
+body { font-family: "opensans","Clear Sans","Helvetica Neue",Helvetica,Arial,sans-serif;}</style>
 <style>p img:only-child {
 	display: block;
 	margin: auto;
@@ -1283,7 +1285,7 @@ table {
 </ul>
 </div>
 <h1 id="introduction">Introduction</h1>
-<p>This document contains various styles and formating options. You can look at the source code <a href="https://github.com/webalorn/md2book/blob/master/examples/reference/book.md">in the repository</a>, and the rendered document <a href="https://github.com/webalorn/md2book/blob/master/examples/reference/generated/reference.pdf">here in pdf</a>. You can also insert any valid html in your markdown code, and it will be rendered. The configuration file used is :</p>
+<p>This document contains various styles and formating options. You can look at the source code <a href="https://raw.githubusercontent.com/webalorn/md2book/master/examples/reference/book.md">in the repository</a>, and the rendered document <a href="https://github.com/webalorn/md2book/blob/master/examples/reference/generated/reference.pdf">here in pdf</a>. You can also insert any valid html in your markdown code, and it will be rendered. The configuration file used is :</p>
 <pre><code class="yaml">targets:
   main:
     chapters:
@@ -1412,9 +1414,9 @@ code block
 <p>A template system is used by <code>md2boook</code>, and allow inserting variables, and special html elements. The variables names must be writen like this : <code>{</code> <code>{</code> <code>variable_name</code> <code>}</code> <code>}</code>.</p>
 <ul>
 <li><strong>Date</strong> : 17/06/2020</li>
-<li><strong>Datetime</strong> : 17/06/2020 09:54:43</li>
-<li><strong>Time</strong> : 09:54:43</li>
-<li><strong>Hour</strong> : 09:54</li>
+<li><strong>Datetime</strong> : 17/06/2020 10:30:26</li>
+<li><strong>Time</strong> : 10:30:26</li>
+<li><strong>Hour</strong> : 10:30</li>
 </ul>
 <h2 id="counters">Counters</h2>
 <p>We can use counters to count occurences, for instance to auto-number chapters. You can replace <code>chapter</code> within the template by anything else.</p>
@@ -1432,11 +1434,11 @@ code block
 <h2 id="sep">Sep</h2>
 <p>It create a separation than can be customized with the configuration file.</p>
 <p>Laboris irure culpa irure dolore dolor nostrud minim dolor ex nostrud quis mollit non in velit mollit. Lorem ipsum dolore velit sint esse laboris culpa sit sed et excepteur ullamco sint veniam duis laboris aute in deserunt commodo veniam anim in anim labore nostrud cillum laborum.</p>
-<div class="sep">*   *   *</div>
+<div class="sep"><span class="sepcontent"></span></div>
 
 <p>Ut id tempor ut duis qui ut officia cillum deserunt. Duis dolore est sunt reprehenderit veniam ut sunt tempor deserunt ut sit ut nostrud excepteur veniam eu. Nulla incididunt cupidatat tempor cillum et amet amet enim non excepteur quis officia do ad incididunt dolor enim consectetur culpa et sit.</p>
 <h2 id="skip">Skip</h2>
-<p>Using skip will force a page break.</p>
+<p>Using skip will force a page break. The default behavior is to also insert a page break between every level 1 title, but it can be overwride with the configuration file.</p>
 <p>Laboris irure culpa irure dolore dolor nostrud minim dolor ex nostrud quis mollit non in velit mollit. Reprehenderit reprehenderit nostrud commodo eu sunt aliqua in magna ut consequat voluptate incididunt quis qui velit reprehenderit incididunt laborum nostrud qui ut laboris est labore.</p>
 <div class="pageBreak"></div>
 

@@ -108,14 +108,18 @@ def create_final_target(conf, book_path):
 		conf['title'] = conf['name']
 
 	# Styles applied
-	custom_css = ""
+	custom_css = []
+
+	sep = conf['sep'].replace('"', '\\"')
+	custom_css.append(".sepcontent::before{content : \"" + sep + "\"}")
+
 	conf['css'] = [str((book_path.parent / p).resolve()) for p in conf['css']]
 	if conf['theme']:
 		conf['theme_path'] = SCRIPT_PATH / 'styles' / 'themes' / '{}.css'.format(conf['theme'])
 	if conf['center-blocks']:
 		conf['css'].append(str(SCRIPT_PATH / 'styles' / 'centerblocks.css'))
 	if conf['chapter-level']:
-		custom_css += "h" + str(conf['chapter-level']).strip() + " { page-break-before: always;}"
+		custom_css.append("h" + str(conf['chapter-level']).strip() + " { page-break-before: always;}")
 
 	# Fonts
 	if conf['default-font']:
@@ -125,22 +129,21 @@ def create_final_target(conf, book_path):
 
 	fonts = [str((SCRIPT_PATH / 'styles' / 'fonts' / ('web-' + f + '.css'))) for f in conf['fonts']]
 	if conf['default-font']:
-		custom_css += FONT_CSS.replace('FONT-HERE', conf['default-font'])
+		custom_css.append(FONT_CSS.replace('FONT-HERE', conf['default-font']))
 		# fonts.append(create_default_font_file(conf['default-font']))
 
 	if conf['font-size']:
-		custom_css += 'body { font-size: ' + ensure_with_unit(conf['font-size'], 'px') + ';}'
+		custom_css.append('body { font-size: ' + ensure_with_unit(conf['font-size'], 'px') + ';}')
 		# fonts.append(create_css_file('body { font-size: ' + conf['font-size'] + ';}'))
 	if conf['indent']:
-		custom_css += 'body > p, section > p {text-indent : ' + ensure_with_unit(conf['indent'], 'em') + ';}'
+		custom_css.append('body > p, section > p {text-indent : ' + ensure_with_unit(conf['indent'], 'em') + ';}')
 	if conf['paragraph-spacing'] is not True:
 		spacing = conf['paragraph-spacing']
 		if not spacing:
 			spacing = "0px"
-		custom_css += 'body > p, section > p {margin : ' + ensure_with_unit(spacing, 'px') + ' 0px;}'
+		custom_css.append('body > p, section > p {margin : ' + ensure_with_unit(spacing, 'px') + ' 0px;}')
 
-	if custom_css:
-		fonts.append(create_css_file(custom_css))
+	fonts.append(create_css_file("\n".join(custom_css)))
 	conf['css'] = fonts + conf['css']
 
 	# Metadatas
