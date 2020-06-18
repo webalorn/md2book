@@ -1,14 +1,7 @@
 import string
 from copy import deepcopy as copy
 from datetime import datetime
-
-class TemplateError(Exception):
-	def __init__(self, error):
-		self.error = error
-		super().__init__(self.error)
-
-	def __str__(self):
-		return "\u001b[31m[ERROR IN TEMPLATE] \u001b[0m {}".format(str(self.error))
+from util.exceptions import TemplateError
 
 class TemplateEngine(string.Formatter):
 	"""
@@ -25,9 +18,10 @@ class TemplateEngine(string.Formatter):
 			{{<file_path>:include} -> Include the file located at file_path
 		
 	"""
-	def __init__(self, values):
+	def __init__(self, values, path):
 		super().__init__()
 		self.values = copy(values)
+		self.path = path
 
 	def get_field(self, field_name, args, kwargs):
 		return field_name, field_name
@@ -45,7 +39,7 @@ class TemplateEngine(string.Formatter):
 		return d
 
 	def get_path_file_content(self, path):
-		sys_path = self.values['base_path'].parent / path
+		sys_path = self.path / path
 		try:
 			content = open(str(sys_path), "r").read()
 		except FileNotFoundError:
@@ -59,22 +53,27 @@ class TemplateEngine(string.Formatter):
 		
 		if action == 'call':
 			return self.get_value_of(val)(*params)
+
 		elif action == 'set':
 			self.values[val] = params.pop()
+
 		elif action == 'counter':
 			if val not in self.values:
 				self.values[val] = int(params.pop())-1 if params else 0
 			self.values[val] = int(self.values[val]) + 1
 			return str(self.values[val])
+
 		elif action == 'include':
 			return self.get_path_file_content(val)
-		elif not spec:
+
+		elif not spec: # Simple variable
 			v = self.get_value_of(val)
 			if isinstance(v, list):
 				v = ", ".join([str(e) for e in v])
 			return str(v)
+		
 		else:
-			raise TemplateError("Template invalide")
+			raise TemplateError("Invalid template : {}".format(":".join([val]+spec)))
 		return ''
 
 	def format(self, txt):
@@ -85,21 +84,22 @@ class TemplateEngine(string.Formatter):
 		txt = txt.replace("𓂴", "{").replace("𓂶", "}")
 		return txt
 
-def template_filler(code, values):
-	values = copy(values)
+class TemplateFiller(TemplateEngine):
+	def __init__(self, target):
+		values = copy(target.conf)
 
-	now = datetime.now()
-	values['date'] = now.strftime("%d/%m/%Y")
-	values['datetime'] = now.strftime("%d/%m/%Y %H:%M:%S")
-	values['time'] = now.strftime("%H:%M:%S")
-	values['hour'] = now.strftime("%H:%M")
+		now = datetime.now()
+		values['date'] = now.strftime("%d/%m/%Y")
+		values['datetime'] = now.strftime("%d/%m/%Y %H:%M:%S")
+		values['time'] = now.strftime("%H:%M:%S")
+		values['hour'] = now.strftime("%H:%M")
 
-	values['skip'] = '<div class="pageBreak"></div>'
-	values['sep'] = '<div class="sep"><span class="sepcontent"></span></div>'
+		values['skip'] = '<div class="pageBreak"></div>'
+		values['sep'] = '<div class="sep"><span class="sepcontent"></span></div>'
 
-	return TemplateEngine(values).format(code)
+		super().__init__(values, target.path)
 
-# -------------------- GENERATED TEMPLATES --------------------
+# -------------------- GENERATED TEMPLATES -------------------- #
 
 def get_titlepage_template(target):
 	if not target['titlepage']:
@@ -107,7 +107,7 @@ def get_titlepage_template(target):
 	meta = target['metadata']
 
 	titlepage = [
-		'<span style="font-family: ' + target['default-font'] + '"></span>', # Workaround for issue in wkhtmltopdf
+		'<span style="font-family: ' + target['font']['default'] + '"></span>', # Workaround for issue in wkhtmltopdf
 		'<div id="titlePage">'
 		'<div id="bookTitle">' + str(target['title']) + '</div>'
 	]
@@ -120,8 +120,8 @@ def get_titlepage_template(target):
 			author = ", ".join(author)
 		titlepage.append('<div id="bookAuthor">' + str(author) + '</div>')
 
-	if target['title-image']:
-		path = target['base_path'].parent / target["title-image"]
+	if target['titlepage']['image']:
+		path = target.path.parent / target['titlepage']['image']
 		titlepage.append('<img id="bookTitleImage" src="' + str(path.resolve()) + '" alt="Title image" />')
 
 	if meta['thanks']:

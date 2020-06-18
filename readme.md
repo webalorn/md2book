@@ -12,7 +12,7 @@ This project is written in python3, and is a interface to pandoc, wkhtmltopdf an
 
 ## Installation
 
-To get started, download the repository, for example with `git clone https://github.com/webalorn/md2book`. Under linux / MacOS, if you want to use this tool, it is recommended to add an alias in your `.bashrc`, `.zshrc` or any other configuration file. In this readme, I will use `md2book` instead of `python3 /..path../md2book.py`.
+To get started, download the repository (`git clone https://github.com/webalorn/md2book`). Under linux / MacOS, if you want to use this tool, it is recommended to add an alias in your `.bashrc`, `.zshrc` or any other configuration file. In this readme, I will use `md2book` instead of `python3 /..path../md2book.py`.
 
 ```
 alias md2book = "python3 /path/where/you/downloaded/md2book.py"
@@ -27,6 +27,13 @@ python3 -m pip install --upgrade pyyaml markdown pdfkit
 
 brew install Caskroom/cask/wkhtmltopdf
 brew install pandoc
+```
+
+### Ubuntu (and some other debian-based distributions)
+
+```
+python3 -m pip install --upgrade pyyaml markdown pdfkit
+sudo apt-get install pandoc xvfb libfontconfig wkhtmltopdf
 ```
 
 ## Quick start

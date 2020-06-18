@@ -2,14 +2,13 @@ from markdown.treeprocessors import Treeprocessor
 from markdown.inlinepatterns import SimpleTagPattern
 from markdown.extensions import Extension
 
-from .imports.tasklist import TasklistExtension
+from imports.tasklist import TasklistExtension
 
 from pathlib import Path
 import re
 
-# -------------------- EXTEND MARKDOWN SYNTAX --------------------
+# -------------------- EXTEND MARKDOWN SYNTAX -------------------- #
 
-	
 class MarkdownExtended(Extension):
 	REGEX_DEL = r'(~~)(.*?)~~'
 	REGEX_MARK = r'(==)(.*?)=='
@@ -30,18 +29,18 @@ class MarkdownExtended(Extension):
 		sub_tag = SimpleTagPattern(self.REGEX_SUB, 'sub')
 		md.inlinePatterns.register(sub_tag, 'sub', 10)
 
-# -------------------- PRE-PROCESS MARKDOWN --------------------
+# -------------------- PRE-PROCESS MARKDOWN -------------------- #
 
 REGEX_IMG_MD = r'!\[(.*?)\]\((.*?)\)'
 REGEX_IMG_HTML1 = r'<img(.*?)src="(.*?)"'
 REGEX_IMG_HTML2 = r"<img(.*?)src='(.*?)'"
 
-def pre_parse_md(content, dir_path):
-	# Change relative paths to absolute
+def md_make_paths_absolute(content, dir_path):
 	def complete_path(path):
 		if not Path(path).is_absolute() and (dir_path / path).exists():
 			return str(dir_path / path)
 		return path
+		
 	def replace_md_images(match):
 		return "![{}]({})".format(match.group(1), complete_path(match.group(2)))
 	def replace_html_images1(match):
@@ -54,21 +53,3 @@ def pre_parse_md(content, dir_path):
 	content = re.sub(REGEX_IMG_HTML2, replace_html_images2, content)
 
 	return content
-
-# -------------------- POST PROCESS THE HTML --------------------
-
-POST_RE_IMG_HTML = r'<img(.*?)/?>'
-POST_RE_EMPTY_ALT = r'alt=([\'"])\1'
-POST_RE_BR = r'<br(.*?)>'
-
-def post_process_html(html):
-	def replace_html_images(match):
-		code = match.group(1)
-		if not " alt=" in code:
-			code = code + ' alt="Image" '
-		return '<img{}/>'.format(code)
-
-	html = re.sub(POST_RE_IMG_HTML, replace_html_images, html)
-	html = re.sub(POST_RE_EMPTY_ALT, 'alt="Image"', html)
-	html = re.sub(POST_RE_BR, '<br />', html)
-	return html

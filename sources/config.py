@@ -1,31 +1,26 @@
 from pathlib import Path
-from .mdhtml import MarkdownExtended, TasklistExtension
-# -------------------- PATHS --------------------
+from mdhtml import MarkdownExtended, TasklistExtension
+# -------------------- PATHS -------------------- #
 
 TMP_DIRS = []
 SCRIPT_PATH = Path(__file__).parent.parent.resolve()
+
 DEFAULT_SETTINGS = SCRIPT_PATH / "default_settings.yml"
 GENERATED_SETTINGS_FILE = SCRIPT_PATH / "generated_default_settings.yml"
-EMBED_FONTS_REL = {
-	'opensans' : 'opensans/OpenSans-*.ttf',
-}
 EMBED_FONTS_PATH = SCRIPT_PATH / 'fonts'
-EMBED_FONTS = {name : str(SCRIPT_PATH / 'fonts' / path) for name, path in EMBED_FONTS_REL.items()}
 
-# -------------------- MAIN --------------------
+# -------------------- MAIN -------------------- #
 
 BOOK_FILE_NAMES = "*book.yml"
 DEFAULT_GEN_DIR = "generated"
 
 BASE_STYLES = {
 	"default" : ["default.css"],
-	"pure_html" : ["pure_html.css"],
+	"html" : ["html.css"],
 	"pdf" : ["pdf.css"],
 	"epub" : ["epub.css"],
 }
 BASE_STYLES = {key : [str(SCRIPT_PATH / "styles" / p) for p in val] for key, val in BASE_STYLES.items()}
-
-FONT_CSS = 'body { font-family: "FONT-HERE","Clear Sans","Helvetica Neue",Helvetica,Arial,sans-serif;}'
 
 DEFAULT_TARGET = {
 	'inherit' : [],
@@ -34,29 +29,41 @@ DEFAULT_TARGET = {
 
 	'name' : 'book', # Name of the file created
 	'title' : None, # Displayed name or title. Default is the name
-	'subtitle' : None, # Disaplayed name or title. Default is the name
+	'subtitle' : None, # Displayed name or title. Default is the name
 	'by' : None,
 
 	'format' : 'pdf',
-	'titlepage' : True,
-	'title-image' : None,
-	'fonts' : [], # Additional fonts
-	'default-font' : 'opensans', # Font used as default font
-	'font-size' : None, # or ??px, ??em, ??pt, ...
-	'between-chapters' : "\n\n",
+
+	'theme' : 'github', # Set 'no' for no theme.
 	'css' : [],
-	'theme' : 'github', # Set 'no' for no theme. Available : github
-	'enable-toc' : None, # If not set, enabled if [TOC] is found in the document
-	'toc-level' : 3,
-	'cover' : None,
+	'between-chapters' : "\n\n",
 	'chapter-level' : 1, # or 2, 3 : level where to split into chapters
-	'center-blocks' : True,
-	'indent' : False,
-	'paragraph-spacing' : True,
 
-	'remove-images' : False,
+	# Modules : 
 	'sep' : "*   *   *",
-
+	'titlepage' : {
+		'enable' : True,
+		'image' : None,
+	},
+	'images' : {
+		'remove' : False,
+		'cover' : None,
+	},
+	'font': {
+		'default' : 'opensans',
+		'include' : [], # Additional fonts
+		'size' : None,
+	},
+	'toc' : {
+		'enable' : None, # If not set, enabled if [TOC] is found in the document
+		'level' : 3,
+	},
+	'style' : {
+		'align' : 'justify',
+		'center-blocks' : True,
+		'indent' : False,
+		'paragraph-spacing' : True,
+	},
 	'metadata' : {
 		# 'title' : [], # Title and subtitle from the config. You can add short, collection, edition, extended
 		# 'subtitle' : "",
@@ -83,7 +90,30 @@ SIMPLE_TARGET = { # Field in a generated configuration file
 	'theme' : 'github',
 }
 
-# -------------------- CONVERTING --------------------
+# -------------------- TEMPLATES -------------------- #
+
+HTML_TEMPLATE = SCRIPT_PATH / 'templates' / 'structure.html'
+FONT_FAMILY_CSS = """
+@font-face {{
+  font-family: "{font}";
+  font-style: {style};
+  font-weight: {weight};
+  font-display: swap;
+  src: url("{src}");
+}}"""
+
+# -------------------- CONVERTING -------------------- #
+
+BASE_FORMATS = ['markdown', 'html', 'pdf', 'docx', 'odt', 'epub', 'txt']
+FORMAT_ALIASES = {
+	'word' : 'docx',
+	'libreoffice' : 'odt',
+	'ebook' : 'epub',
+	'md' : 'markdown',
+	'web' : 'html',
+	'text' : 'txt',
+}
+ALLOWED_FORMATS = list(BASE_FORMATS) + list(FORMAT_ALIASES)
 
 MD_EXTENSIONS = [
 	'extra', 'nl2br', 'sane_lists', 'smarty', 'toc',
@@ -94,20 +124,6 @@ MD_CONFIG = {
 		'toc_depth' : 6,
 	}
 }
-
-HTML_STRUCTURE = """<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8" />
-<!-- <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap" rel="stylesheet"> -->
-<title>{title}</title>
-{headers}
-</head>
-<body>
-{body}
-</body>
-</html>
-"""
 
 PDF_OPTIONS = { # https://wkhtmltopdf.org/usage/wkhtmltopdf.txt
 	'margin-top': '0.75in',
