@@ -1,0 +1,46 @@
+default_target:
+  between-chapters: '
+
+
+    '
+  by: null
+  chapter-level: 1
+  chapters: []
+  css: []
+  font:
+    default: opensans
+    include: []
+    size: null
+  format: pdf
+  images:
+    cover: null
+    remove: false
+  inherit: []
+  js: []
+  metadata:
+    abstract: null
+    author: null
+    date: null
+    description: null
+    keywords: null
+    lang: null
+    rights: null
+    subject: null
+    thanks: null
+  name: book
+  sep: "\u2736   \u2736   \u2736"
+  style:
+    align: justify
+    center-blocks: true
+    indent: false
+    paragraph-spacing: true
+  subtitle: null
+  theme: github
+  title: null
+  titlepage:
+    enable: true
+    image: null
+  toc:
+    enable: null
+    level: 3
+  variables: {}

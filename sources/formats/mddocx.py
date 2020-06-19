@@ -6,6 +6,7 @@ from docx.enum.style import WD_STYLE_TYPE
 from docx.shared import Pt, Cm
 
 from util.common import get_document_local_path
+from .mdhtml import purify_remove_html
 
 ALIGMENTS = {
 	'left' : WD_ALIGN_PARAGRAPH.LEFT,
@@ -69,3 +70,17 @@ def post_process_docx(docx_file, target):
 				p.alignment = ALIGMENTS[image_alignment]
 
 	document.save(docx_path)
+
+# -------------------- MAKE MARDOWN-HTML CONVERTABLE -------------------- #
+
+def purify_for_docx(code):
+	REGEX_MD_IMAGE = r"!\[(.*?)\]\((.*?)\)"
+
+	def store_html_image(match):
+		txt, url = match.group(1), match.group(2)
+		template = '[[IMAGE-ITEM]][[{}]][[{}]]'
+		return template.format(txt, url)
+
+	code = purify_remove_html(code)
+	code = re.sub(REGEX_MD_IMAGE, store_html_image, code)
+	return code

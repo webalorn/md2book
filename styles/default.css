@@ -13,10 +13,12 @@ img {
 }
 .sep {
   margin-bottom: 16px;
-  padding: 1.5em 0px;
+  padding: 1em 0px;
   text-align: center;
-  white-space: pre;
   font-size : 1.1em;
+}
+.sep > span {
+  white-space: pre;
 }
 
 

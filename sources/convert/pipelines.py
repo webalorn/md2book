@@ -7,6 +7,7 @@ from .forms_text import *
 from .forms_stored import *
 from formats.mddocx import post_process_docx
 from formats.mdtxt import post_process_txt
+from formats.mdebook import preparse_ebook_markdown
 
 # -------------------- META-PIPELINES -------------------- #
 
@@ -125,6 +126,15 @@ class PipeMd2OdtPandoc(PandocPipeline):
 
 class PipeMd2EpubPandoc(PandocPipeline):
 	DEST_FORMAT = EpubFileCode
+
+	def alter_code(self, target):
+		super().alter_code(target)
+		# For markdown not supported by pandoc
+		self.code.code = preparse_ebook_markdown(self.code.code)
+
+		# The markdown can contains some HTML that needs to be altered
+		for mod in target.modules:
+			mod.alter_html(self.code)
 
 class PipeMd2txtPandoc(PandocPipeline):
 	DEST_FORMAT = TxtCode

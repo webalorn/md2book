@@ -43,7 +43,7 @@ class PureCodeData(CodeData):
 		self.code = code
 
 	def fill_template(self, target):
-		self.code = TemplateFiller(target).format(self.code)
+		self.code = TemplateFiller(target).fill(self.code)
 
 	def get(self):
 		return self.code

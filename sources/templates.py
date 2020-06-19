@@ -3,7 +3,15 @@ from copy import deepcopy as copy
 from datetime import datetime
 
 from util.exceptions import TemplateError
-from util.common import is_int
+from util.common import is_int, rand_str
+
+FONT_TEMPLATE = "\
+<style>\
+#{id} {{ display : none; }}\
+#{id} ~ * {{ font-family : '{font}'; }}\
+</style>\
+<div id="{id}"></div>\
+"
 
 class TemplateEngine(string.Formatter):
 	"""
@@ -23,6 +31,7 @@ class TemplateEngine(string.Formatter):
 			{{?<var_name>:eval:<expr>}} -> eval the expression, store it if <var_name> is non-empty. Otherwise, return the value
 			{{?<var_name>:if:<cond>:<expr>}}, {{<var_name>:if:<cond>:<expr>:else:<expr>}}
 			{{<var_name>:relpath}} -> Path relative to the target directory
+			{{<font-name>:font}} -> Change the font used
 		
 	"""
 	def __init__(self, values, path):
@@ -92,6 +101,19 @@ class TemplateEngine(string.Formatter):
 			pass
 		return '"{}"'.format(val)
 
+	def set_font(self, font):
+		# r = ''
+		# if self.openedFont:
+		# 	r += '</div>'
+		# self.openedFont = font or None
+		# if self.openedFont:
+		# 	r += '<div style="font-family : \'{}\';">'.format(self.openedFont)
+		# return r
+
+		font = font or self.values['font']['default']
+		block_id = rand_str(10)
+		return FONT_TEMPLATE.format(font=font, id=block_id)
+
 	def split_delimiters(self, params, delims=None, ensure_size=None):
 		if not isinstance(delims, list):
 			delims = [delims]
@@ -128,6 +150,9 @@ class TemplateEngine(string.Formatter):
 		elif action == 'include':
 			return self.get_path_file_content(val)
 
+		elif action == 'font':
+			return self.set_font(val)
+
 		elif action == 'relpath':
 			path = self.get_value_of(val)
 			return str(self.path / path)
@@ -163,7 +188,13 @@ class TemplateEngine(string.Formatter):
 		txt = txt.replace("{{", "𓀀").replace("}}", "𓀁")
 		txt = txt.replace("{", "𓂴").replace("}", "𓂶")
 		txt = txt.replace("𓀀", "{").replace("𓀁", "}")
+		self.openedFont = None
+
 		txt = super().format(txt)
+
+		# if self.openedFont:
+		# 	txt += '\n\n</div>'
+
 		txt = txt.replace("𓂴", "{").replace("𓂶", "}")
 		return txt
 
@@ -180,18 +211,17 @@ class TemplateFiller(TemplateEngine):
 		sep_string = values['sep']
 
 		values['skip'] = '<div class="pageBreak"></div>'
-		values['sep'] = '<div class="sep">' + sep_string + '</div>'
+		values['sep'] = '<div class="sep"><span>' + sep_string + '</span></div>'
 
-		if target.format in ['ebook']:
+		if target.format in ['epub']:
 			if '*' in sep_string or '_' in sep_string:
 				values['sep'] = '<div class="sep"><span class="sepcontent"></span></div>'
 
-		if target.format in ['docx']:
+		if target.format in ['docx', 'txt']:
 			values['skip'] = '[[SKIP-ITEM]]'
 			values['sep'] = '[[SEP-ITEM]]'
 
-		if target.format in ['txt']:
-			values['skip'] = '\n'*6
-			values['sep'] = '[[SEP-ITEM]]'
-
 		super().__init__(values, target.path.parent)
+
+	def fill(self, code):
+		return self.format(code)

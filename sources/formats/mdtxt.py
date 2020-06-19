@@ -3,6 +3,7 @@ import re
 from .mdhtml import purify_remove_html
 
 TXT_LARG = 72
+SKIP = '\n' * 25
 
 def center_txt(text):
 	if isinstance(text, list):
@@ -52,5 +53,6 @@ def post_process_txt(code, target):
 	code = re.sub(REGEX_MARKDOWN_EL, convert_md_el, code)
 
 	code = code.replace('[[SEP-ITEM]]', sep)
+	code = code.replace('[[SKIP-ITEM]]', SKIP)
 
 	return code

@@ -5,7 +5,7 @@ from urllib.request import urlopen
 from .forms import PureCodeData
 from util.exceptions import ParsingError
 from config import *
-from formats.mdhtml import purify_for_docx
+from formats.mddocx import purify_for_docx
 from formats.mdtxt import purify_for_txt
 
 class MarkdownCode(PureCodeData):

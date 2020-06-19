@@ -59,10 +59,11 @@ class TitlePageModule(BaseModule):
 	NAME = 'titlepage'
 
 	def alter_html(self, code):
-		with open(TITLE_PAGE_TEMPLATE, 'r') as f:
-			titlepage = f.read()
-		titlepage = TemplateFiller(self.target).format(titlepage)
-		code.code = titlepage + code.code
+		if self.format != 'epub':
+			with open(TITLE_PAGE_TEMPLATE, 'r') as f:
+				titlepage = f.read()
+			titlepage = TemplateFiller(self.target).fill(titlepage)
+			code.code = titlepage + code.code
 
 class TocModule(BaseModule):
 	NAME = 'toc'
@@ -88,7 +89,7 @@ class TocModule(BaseModule):
 
 class HtmlBlocksModule(BaseModule):
 	RE_BR = r'<br(.*?)>'
-	REGEX_COMMENTS = r"<!--.*?-->"
+	REGEX_COMMENTS = r"<!--([\s\S]*?)-->"
 
 	def alter_html(self, code):
 		code.code = re.sub(self.REGEX_COMMENTS, '', code.code)

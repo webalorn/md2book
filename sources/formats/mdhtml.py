@@ -71,15 +71,3 @@ def purify_remove_html(code):
 	code = re.sub(REGEX_U, replace_u, code)
 	code = re.sub(REGEX_COMMENTS, '', code)
 	return code
-
-def purify_for_docx(code):
-	REGEX_MD_IMAGE = r"!\[(.*?)\]\((.*?)\)"
-
-	def store_html_image(match):
-		txt, url = match.group(1), match.group(2)
-		template = '[[IMAGE-ITEM]][[{}]][[{}]]'
-		return template.format(txt, url)
-
-	code = purify_remove_html(code)
-	code = re.sub(REGEX_MD_IMAGE, store_html_image, code)
-	return code

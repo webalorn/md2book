@@ -7,6 +7,10 @@ body {
 h1, h2, h3 {
 	page-break-before: auto!important;
 }
+.sep {
+  padding: 1em 0px;
+  font-size : 0.9em;
+}
 
 #toc ol {
   list-style-type: decimal;
