@@ -182,7 +182,7 @@ class TemplateEngine(string.Formatter):
 			cond = eval(condition, self.values)
 			if isinstance(cond, str):
 				cond = cond.strip()
-			return self.end_expr(val, if_expr if cond else els_expr)
+			return self.end_expr(val, if_expr if cond else else_expr)
 
 		elif not spec: # Simple variable
 			v = self.get_value_of(val)
