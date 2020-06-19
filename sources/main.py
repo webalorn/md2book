@@ -2,7 +2,7 @@ import argparse, tempfile
 from pathlib import Path
 
 from config import *
-from mdhtml import md_make_paths_absolute
+from formats.mdhtml import md_make_paths_absolute
 from util.common import sys_open, load_yaml_file, find_files_matching
 from util.settings import Target, create_default_book_config, load_settings
 from util.exceptions import LocatedError, ConfigError, WarningNoBookFound

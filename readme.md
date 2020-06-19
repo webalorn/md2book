@@ -18,12 +18,12 @@ To get started, download the repository (`git clone https://github.com/webalorn/
 alias md2book = "python3 /path/where/you/downloaded/md2book.py"
 ```
 
-md2book requires the following python packages : `pyyaml`, `markdown`, `pdfkit`. You must also install `wkhtmltopdf` and `pandoc`.
+md2book requires the following python packages : `pyyaml`, `markdown`, `pdfkit`, `docx`. You must also install `wkhtmltopdf` and `pandoc`.
 
 ### Mac OS
 
 ```
-python3 -m pip install --upgrade pyyaml markdown pdfkit
+python3 -m pip install --upgrade pyyaml markdown pdfkit docx
 
 brew install Caskroom/cask/wkhtmltopdf
 brew install pandoc
@@ -32,7 +32,7 @@ brew install pandoc
 ### Ubuntu (and some other debian-based distributions)
 
 ```
-python3 -m pip install --upgrade pyyaml markdown pdfkit
+python3 -m pip install --upgrade pyyaml markdown pdfkit docx
 sudo apt-get install pandoc xvfb libfontconfig wkhtmltopdf
 ```
 
@@ -76,6 +76,7 @@ md2book -t ebook # epub document
 
 - The markdown and html documents generated are not always portable, because they reference the fonts and images that are external files on your system.
 - Generating pdf takes some time, this is the expected behavior, because they are generated using webkit from the html document.
+- The docx and odt files generated do not support all styles and functionalities. Md2book is design to publish using pdf / ebook / html. Docx should be used to share a work-in-progress draft.
 
 ## Supported formats
 
@@ -298,7 +299,7 @@ Simply write the `code` into your markdown file, and they will be replaced by th
 
 - `{{skip}}` : inserting this code will force a page break in pdf and ebooks
 - `{{sep}}` : create a simple separation in the text
-  - The default separator is `*   *   *`, but here are other great symbols you can use, by setting `sep` in the configuration file : `✧ ✦ ♢ ♦︎ ☓ ・ ● ■ ✶ ✷ ✸ ✽`
+  - The default separator is `✶   ✶   ✶`, but here are other great symbols you can use, by setting `sep` in the configuration file : `✧ ✦ ♢ ♦︎ ☓ ・ ● ■ ✶ ✷ ✸ ✽*`
 - Date and time
   - `{{date}}` : insert current date in the format "DAY/MONTH/YEAR"
   - `{{datetime}}` : format "DAY/MONTH/YEAR HOUR:MINUTES:SECONDS"
@@ -343,7 +344,8 @@ Syntax :
 
 ## Known issues
 
-- LaTeX is not currently supported
+- LaTeX formulas are not currently supported
 - Tables width in docx documents is too small (width of 1 character in each column)
+- Custom fonts are not supported in docx and odt.
 - odt documents have strange grey areas and are not well formated
 - Problems with background color if the background is not white in pdf and ebook. It is recomended to use a white / transparent background for better support by ebook readers.

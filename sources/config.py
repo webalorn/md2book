@@ -1,5 +1,5 @@
 from pathlib import Path
-from mdhtml import MarkdownExtended, TasklistExtension
+from formats.mdhtml import MarkdownExtended, TasklistExtension
 # -------------------- PATHS -------------------- #
 
 TMP_DIRS = []
@@ -36,11 +36,12 @@ DEFAULT_TARGET = {
 
 	'theme' : 'github', # Set 'no' for no theme.
 	'css' : [],
+	'js' : [],
 	'between-chapters' : "\n\n",
 	'chapter-level' : 1, # or 2, 3 : level where to split into chapters
 
 	# Modules : 
-	'sep' : "*   *   *",
+	'sep' : "✶   ✶   ✶",
 	'titlepage' : {
 		'enable' : True,
 		'image' : None,
@@ -93,6 +94,7 @@ SIMPLE_TARGET = { # Field in a generated configuration file
 # -------------------- TEMPLATES -------------------- #
 
 HTML_TEMPLATE = SCRIPT_PATH / 'templates' / 'structure.html'
+TITLE_PAGE_TEMPLATE = SCRIPT_PATH / 'templates' / 'titlepage.html'
 FONT_FAMILY_CSS = """
 @font-face {{
   font-family: "{font}";
@@ -101,6 +103,10 @@ FONT_FAMILY_CSS = """
   font-display: swap;
   src: url("{src}");
 }}"""
+
+AVAILABLE_SCRIPTS = {
+	'jquery' : "https://code.jquery.com/jquery-3.5.1.min.js",
+}
 
 # -------------------- CONVERTING -------------------- #
 

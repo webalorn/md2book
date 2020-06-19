@@ -2,7 +2,7 @@ import datetime, yaml, re
 
 from .base import BaseModule
 from config import *
-from templates import get_titlepage_template
+from templates import TemplateFiller
 
 class MetadataModule(BaseModule):
 	NAME = 'metadata'
@@ -59,7 +59,10 @@ class TitlePageModule(BaseModule):
 	NAME = 'titlepage'
 
 	def alter_html(self, code):
-		code.code = get_titlepage_template(self.target) + code.code
+		with open(TITLE_PAGE_TEMPLATE, 'r') as f:
+			titlepage = f.read()
+		titlepage = TemplateFiller(self.target).format(titlepage)
+		code.code = titlepage + code.code
 
 class TocModule(BaseModule):
 	NAME = 'toc'

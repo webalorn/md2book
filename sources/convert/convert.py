@@ -10,7 +10,7 @@ FORMATS_PIPELINE = {
 	'docx' : PipeMd2DocxPandoc,
 	'odt' : PipeMd2OdtPandoc,
 	'epub' : PipeMd2EpubPandoc,
-	'txt' : PipeAny2txtPandoc,
+	'txt' : PipeMd2txtPandoc,
 }
 
 def convertBook(code, target):

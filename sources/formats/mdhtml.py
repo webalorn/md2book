@@ -14,7 +14,7 @@ class MarkdownExtended(Extension):
 	REGEX_MARK = r'(==)(.*?)=='
 	REGEX_SUP = r'(\^)(.*?)\^'
 	REGEX_SUB = r'(~)(.*?)~'
-	REGEX_SKIP = r'\[SKIP\]'
+	# REGEX_SKIP = r'\[SKIP\]'
 
 	def extendMarkdown(self, md):
 		del_tag = SimpleTagPattern(self.REGEX_DEL, 'del')
@@ -51,5 +51,35 @@ def md_make_paths_absolute(content, dir_path):
 	content = re.sub(REGEX_IMG_MD, replace_md_images, content)
 	content = re.sub(REGEX_IMG_HTML1, replace_html_images1, content)
 	content = re.sub(REGEX_IMG_HTML2, replace_html_images2, content)
-
 	return content
+
+# -------------------- MAKE MARDOWN-HTML CONVERTABLE -------------------- #
+
+def purify_remove_html(code):
+	REGEX_IMG_HTML = r"<img(.*?)src=['\"](.*?)['\"](.*?)>"
+	REGEX_U = r"==(.*?)=="
+	REGEX_COMMENTS = r"<!--([\s\S]*?)-->"
+
+	def replace_html_image(match):
+		attributes = match.group(1) + " " + match.group(3)
+		return '![]({})'.format(match.group(2))
+
+	def replace_u(match):
+		return match.group(1)
+
+	code = re.sub(REGEX_IMG_HTML, replace_html_image, code)
+	code = re.sub(REGEX_U, replace_u, code)
+	code = re.sub(REGEX_COMMENTS, '', code)
+	return code
+
+def purify_for_docx(code):
+	REGEX_MD_IMAGE = r"!\[(.*?)\]\((.*?)\)"
+
+	def store_html_image(match):
+		txt, url = match.group(1), match.group(2)
+		template = '[[IMAGE-ITEM]][[{}]][[{}]]'
+		return template.format(txt, url)
+
+	code = purify_remove_html(code)
+	code = re.sub(REGEX_MD_IMAGE, store_html_image, code)
+	return code

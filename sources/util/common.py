@@ -1,8 +1,10 @@
 import subprocess, os, platform, fnmatch, yaml
 import random, string
 from copy import deepcopy
+from urllib.request import urlretrieve
 
 from util.exceptions import ConfigError
+from config import *
 
 # -------------------- UTILITY -------------------- #
 
@@ -64,3 +66,11 @@ def load_yaml_file(filepath, default=None):
 		if default is None:
 			raise ConfigError("This file doesn't exists", filepath)
 	return default
+
+def get_document_local_path(path):
+	try:
+		p = TMP_DIRS[0] / rand_str(20)
+		urlretrieve(path, p)
+	except ValueError:
+		return path
+	return str(p)

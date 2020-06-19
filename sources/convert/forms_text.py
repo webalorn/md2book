@@ -5,6 +5,8 @@ from urllib.request import urlopen
 from .forms import PureCodeData
 from util.exceptions import ParsingError
 from config import *
+from formats.mdhtml import purify_for_docx
+from formats.mdtxt import purify_for_txt
 
 class MarkdownCode(PureCodeData):
 	EXT = "md"
@@ -23,22 +25,15 @@ class MarkdownCode(PureCodeData):
 	def clear_for(self, target_format):
 		""" Remove parts that are not needed in some documents """
 		if target_format in ['docx']:
-			self.purify_code()
+			self.code = purify_for_docx(self.code)
+		elif target_format in ['txt']:
+			self.code = purify_for_txt(self.code)
 
 	def get(self):
 		return self.meta_code + self.code
 
 	def get_base_code_only(self):
 		return self.code
-
-	def purify_code(self):
-		""" Change some HTML element into markdown """
-		REGEX_IMG_HTML = r"<img(.*?)src=['\"](.*?)['\"](.*?)>"
-		def replace_image(match):
-			attributes = match.group(1) + " " + match.group(3)
-			return '![]({})'.format(match.group(2))
-
-		self.code = re.sub(REGEX_IMG_HTML, replace_image, self.code)
 
 class TxtCode(PureCodeData):
 	EXT = "txt"
@@ -54,6 +49,8 @@ class HtmlCode(PureCodeData):
 		super().set_conf(target)
 		for style in target.stylesheets:
 			self.addStyle(style)
+		for script in target.scripts:
+			self.addScript(script)
 
 	def getHtmlTag(self, tag, content, **keys_vals):
 		keys = ''.join([' {}="{}"'.format(key, val) for key, val in keys_vals.items()])
@@ -79,6 +76,19 @@ class HtmlCode(PureCodeData):
 					raise ParsingError('The theme "{}" doesn\'t exists'.format(theme))
 				raise ParsingError('Can\'t find the stylesheet {}'.format(path))
 		self.addHeader('style', f.read())
+
+	def addScript(self, path, base_path=""):
+		base_path = Path(base_path or self.target.path.parent)
+		path = str(path)
+		try:
+			f = urlopen(path)
+			self.addHeader('script', '', src=path)
+		except ValueError:
+			try:
+				f = open(str(base_path / path))
+			except:
+				raise ParsingError('Can\'t find the script {}'.format(path))
+			self.addHeader('script', f.read())
 
 	def get(self):
 		with open(HTML_TEMPLATE) as f:

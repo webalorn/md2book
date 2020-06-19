@@ -5,6 +5,8 @@ from copy import deepcopy
 from config import *
 from .forms_text import *
 from .forms_stored import *
+from formats.mddocx import post_process_docx
+from formats.mdtxt import post_process_txt
 
 # -------------------- META-PIPELINES -------------------- #
 
@@ -114,8 +116,19 @@ class PipeAny2txtPandoc(PandocPipeline):
 class PipeMd2DocxPandoc(PandocPipeline):
 	DEST_FORMAT = DocxFileCode
 
+	def convert_steps(self, target):
+		super().convert_steps(target)
+		post_process_docx(self.code, target)
+
 class PipeMd2OdtPandoc(PandocPipeline):
 	DEST_FORMAT = OdtFileCode
 
 class PipeMd2EpubPandoc(PandocPipeline):
 	DEST_FORMAT = EpubFileCode
+
+class PipeMd2txtPandoc(PandocPipeline):
+	DEST_FORMAT = TxtCode
+
+	def convert_steps(self, target):
+		super().convert_steps(target)
+		self.code.code = post_process_txt(self.code.code, target)

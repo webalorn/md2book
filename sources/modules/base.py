@@ -49,6 +49,7 @@ class MainTargetDatasModule(BaseModule):
 
 		# Stylesheets
 		conf_css = [(self.target.path.parent / p).resolve() for p in conf['css']]
+		# conf_css = conf['css']
 
 		base_styles = BASE_STYLES['default'][:]
 		if conf['theme']:
@@ -57,6 +58,12 @@ class MainTargetDatasModule(BaseModule):
 			base_styles.extend(BASE_STYLES[self.format])
 
 		self.target.stylesheets = base_styles + self.target.stylesheets + conf_css
+
+		# Scripts
+		for script in conf['js']:
+			if script in AVAILABLE_SCRIPTS:
+				script = AVAILABLE_SCRIPTS[script]
+			self.target.scripts.append(script)
 
 	def pandoc_options(self, dest_format):
 		options = super().pandoc_options(dest_format)

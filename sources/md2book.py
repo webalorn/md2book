@@ -7,6 +7,7 @@ python_modules = {
 	'pyyaml' : 'yaml',
 	'markdown' : 'markdown',
 	'pdfkit' : 'pdfkit',
+	'python-docx' : 'docx',
 }
 
 def check_dependency(name):

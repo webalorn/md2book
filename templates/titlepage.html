@@ -1,0 +1,14 @@
+{{ : if : {{titlepage.enable}} :
+
+<span style="font-family: '{{font.default}}';"></span> <!-- Workaround for issue in wkhtmltopdf -->
+<div id="titlePage">
+	
+	<div id="bookTitle">{{title}}</div>
+	{{:if : subtitle : <div id="bookSubtitle">{{subtitle}}</div> }}
+	{{:if : metadata['author'] : <div id="bookAuthor">{{metadata.author}}</div>}}
+	{{:if : titlepage['image'] : <img id="bookTitleImage" src="{{titlepage.image:relpath}}" alt="Title image" />}}
+	{{:if : metadata['thanks'] : <div id="bookThanks">{{metadata.thanks}}</div>}}
+	{{:if : metadata['abstract'] : <div id="bookAbstract">{{metadata.abstract}}</div>}}
+
+</div>
+}}
