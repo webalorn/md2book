@@ -1,5 +1,5 @@
 from .forms import OutFileCode
-from util.common import escapePath
+from md2book.util.common import escapePath
 
 class PdfFileCode(OutFileCode):
 	EXT = "pdf"

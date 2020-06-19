@@ -1,11 +1,11 @@
+from pathlib import Path
+import re
+
 from markdown.treeprocessors import Treeprocessor
 from markdown.inlinepatterns import SimpleTagPattern
 from markdown.extensions import Extension
 
-from imports.tasklist import TasklistExtension
-
-from pathlib import Path
-import re
+from md2book.imports.tasklist import TasklistExtension
 
 # -------------------- EXTEND MARKDOWN SYNTAX -------------------- #
 

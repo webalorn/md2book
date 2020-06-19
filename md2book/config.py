@@ -1,13 +1,16 @@
 from pathlib import Path
-from formats.mdhtml import MarkdownExtended, TasklistExtension
+
+from md2book.formats.mdhtml import MarkdownExtended, TasklistExtension
+
 # -------------------- PATHS -------------------- #
 
 TMP_DIRS = []
-SCRIPT_PATH = Path(__file__).parent.parent.resolve()
+SCRIPT_PATH = Path(__file__).parent.resolve()
+DATA_PATH = (Path(__file__).parent / 'data').resolve()
 
-DEFAULT_SETTINGS = SCRIPT_PATH / "default_settings.yml"
-GENERATED_SETTINGS_FILE = SCRIPT_PATH / "generated_default_settings.yml"
-EMBED_FONTS_PATH = SCRIPT_PATH / 'fonts'
+DEFAULT_SETTINGS = DATA_PATH / "default_settings.yml"
+GENERATED_SETTINGS_FILE = DATA_PATH / "generated_default_settings.yml"
+EMBED_FONTS_PATH = DATA_PATH / 'fonts'
 
 # -------------------- MAIN -------------------- #
 
@@ -20,7 +23,7 @@ BASE_STYLES = {
 	"pdf" : ["pdf.css"],
 	"epub" : ["epub.css"],
 }
-BASE_STYLES = {key : [str(SCRIPT_PATH / "styles" / p) for p in val] for key, val in BASE_STYLES.items()}
+BASE_STYLES = {key : [str(DATA_PATH / "styles" / p) for p in val] for key, val in BASE_STYLES.items()}
 
 DEFAULT_TARGET = {
 	'inherit' : [],
@@ -96,8 +99,8 @@ SIMPLE_TARGET = { # Field in a generated configuration file
 
 # -------------------- TEMPLATES -------------------- #
 
-HTML_TEMPLATE = SCRIPT_PATH / 'templates' / 'structure.html'
-TITLE_PAGE_TEMPLATE = SCRIPT_PATH / 'templates' / 'titlepage.html'
+HTML_TEMPLATE = DATA_PATH / 'templates' / 'structure.html'
+TITLE_PAGE_TEMPLATE = DATA_PATH / 'templates' / 'titlepage.html'
 FONT_FAMILY_CSS = """
 @font-face {{
   font-family: "{font}";

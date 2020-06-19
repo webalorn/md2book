@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from config import *
+from md2book.config import *
 from .common import rand_str, is_int
 from .exceptions import ConfigError
 
@@ -21,7 +21,6 @@ def ensure_with_unit(val, default_unit='px'):
 # -------------------- FONTS -------------------- #
 
 class FontFamily:
-	# HTML_PATH = "{script}/fonts/{font}/{file}"
 	HTML_PATH = "{syspath}"
 	EPUB_PATH = "../fonts/{file}"
 
@@ -35,7 +34,7 @@ class FontFamily:
 		self.name = name
 
 		if not self.font_path.exists() or not self.font_path.is_dir():
-			raise ConfigError("Font {} doesn't exists".format(self.name))
+			raise ConfigError("Font {} ({}) doesn't exists".format(self.name, str(self.font_path)))
 
 		font_files = [p for p in self.font_path.iterdir() if p.stem.startswith(self.name)]
 		self.font_files = []
@@ -61,8 +60,6 @@ class FontFamily:
 		css = []
 		for file, style, weight in self.font_files:
 			src = src_template.format(
-				script=str(SCRIPT_PATH),
-				font=self.name,
 				file=file.name,
 				syspath=str(file),
 			)

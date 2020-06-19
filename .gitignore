@@ -3,3 +3,6 @@
 *.pyc
 default_settings.yml
 *.zip
+dist/*
+build/*
+*.egg*

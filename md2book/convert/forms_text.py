@@ -3,10 +3,10 @@ from pathlib import Path
 from urllib.request import urlopen
 
 from .forms import PureCodeData
-from util.exceptions import ParsingError
-from config import *
-from formats.mddocx import purify_for_docx
-from formats.mdtxt import purify_for_txt
+from md2book.util.exceptions import ParsingError
+from md2book.config import *
+from md2book.formats.mddocx import purify_for_docx
+from md2book.formats.mdtxt import purify_for_txt
 
 class MarkdownCode(PureCodeData):
 	EXT = "md"

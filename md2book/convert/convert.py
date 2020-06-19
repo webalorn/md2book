@@ -1,4 +1,4 @@
-from config import *
+from md2book.config import *
 from .pipelines import *
 
 # -------------------- EXTERNAL FUNCTIONS -------------------- #

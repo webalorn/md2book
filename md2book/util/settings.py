@@ -1,10 +1,10 @@
 import yaml, re
 
-from config import *
+from md2book.config import *
 from .common import merge_dicts_recur, load_yaml_file
 from .style import create_css_file
 from .exceptions import ConfigError
-from modules import ALL_MODULES
+from md2book.modules import ALL_MODULES
 
 # -------------------- MAIN SETTINGS -------------------- #
 

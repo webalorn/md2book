@@ -3,8 +3,8 @@ import random, string
 from copy import deepcopy
 from urllib.request import urlretrieve
 
-from util.exceptions import ConfigError
-from config import *
+from .exceptions import ConfigError
+from md2book.config import *
 
 # -------------------- UTILITY -------------------- #
 

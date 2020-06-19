@@ -1,8 +1,8 @@
 import datetime, yaml, re
 
 from .base import BaseModule
-from config import *
-from templates import TemplateFiller
+from md2book.config import *
+from md2book.templates import TemplateFiller
 
 class MetadataModule(BaseModule):
 	NAME = 'metadata'

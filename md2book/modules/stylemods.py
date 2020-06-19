@@ -1,14 +1,14 @@
 from .base import BaseModule
-from config import *
-from util.style import ensure_with_unit, FontFamily
-from util.common import escapePath
+from md2book.config import *
+from md2book.util.style import ensure_with_unit, FontFamily
+from md2book.util.common import escapePath
 
 class StyleModule(BaseModule):
 	NAME = 'style'
 	def get_stylesheets(self):
 		styles = []
 		if self.conf.get("center-blocks", None):
-			styles.append(SCRIPT_PATH / 'styles' / 'centerblocks.css')
+			styles.append(DATA_PATH / 'styles' / 'centerblocks.css')
 
 		return styles
 
@@ -51,7 +51,7 @@ class FontModule(BaseModule):
 		default = self.conf['default']
 		
 		if default:
-			base_font_dir = SCRIPT_PATH / 'fonts' / str(default)
+			base_font_dir = DATA_PATH / 'fonts' / str(default)
 			if default not in self.conf['include'] and base_font_dir.exists():
 				self.conf['include'].append(default)
 

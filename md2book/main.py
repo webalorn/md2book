@@ -1,12 +1,12 @@
 import argparse, tempfile
 from pathlib import Path
 
-from config import *
-from formats.mdhtml import md_make_paths_absolute
-from util.common import sys_open, load_yaml_file, find_files_matching
-from util.settings import Target, create_default_book_config, load_settings
-from util.exceptions import LocatedError, ConfigError, WarningNoBookFound
-from convert.convert import convertBook
+from md2book.config import *
+from md2book.formats.mdhtml import md_make_paths_absolute
+from md2book.util.common import sys_open, load_yaml_file, find_files_matching
+from md2book.util.settings import Target, create_default_book_config, load_settings
+from md2book.util.exceptions import LocatedError, ConfigError, WarningNoBookFound
+from md2book.convert.convert import convertBook
 
 def get_cmd_args():
 	parser = argparse.ArgumentParser(description='md2book : Compile books from CLI. Full documentation at https://github.com/webalorn/md2book/wiki.')

@@ -5,7 +5,7 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_BREAK
 from docx.enum.style import WD_STYLE_TYPE
 from docx.shared import Pt, Cm
 
-from util.common import get_document_local_path
+from md2book.util.common import get_document_local_path
 from .mdhtml import purify_remove_html
 
 ALIGMENTS = {

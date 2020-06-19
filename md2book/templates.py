@@ -2,8 +2,8 @@ import string
 from copy import deepcopy as copy
 from datetime import datetime
 
-from util.exceptions import TemplateError
-from util.common import is_int, rand_str
+from md2book.util.exceptions import TemplateError
+from md2book.util.common import is_int, rand_str
 
 FONT_CSS_TEMPLATE = "\
 <style>\

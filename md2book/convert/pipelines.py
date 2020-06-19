@@ -1,13 +1,13 @@
 import pdfkit, markdown, subprocess
-from util.exceptions import ParsingError
 from copy import deepcopy
 
-from config import *
+from md2book.config import *
+from md2book.util.exceptions import ParsingError
+from md2book.formats.mddocx import post_process_docx
+from md2book.formats.mdtxt import post_process_txt
+from md2book.formats.mdebook import preparse_ebook_markdown
 from .forms_text import *
 from .forms_stored import *
-from formats.mddocx import post_process_docx
-from formats.mdtxt import post_process_txt
-from formats.mdebook import preparse_ebook_markdown
 
 # -------------------- META-PIPELINES -------------------- #
 

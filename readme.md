@@ -16,12 +16,12 @@ Md2book uses pandoc, wkhtmltopdf and some python packages to generate documents.
 
 ## Start using md2book
 
-All the instructions are available on the wiki.
+All the instructions are available on the [wiki](https://github.com/webalorn/md2book/wiki).
 
 - [Wiki Home](https://github.com/webalorn/md2book/wiki)
 - [Installation](https://github.com/webalorn/md2book/wiki/Install)
 - [Quick Start](https://github.com/webalorn/md2book/wiki/Quick-start)
-- And the full documentation
+- [And the full documentation on the wiki](https://github.com/webalorn/md2book/wiki)
 
 ## License
 

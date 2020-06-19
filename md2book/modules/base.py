@@ -1,5 +1,5 @@
-from config import *
-from util.common import escapePath
+from md2book.config import *
+from md2book.util.common import escapePath
 
 class BaseModule:
 	NAME = None # None for a module auto-loaded without configuration
@@ -45,7 +45,7 @@ class MainTargetDatasModule(BaseModule):
 		if conf.get('title', None) is None:
 			conf['title'] = conf['name']
 		if conf['theme']:
-			self.target.theme_path = SCRIPT_PATH / 'styles' / 'themes' / '{}.css'.format(conf['theme'])
+			self.target.theme_path = DATA_PATH / 'styles' / 'themes' / '{}.css'.format(conf['theme'])
 
 		# Stylesheets
 		conf_css = [(self.target.path.parent / p).resolve() for p in conf['css']]

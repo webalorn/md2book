@@ -1,8 +1,8 @@
 import shutil
 
-from util.common import rand_str
-from templates import TemplateFiller
-from config import *
+from md2book.util.common import rand_str
+from md2book.templates import TemplateFiller
+from md2book.config import *
 
 # -------------------- CODE CLASSES -------------------- #
 
@@ -83,7 +83,7 @@ class OutFileCode(CodeData):
 	def getPandocOutputOptions(self):
 		params = super().getPandocOutputOptions()
 		if self.REF_DOC:
-			params.append('--reference-doc=' + str(SCRIPT_PATH / 'templates' / ('ref.' + self.EXT)))
+			params.append('--reference-doc=' + str(DATA_PATH / 'templates' / ('ref.' + self.EXT)))
 		for mod in self.target.modules:
 			params.extend(mod.pandoc_options(self.EXT))
 
