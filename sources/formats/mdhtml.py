@@ -59,6 +59,7 @@ def purify_remove_html(code):
 	REGEX_IMG_HTML = r"<img(.*?)src=['\"](.*?)['\"](.*?)>"
 	REGEX_U = r"==(.*?)=="
 	REGEX_COMMENTS = r"<!--([\s\S]*?)-->"
+	REGEX_STYLE = r"<style.*?>([\s\S]*?)</style.*?>"
 
 	def replace_html_image(match):
 		attributes = match.group(1) + " " + match.group(3)
@@ -70,4 +71,5 @@ def purify_remove_html(code):
 	code = re.sub(REGEX_IMG_HTML, replace_html_image, code)
 	code = re.sub(REGEX_U, replace_u, code)
 	code = re.sub(REGEX_COMMENTS, '', code)
+	code = re.sub(REGEX_STYLE, '', code)
 	return code

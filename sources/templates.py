@@ -5,13 +5,18 @@ from datetime import datetime
 from util.exceptions import TemplateError
 from util.common import is_int, rand_str
 
-FONT_TEMPLATE = "\
+FONT_CSS_TEMPLATE = "\
 <style>\
 #{id} {{ display : none; }}\
-#{id} ~ * {{ font-family : '{font}'; }}\
+#{id} ~ * {{ {prop} : {val}; }}\
 </style>\
-<div id="{id}"></div>\
+<div id='{id}'></div>\
 "
+CSS_FONT_PROPERTIES = {
+	'family' : 'font-family',
+	'color' : 'color',
+	'size' : 'font-size',
+}
 
 class TemplateEngine(string.Formatter):
 	"""
@@ -31,7 +36,8 @@ class TemplateEngine(string.Formatter):
 			{{?<var_name>:eval:<expr>}} -> eval the expression, store it if <var_name> is non-empty. Otherwise, return the value
 			{{?<var_name>:if:<cond>:<expr>}}, {{<var_name>:if:<cond>:<expr>:else:<expr>}}
 			{{<var_name>:relpath}} -> Path relative to the target directory
-			{{<font-name>:font}} -> Change the font used
+			{{<font-name>:font}} -> Change the font used ( = {{<val>:font:family}})
+				{{<val>:font:family}}, {{<val>:font:size}}, {{<val>:font:color}} [SIZE MUST HAVE A UNIT]
 		
 	"""
 	def __init__(self, values, path):
@@ -101,18 +107,17 @@ class TemplateEngine(string.Formatter):
 			pass
 		return '"{}"'.format(val)
 
-	def set_font(self, font):
-		# r = ''
-		# if self.openedFont:
-		# 	r += '</div>'
-		# self.openedFont = font or None
-		# if self.openedFont:
-		# 	r += '<div style="font-family : \'{}\';">'.format(self.openedFont)
-		# return r
+	def set_font(self, val, prop):
+		prop = prop or 'family'
+		if prop == 'family' and val:
+			val = '"' + val + '"'
+		if not prop in CSS_FONT_PROPERTIES:
+			raise TemplateError("The font property '{}' doesn't exists".format(prop))
+		prop = CSS_FONT_PROPERTIES[prop]
 
-		font = font or self.values['font']['default']
-		block_id = rand_str(10)
-		return FONT_TEMPLATE.format(font=font, id=block_id)
+		val = val or 'inherit'
+		block_id = rand_str(15)
+		return FONT_CSS_TEMPLATE.format(val=val, id=block_id, prop=prop)
 
 	def split_delimiters(self, params, delims=None, ensure_size=None):
 		if not isinstance(delims, list):
@@ -151,7 +156,7 @@ class TemplateEngine(string.Formatter):
 			return self.get_path_file_content(val)
 
 		elif action == 'font':
-			return self.set_font(val)
+			return self.set_font(val, params.pop().strip() if params else '')
 
 		elif action == 'relpath':
 			path = self.get_value_of(val)
