@@ -85,10 +85,13 @@ SIMPLE_TARGET = { # Field in a generated configuration file
 	'title' : None,
 	'subtitle' : None,
 	'by' : None,
-
-	'default-font' : 'opensans',
-	'font-size' : None,
 	'theme' : 'github',
+
+	'font' : {
+		'default' : 'opensans',
+		'size' : None,
+
+	},
 }
 
 # -------------------- TEMPLATES -------------------- #

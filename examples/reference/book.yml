@@ -6,6 +6,19 @@ targets:
     by : webalorn
     name : reference
     title : "Reference document"
+
+    titlepage:
+      image : dragon.jpg
+    images:
+      cover : dragon.jpg
+
+    font:
+      include:
+        - calligraffiti
+
+    metadata:
+      abstract : "This document contains examples for many of the functionalities of md2book.\n
+Cover image by @nervum (unsplash.com/@nervum)."
     
     variables:
       names:

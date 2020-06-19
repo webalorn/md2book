@@ -5,6 +5,7 @@ targets:
       - chapter2.md
     name : my_super_book
     title : "My super book"
-    font-size : 14px
     theme : github
-    default-font: opensans
+    font :
+      default : opensans
+      size : 14px

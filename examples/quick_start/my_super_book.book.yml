@@ -3,8 +3,9 @@ targets:
     by: null
     chapters:
     - my_super_book.md
-    default-font: opensans
-    font-size: null
+    font:
+        default: opensans
+        size : null
     name: my_super_book
     subtitle: null
     theme: github

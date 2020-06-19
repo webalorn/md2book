@@ -8,7 +8,7 @@
 	{{:if : metadata['author'] : <div id="bookAuthor">{{metadata.author}}</div>}}
 	{{:if : titlepage['image'] : <img id="bookTitleImage" src="{{titlepage.image:relpath}}" alt="Title image" />}}
 	{{:if : metadata['thanks'] : <div id="bookThanks">{{metadata.thanks}}</div>}}
-	{{:if : metadata['abstract'] : <div id="bookAbstract">{{metadata.abstract}}</div>}}
+	{{:if : metadata['abstract'] : <div id="bookAbstract">{{:format : {{metadata.abstract}} }}</div>}}
 
 </div>
 }}

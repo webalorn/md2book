@@ -9,7 +9,7 @@ from util.exceptions import LocatedError, ConfigError, WarningNoBookFound
 from convert.convert import convertBook
 
 def get_cmd_args():
-	parser = argparse.ArgumentParser(description='Compile books from CLI')
+	parser = argparse.ArgumentParser(description='md2book : Compile books from CLI. Full documentation at https://github.com/webalorn/md2book/wiki.')
 	targets = " | ".join(list(ALLOWED_FORMATS))
 	parser.add_argument('-t', '--target', type=str, help='Target to be compiled [main, user defined, or {}]'.format(targets), default='main')
 	parser.add_argument('-o', '--output', type=str, help='Output directory', default=None)

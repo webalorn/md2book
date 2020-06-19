@@ -1,4 +1,4 @@
-import yaml
+import yaml, re
 
 from config import *
 from .common import merge_dicts_recur, load_yaml_file
@@ -8,8 +8,8 @@ from modules import ALL_MODULES
 
 # -------------------- MAIN SETTINGS -------------------- #
 
-def merge_settings(settings, overwride):
-	for key, val in overwride.items():
+def merge_settings(settings, overrride):
+	for key, val in overrride.items():
 		if isinstance(val, dict) and isinstance(settings.get(key, None), dict):
 			merge_settings(settings[key], val)
 		else:
@@ -90,8 +90,8 @@ class Target:
 
 		self.merge(config[form])
 
-	def merge(self, overwride):
-		self.conf = merge_dicts_recur(self.conf, overwride)
+	def merge(self, overrride):
+		self.conf = merge_dicts_recur(self.conf, overrride)
 
 	def resolve_format(self):
 		self.format = self.conf['format']

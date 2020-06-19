@@ -8,10 +8,10 @@ from config import *
 
 # -------------------- UTILITY -------------------- #
 
-def merge_dicts_recur(settings, overwride):
-	if overwride is None:
+def merge_dicts_recur(settings, overrride):
+	if overrride is None:
 		return settings
-	for key, val in overwride.items():
+	for key, val in overrride.items():
 		if isinstance(val, dict) and isinstance(settings.get(key, None), dict):
 			merge_dicts_recur(settings[key], val)
 		else:

@@ -10,10 +10,10 @@ import re
 # -------------------- EXTEND MARKDOWN SYNTAX -------------------- #
 
 class MarkdownExtended(Extension):
-	REGEX_DEL = r'(~~)(.*?)~~'
-	REGEX_MARK = r'(==)(.*?)=='
-	REGEX_SUP = r'(\^)(.*?)\^'
-	REGEX_SUB = r'(~)(.*?)~'
+	REGEX_DEL = r'(~~)(\S.*?)~~'
+	REGEX_MARK = r'(==)(\S.*?)=='
+	REGEX_SUP = r'(\^)(\S.*?)\^'
+	REGEX_SUB = r'(~)(\S.*?)~'
 	# REGEX_SKIP = r'\[SKIP\]'
 
 	def extendMarkdown(self, md):

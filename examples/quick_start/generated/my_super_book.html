@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <!-- <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap" rel="stylesheet"> -->
-<title>Reference document</title>
+<title>My super book</title>
 <style>body {
   max-width: 860px;
   padding: 30px;
@@ -1192,14 +1192,6 @@ body {text-align : justify;}
 .sepcontent::before{content : "✶   ✶   ✶"}
 
 @font-face {
-  font-family: "calligraffiti";
-  font-style: normal;
-  font-weight: normal;
-  font-display: swap;
-  src: url("/Users/webalorn/Documents/info/projects/md2book/fonts/calligraffiti/calligraffiti-normal-normal.ttf");
-}
-
-@font-face {
   font-family: "opensans";
   font-style: italic;
   font-weight: 300;
@@ -1278,257 +1270,64 @@ body {text-align : justify;}
   font-display: swap;
   src: url("/Users/webalorn/Documents/info/projects/md2book/fonts/opensans/opensans-normal-300.ttf");
 }
-body { font-family: "opensans","Clear Sans","Helvetica Neue",Helvetica,Arial,sans-serif;}</style>
+body { font-family: "opensans","Clear Sans","Helvetica Neue",Helvetica,Arial,sans-serif;}
+body { font-size: 14px;}</style>
 </head>
 <body>
 <span style="font-family:'opensans';"></span> 
 <div id="titlePage">
 	
-	<div id="bookTitle">Reference document</div>
+	<div id="bookTitle">My super book</div>
 	
-	<div id="bookAuthor">webalorn</div>
-	<img id="bookTitleImage" src="/Users/webalorn/Documents/info/projects/md2book/examples/reference/dragon.jpg" alt="Title image" />
+	<div id="bookAuthor">Théophane Vallaeys</div>
 	
-	<div id="bookAbstract">This document contains examples for many of the functionalities of md2book.
-<br /> Cover image by @nervum (unsplash.com/@nervum).</div>
+	
+	
 
 </div><div class="toc">
 <ul>
-<li><a href="#introduction">Introduction</a></li>
-<li><a href="#markdown-title-level-1">Markdown - Title level 1</a><ul>
-<li><a href="#markdown-title-level-2">Markdown - Title level 2</a><ul>
-<li><a href="#markdown-title-level-3">Markdown - Title level 3</a></li>
+<li><a href="#your-first-book-with-md2book">Your first book with md2book</a><ul>
+<li><a href="#markdown">Markdown</a><ul>
+<li><a href="#and-any-title-level">And any title level</a></li>
 </ul>
 </li>
-<li><a href="#simple-markdown">Simple markdown</a></li>
-<li><a href="#tables">Tables</a></li>
+<li><a href="#lorem-ipsum">Lorem ipsum</a></li>
 </ul>
 </li>
-<li><a href="#templates">Templates</a><ul>
-<li><a href="#counters">Counters</a></li>
-<li><a href="#variables">Variables</a></li>
-<li><a href="#sep">Sep</a></li>
-<li><a href="#skip">Skip</a></li>
-<li><a href="#include">Include</a></li>
-<li><a href="#font-size-and-color">Font, size and color</a></li>
-<li><a href="#conditions">Conditions</a></li>
-</ul>
-</li>
-<li><a href="#second-markdown-document">Second markdown document</a></li>
+<li><a href="#this-is-the-second-chapter">This is the second chapter</a></li>
 </ul>
 </div>
-<h1 id="introduction">Introduction</h1>
-<p>This document contains various styles and formating options. The links may not be clickable on the github pdf viewer, so you can download the pdf. You can look at the source code <a href="https://raw.githubusercontent.com/webalorn/md2book/master/examples/reference/book.md">in the repository</a>, and the rendered document <a href="https://github.com/webalorn/md2book/blob/master/examples/reference/generated/reference.pdf">here in pdf</a>. Any valid html can be inserted into the markdown code, and it will be rendered. The configuration file used here is :</p>
-<pre><code class="yaml">targets:
-  main:
-    chapters:
-      - book.md
-      - next_chapter.md
-    by : webalorn
-    name : reference
-    title : &quot;Reference document&quot;
-
-    titlepage:
-      image : dragon.jpg
-    images:
-      cover : dragon.jpg
-
-    font:
-      include:
-        - calligraffiti
-
-    metadata:
-      abstract : &quot;This document contains examples for many of the functionalities of md2book.\n
-Cover image by @nervum (unsplash.com/@nervum).&quot;
-
-    variables:
-      names:
-        character1 : &quot;This is a custom variable&quot;
-      todo:
-        - item1
-        - item2
-        - item3
+<h1 id="your-first-book-with-md2book">Your first book with md2book</h1>
+<h2 id="markdown">Markdown</h2>
+<p>You can input any markdown here, use <a href="github.com">links</a>, <em>italic</em>, <strong>bold</strong>, <u>underlined </u> and <del>striked</del> text, <code>inline-code</code>,  <mark>highlighted text</mark> and super<sup>script</sup> and sub<sub>script</sub>.</p>
+<blockquote>
+<p>You can even use<br />
+blockquotes</p>
+</blockquote>
+<pre><code>And code blocks
 </code></pre>
 
-<p>Some other formats are supported :</p>
 <ul>
-<li><a href="https://github.com/webalorn/md2book/blob/master/examples/reference/generated/reference.html">Html document</a></li>
-<li><a href="https://github.com/webalorn/md2book/blob/master/examples/reference/generated/reference.epub">epub (ebook)</a></li>
-<li><a href="https://github.com/webalorn/md2book/blob/master/examples/reference/generated/reference.docx">docx document</a></li>
-<li>And others&hellip;</li>
-</ul>
-<h1 id="markdown-title-level-1">Markdown - Title level 1</h1>
-<h2 id="markdown-title-level-2">Markdown - Title level 2</h2>
-<h3 id="markdown-title-level-3">Markdown - Title level 3</h3>
-<h4>Markdown - Title level 4</h4>
-<h5>Markdown - Title level 5</h5>
-<h6>Markdown - Title level 6</h6>
-<h2 id="simple-markdown">Simple markdown</h2>
-<p>The table of contents is generated by the <code>[TOC]</code> below. This is a paragraph</p>
-<p>This is another paragraph.<br />
-Simple lines breaks can be used, and two line breaks to create another paragraph. The next paragraph is separated by an horizontal line, using <code>---</code>.</p>
-<hr />
-<p>You can use <a href="https://www.google.com">markdown links</a> or <a href="https://www.google.com">html links</a>. Transform an url or an e-mail into a link using <code>&lt;...&gt;</code> : <a href="https://google.com">https://google.com</a>, <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#99;&#111;&#110;&#116;&#97;&#99;&#116;&#64;&#101;&#120;&#97;&#109;&#112;&#108;&#101;&#46;&#111;&#114;&#103;">&#99;&#111;&#110;&#116;&#97;&#99;&#116;&#64;&#101;&#120;&#97;&#109;&#112;&#108;&#101;&#46;&#111;&#114;&#103;</a>. You can use all sort of formating : <em>italic</em>, <strong>bold</strong>, <u>underlined (with html)</u>, <del>striked</del>, <code>inline-code</code>, <mark>highlighted</mark>, super<sup>super</sup>, inf<sub>inf</sub>.</p>
-<ul>
-<li>This is a dotted list</li>
-<li>With multiple</li>
-<li>Items<ul>
-<li>And</li>
-<li>One sublist<ul>
-<li>Two sublists</li>
-</ul>
-</li>
+<li>Or use</li>
+<li>Lists<ul>
+<li>Nested lists</li>
 </ul>
 </li>
 </ul>
 <ol>
-<li>This is a numbered list</li>
-<li>With multiple</li>
-<li>Items<ol>
-<li>And</li>
-<li>One sublist<ol>
-<li>Two sublists</li>
+<li>Ordered</li>
+<li>Lists</li>
 </ol>
-</li>
-</ol>
-</li>
-</ol>
-<ul class="task-list">
-<li class="task-list-item"><input type="checkbox"/> This is a task list</li>
-<li class="task-list-item"><input type="checkbox" checked/> Task 2 (done)</li>
-</ul>
-<blockquote>
-<p>This is a blockquote<br />
-with multiple lines</p>
-<p>And paragraphs !</p>
-<blockquote>
-<p>And even a nested blockquote</p>
-</blockquote>
-</blockquote>
-<pre><code>This is a multiline
-code block
-</code></pre>
-
-<p>And definitions : the <abbr title="Hyper Text Markup Language">HTML</abbr> specification is maintained by the W3C. Awesome <abbr title="Hyper Text Markup Language">HTML</abbr> !</p>
-<p><img alt="Picture of a cat" src="https://upload.wikimedia.org/wikipedia/commons/b/bb/Kittyply_edit1.jpg" /></p>
-<h2 id="tables">Tables</h2>
-<table>
-<thead>
-<tr>
-<th align="left">First Header</th>
-<th>Second Header</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="left">Content Cell</td>
-<td>Content Cell</td>
-</tr>
-<tr>
-<td align="left">Content Cell</td>
-<td>Content Cell</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>header 1</th>
-<th>header 2</th>
-<th>header 3</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>three</td>
-<td>columns</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>.</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>…</td>
-</tr>
-</tbody>
-</table>
-<h1 id="templates">Templates</h1>
-<p>A template system is used by <code>md2boook</code>, and allow inserting variables, and special html elements. The variables names must be writen like this : <code>{</code> <code>{</code> <code>variable_name</code> <code>}</code> <code>}</code>.</p>
-<ul>
-<li><strong>Date</strong> : 19/06/2020</li>
-<li><strong>Datetime</strong> : 19/06/2020 16:55:34</li>
-<li><strong>Time</strong> : 16:55:34</li>
-<li><strong>Hour</strong> : 16:55</li>
-</ul>
-<h2 id="counters">Counters</h2>
-<p>We can use counters to count occurences, for instance to auto-number chapters. You can replace <code>chapter</code> within the template by anything else.</p>
-<ul>
-<li>Chapter 1</li>
-<li>Chapter 2</li>
-<li>Chapter 3</li>
-<li>Chapter 4</li>
-</ul>
-<h2 id="variables">Variables</h2>
-<p>You can defines a variable using <code>{</code> <code>{</code> <code>var_name:set:value</code> <code>}</code> <code>}</code>. In this example, we will use is to store a name with <code>{</code> <code>{</code> <code>name1:set:The Great Warrior Kron</code> <code>}</code> <code>}</code>. </p>
-<p>It can then be used multiple times : <strong>The Great Warrior Kron</strong> is great, and The Great Warrior Kron is a warrior. And this paragraph doesn&rsquo;t even used the name of <em>The Great Warrior Kron</em>.</p>
-<p>All the variables defined in the configuration file can be used in the document : This document used the font opensans, with the theme github, and is writen by webalorn. The chapters are <code>book.md, next_chapter.md</code>. Keywords are not set in the configuration file : <code>None</code>.</p>
-<p>You can use your own variables, by setting them under <code>variables</code> in the configuraiton file : This is a custom variable, and <code>item1, item2, item3</code>.</p>
-<h2 id="sep">Sep</h2>
-<p>It create a separation than can be customized with the configuration file.</p>
-<p>Laboris irure culpa irure dolore dolor nostrud minim dolor ex nostrud quis mollit non in velit mollit. Lorem ipsum dolore velit sint esse laboris culpa sit sed et excepteur ullamco sint veniam duis laboris aute in deserunt commodo veniam anim in anim labore nostrud cillum laborum.</p>
-<div class="sep"><span>✶   ✶   ✶</span></div>
-
-<p>Ut id tempor ut duis qui ut officia cillum deserunt. Duis dolore est sunt reprehenderit veniam ut sunt tempor deserunt ut sit ut nostrud excepteur veniam eu. Nulla incididunt cupidatat tempor cillum et amet amet enim non excepteur quis officia do ad incididunt dolor enim consectetur culpa et sit.</p>
-<h2 id="skip">Skip</h2>
-<p>Using skip will force a page break. The default behavior is to also insert a page break between every level 1 title, but it can be overwride with the configuration file.</p>
-<p>Laboris irure culpa irure dolore dolor nostrud minim dolor ex nostrud quis mollit non in velit mollit. Reprehenderit reprehenderit nostrud commodo eu sunt aliqua in magna ut consequat voluptate incididunt quis qui velit reprehenderit incididunt laborum nostrud qui ut laboris est labore.</p>
-<div class="pageBreak"></div>
-
-<p>Ut id tempor ut duis qui ut officia cillu. Consectetur sunt exercitation exercitation officia esse dolore laborum dolore cupidatat sed in sed magna enim nostrud velit dolor eu nisi adipisicing in elit dolor sit mollit anim labore. Cupidatat dolor ex excepteur aute officia nostrud ex culpa elit officia eiusmod nisi sint amet excepteur deserunt in dolore est sint.</p>
-<h2 id="include">Include</h2>
-<p>We can include a file multiple time. This template is useful for inserting small blocks without copy-pasting. But we recommend using the chapters to split your text into multiple main files.</p>
-<p>This is an included document. It can use templates : written by webalorn.</p>
-<p>This is an included document. It can use templates : written by webalorn.</p>
-<h2 id="font-size-and-color">Font, size and color</h2>
-<p>I want to use a more funny font. The text will now use the <code>calligraffiti</code> font. Do not insert templates to change the font, the color or the size in the middle of a paragraph, it can cause bugs. Use pure html if you really want to do it. Font template must be used on a line without leading or trailing spaces and without any other template, include font templates.</p>
-<style>#eunodxpmhnujtyl { display : none; }#eunodxpmhnujtyl ~ * { font-family : calligraffiti; }</style>
-
-<div id='eunodxpmhnujtyl'></div>
-
-<p>Wow, this paragraph uses <code>calligraffiti</code> ! Now I can change the color.</p>
-<style>#vdmxguakwcfdcnx { display : none; }#vdmxguakwcfdcnx ~ * { color : #031594; }</style>
-
-<div id='vdmxguakwcfdcnx'></div>
-
-<p>This text is now in blue. But I can make it bigger.</p>
-<style>#ihglkkicaetsmgm { display : none; }#ihglkkicaetsmgm ~ * { font-size : 2em; }</style>
-
-<div id='ihglkkicaetsmgm'></div>
-
-<p>This is a bigger text, indeed. But before going to the next section, I will reset all the text properties.</p>
-<style>#gehosksijegembf { display : none; }#gehosksijegembf ~ * { font-family : inherit; }</style>
-
-<div id='gehosksijegembf'></div>
-
-<style>#pkxpgwucwsocaxi { display : none; }#pkxpgwucwsocaxi ~ * { color : inherit; }</style>
-
-<div id='pkxpgwucwsocaxi'></div>
-
-<style>#spsguhywmboqato { display : none; }#spsguhywmboqato ~ * { font-size : inherit; }</style>
-
-<div id='spsguhywmboqato'></div>
-
-<h2 id="conditions">Conditions</h2>
-<p>This code will display the subtitle only if it extists : .</p>
-<ul>
-<li>2 + 2 = 2 ? Non&hellip;</li>
-<li>2 + 2 = 4 ? OUI !</li>
-</ul>
-<h1 id="second-markdown-document">Second markdown document</h1>
-<p>This document is merged with the first one.</p>
+<h3 id="and-any-title-level">And any title level</h3>
+<h2 id="lorem-ipsum">Lorem ipsum</h2>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis a orci in odio hendrerit vestibulum ac eget nisi. Donec eget justo sollicitudin, eleifend metus et, rutrum leo. Sed nunc risus, tempor et posuere in, sodales et eros. Aliquam posuere mauris et semper accumsan. In hac habitasse platea dictumst. Etiam dictum facilisis enim, nec interdum diam pretium ac. Nulla in dui libero. Phasellus quis nisl faucibus, auctor nibh a, malesuada libero. Vestibulum lacinia suscipit libero quis scelerisque. Phasellus elementum porttitor elit. Nullam lobortis ultrices cursus.</p>
+<p>Integer eu suscipit mauris. Nam imperdiet leo eget justo auctor aliquet. Quisque lacinia mi ac tellus cursus accumsan. Integer in volutpat arcu. Suspendisse potenti. Aliquam placerat ullamcorper lectus. Sed sit amet interdum purus, at dictum purus. Etiam aliquet eros ut tincidunt fermentum. Mauris commodo velit felis, vel pulvinar diam tincidunt eu. Praesent vehicula, mauris quis pulvinar posuere, elit ante aliquam neque, at lobortis erat elit eget justo. Quisque malesuada faucibus convallis. Phasellus dui metus, placerat eget varius vel, posuere eu orci. Maecenas congue nunc et tincidunt egestas. Duis odio ligula, egestas sed sem in, dapibus accumsan mi. Fusce in rutrum turpis.</p>
+<h1 id="this-is-the-second-chapter">This is the second chapter</h1>
+<p>Suspendisse ac enim blandit, aliquam enim et, sollicitudin nisl. Praesent eget cursus dolor. Vivamus vestibulum velit non sapien porttitor, in venenatis neque pharetra. Praesent rhoncus mi ut augue sollicitudin suscipit. Nulla porttitor nisl eu lacus dignissim facilisis. Etiam metus velit, malesuada quis euismod et, scelerisque nec massa. Sed auctor leo non iaculis ultricies. Pellentesque consectetur arcu eu aliquet luctus. Aliquam fringilla diam vel tempus tempus. Maecenas egestas gravida nisl eget iaculis.</p>
+<p>Nulla vitae erat at urna vehicula elementum sit amet sed enim. Morbi nulla massa, gravida ultrices scelerisque nec, hendrerit eget erat. Integer dignissim erat sed nisi consectetur tincidunt. Nulla nec neque nec nulla sollicitudin facilisis ut nec arcu. Sed sit amet turpis nulla. Vestibulum sollicitudin nec erat aliquet vehicula. Morbi sed scelerisque nunc, at auctor dolor.</p>
+<p>Nullam sagittis, nisi sed finibus egestas, leo arcu condimentum risus, sit amet luctus quam diam ut arcu. Interdum et malesuada fames ac ante ipsum primis in faucibus. Fusce pharetra, tellus in porttitor volutpat, tellus lectus vulputate tellus, quis euismod tellus quam vel urna. Vestibulum ut justo hendrerit elit consequat dignissim. Vestibulum consectetur, felis ac posuere laoreet, leo nisl finibus elit, at aliquam enim nunc non purus. Proin vel nisl a dolor laoreet porttitor. Nulla eu fringilla leo. In lacinia elementum est, id congue augue. Morbi sit amet convallis purus. Nulla dictum, dui sodales commodo congue, libero leo maximus sapien, quis consectetur lectus dolor et lacus. Quisque nibh eros, luctus at eros nec, pulvinar tincidunt dolor. Suspendisse augue nulla, vestibulum ut dolor imperdiet, molestie porttitor neque.</p>
+<p>Aliquam vulputate porttitor nisi, ultrices interdum nisi congue ac. Vestibulum luctus mauris eget quam tempus, a pretium odio suscipit. Mauris viverra pharetra lacus non hendrerit. Mauris sed mi consectetur nisi feugiat mattis ut eu dui. Curabitur auctor sapien eget dolor tincidunt pretium. Morbi iaculis, urna id dictum posuere, velit nibh porta lacus, sed iaculis est dui tincidunt mi. Nullam lacinia et felis vitae suscipit. Vestibulum a rhoncus massa. Vestibulum sit amet odio quis arcu molestie placerat eget id sem. In facilisis sagittis nulla sed hendrerit. Morbi feugiat sapien turpis, a venenatis elit bibendum sit amet. Sed ultrices egestas mollis. Mauris in suscipit turpis.</p>
+<p>Suspendisse potenti. Nullam ut bibendum leo. Quisque ut arcu ligula. Praesent velit nulla, feugiat ut imperdiet eget, rhoncus ac elit. Curabitur tempor, orci quis sodales porta, enim nunc fringilla nisi, in auctor felis nibh quis sem. Sed suscipit, nisi non laoreet dictum, tellus orci varius massa, quis feugiat mauris dui vestibulum dolor. Fusce nec dignissim urna. Ut tempus vehicula vestibulum. Aliquam vel erat sodales, gravida risus semper, eleifend elit.</p>
+<p>Nunc in ultricies eros, eget rhoncus eros. Aenean libero velit, hendrerit non nisl ac, feugiat placerat dolor. Suspendisse in arcu vel eros laoreet accumsan et sed massa. Aliquam rutrum eleifend orci, eget faucibus lorem vulputate consequat. Nullam eu lectus pharetra, pellentesque dolor in, mattis turpis. Sed eu nulla massa. Suspendisse lacinia mauris eu sodales malesuada. In nisl diam, hendrerit a diam vel, semper tempus justo.</p>
 </body>
 </html>

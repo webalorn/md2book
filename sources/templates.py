@@ -10,10 +10,9 @@ FONT_CSS_TEMPLATE = "\
 #{id} {{ display : none; }}\
 #{id} ~ * {{ {prop} : {val}; }}\
 </style>\
-<div id='{id}'></div>\
-"
+<div id='{id}'></div>"
 CSS_FONT_PROPERTIES = {
-	'family' : 'font-family',
+	'font' : 'font-family',
 	'color' : 'color',
 	'size' : 'font-size',
 }
@@ -35,9 +34,10 @@ class TemplateEngine(string.Formatter):
 			{{<var_name>:get}} Try to guess the type and return the value with a good type
 			{{?<var_name>:eval:<expr>}} -> eval the expression, store it if <var_name> is non-empty. Otherwise, return the value
 			{{?<var_name>:if:<cond>:<expr>}}, {{<var_name>:if:<cond>:<expr>:else:<expr>}}
-			{{<var_name>:relpath}} -> Path relative to the target directory
-			{{<font-name>:font}} -> Change the font used ( = {{<val>:font:family}})
-				{{<val>:font:family}}, {{<val>:font:size}}, {{<val>:font:color}} [SIZE MUST HAVE A UNIT]
+			{{<rel_path>:relpath}} -> Path relative to the target directory
+			{{<font-name>:font}} -> Change the font used
+				{{<font-name>:font}}, {{<font-size>:size}}, {{<color>:color}} [SIZE MUST HAVE A UNIT]
+			{{<var-name>?:format:<code>}} -> In <code> : replace newlines by <br/>
 		
 	"""
 	def __init__(self, values, path):
@@ -108,9 +108,8 @@ class TemplateEngine(string.Formatter):
 		return '"{}"'.format(val)
 
 	def set_font(self, val, prop):
-		prop = prop or 'family'
-		if prop == 'family' and val:
-			val = '"' + val + '"'
+		# if prop == 'font' and val:
+		# 	val = '"' + val + '"'
 		if not prop in CSS_FONT_PROPERTIES:
 			raise TemplateError("The font property '{}' doesn't exists".format(prop))
 		prop = CSS_FONT_PROPERTIES[prop]
@@ -133,18 +132,22 @@ class TemplateEngine(string.Formatter):
 			parts.append([])
 		return [':'.join(l) for l in parts]
 
+	def format_html(self, code):
+		code = code.replace("\n", "\n<br/>")
+		return code
+
 	def format_field(self, val, spec):
 		params = [s.strip() for s in spec.split(':')][::-1]
 		action = params.pop().lower().strip() if params else ''
 		
 		if action == 'call':
-			return self.get_value_of(val)(*params)
+			return str(self.get_value_of(val)(*params))
 
 		elif action == 'set':
 			self.values[val] = params.pop()
 
 		elif action == 'get':
-			return self.guess_type_convert(self.get_value_of(val))
+			return str(self.guess_type_convert(self.get_value_of(val)))
 
 		elif action == 'counter':
 			if val not in self.values:
@@ -155,11 +158,17 @@ class TemplateEngine(string.Formatter):
 		elif action == 'include':
 			return self.get_path_file_content(val)
 
-		elif action == 'font':
-			return self.set_font(val, params.pop().strip() if params else '')
+		elif action == 'format':
+			txt = ':'.join(params)
+			return self.end_expr(val, self.format_html(txt))
+
+		elif action in ['font', 'color', 'size']:
+			return self.set_font(val, action)
 
 		elif action == 'relpath':
 			path = self.get_value_of(val)
+			if path is None:
+				return ''
 			return str(self.path / path)
 
 		elif action == 'eval':
@@ -173,11 +182,7 @@ class TemplateEngine(string.Formatter):
 			cond = eval(condition, self.values)
 			if isinstance(cond, str):
 				cond = cond.strip()
-
-			if cond:
-				return self.end_expr(val, if_expr)
-			elif params and params.pop() == "else":
-				return self.end_expr(val, else_expr)
+			return self.end_expr(val, if_expr if cond else els_expr)
 
 		elif not spec: # Simple variable
 			v = self.get_value_of(val)

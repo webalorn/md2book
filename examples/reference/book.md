@@ -2,7 +2,7 @@
 
 # Introduction
 
-This document contains various styles and formating options. You can look at the source code [in the repository](https://raw.githubusercontent.com/webalorn/md2book/master/examples/reference/book.md), and the rendered document [here in pdf](https://github.com/webalorn/md2book/blob/master/examples/reference/generated/reference.pdf). You can also insert any valid html in your markdown code, and it will be rendered. The configuration file used is :
+This document contains various styles and formating options. The links may not be clickable on the github pdf viewer, so you can download the pdf. You can look at the source code [in the repository](https://raw.githubusercontent.com/webalorn/md2book/master/examples/reference/book.md), and the rendered document [here in pdf](https://github.com/webalorn/md2book/blob/master/examples/reference/generated/reference.pdf). Any valid html can be inserted into the markdown code, and it will be rendered. The configuration file used here is :
 
 ```yaml
 {{book.yml:include}}
@@ -109,7 +109,7 @@ You can defines a variable using `{` `{` `var_name:set:value` `}` `}`. In this e
 
 It can then be used multiple times : **{{name1}}** is great, and {{name1}} is a warrior. And this paragraph doesn't even used the name of *{{name1}}*.
 
-All the variables defined in the configuration file can be used in the document : This document used the font {{default-font}}, with the theme {{theme}}, and is writen by {{by}}. The chapters are `{{chapters}}`. Keywords are not set in the configuration file : `{{metadata.keywords}}`.
+All the variables defined in the configuration file can be used in the document : This document used the font {{font.default}}, with the theme {{theme}}, and is writen by {{by}}. The chapters are `{{chapters}}`. Keywords are not set in the configuration file : `{{metadata.keywords}}`.
 
 You can use your own variables, by setting them under `variables` in the configuraiton file : {{names.character1}}, and `{{todo}}`.
 
@@ -140,3 +140,30 @@ We can include a file multiple time. This template is useful for inserting small
 {{included.md:include}}
 
 {{included.md:include}}
+
+## Font, size and color
+
+I want to use a more funny font. The text will now use the `calligraffiti` font. Do not insert templates to change the font, the color or the size in the middle of a paragraph, it can cause bugs. Use pure html if you really want to do it. Font template must be used on a line without leading or trailing spaces and without any other template, include font templates.
+
+{{calligraffiti : font}}
+
+Wow, this paragraph uses `calligraffiti` ! Now I can change the color.
+
+{{#031594 : color}}
+
+This text is now in blue. But I can make it bigger.
+
+{{2em : size}}
+
+This is a bigger text, indeed. But before going to the next section, I will reset all the text properties.
+
+{{:font}}
+{{:color}}
+{{:size}}
+
+## Conditions
+
+This code will display the subtitle only if it extists : {{:if : subtitle : <div id="bookSubtitle">{{subtitle}}</div> }}.
+
+- 2 + 2 = 2 ? {{:if : 2+2 == 2 : OUI ! : else : Non...}}
+- 2 + 2 = 4 ? {{:if : 2+2 == 4 : OUI ! : else : Non...}}

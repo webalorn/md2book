@@ -1,4 +1,4 @@
-import importlib
+import importlib, traceback
 from shutil import which
 from util.exceptions import BaseError, ModuleImportError, MissingDependencyError
 
@@ -31,3 +31,6 @@ if __name__ == '__main__':
 		main()
 	except BaseError as e:
 		print(e)
+	except Exception as e:
+		traceback.print_exc()
+		print("\u001b[31m[ERROR] An unexpected exception occured in md2book. If you can't solve the problem, please open an issue on https://github.com/webalorn/md2book/issues\nIf possible, copy the error message, the configuration file and the markdown code that created the problem.\u001b[0m")

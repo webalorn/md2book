@@ -32,7 +32,7 @@ class ConvertPipeline:
 
 		return self.code
 
-	# Functions to overwride
+	# Functions to overrride
 
 	def prepare_config(self, target):
 		pass

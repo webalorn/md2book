@@ -21,7 +21,8 @@ def ensure_with_unit(val, default_unit='px'):
 # -------------------- FONTS -------------------- #
 
 class FontFamily:
-	HTML_PATH = "{script}/fonts/{font}/{file}"
+	# HTML_PATH = "{script}/fonts/{font}/{file}"
+	HTML_PATH = "{syspath}"
 	EPUB_PATH = "../fonts/{file}"
 
 	def __init__(self, name):
@@ -63,6 +64,7 @@ class FontFamily:
 				script=str(SCRIPT_PATH),
 				font=self.name,
 				file=file.name,
+				syspath=str(file),
 			)
 			css.append(FONT_FAMILY_CSS.format(
 				font=self.name,

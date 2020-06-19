@@ -1,5 +1,5 @@
 *.DS_Store
-__pycache__/*
+*__/*
 *.pyc
 default_settings.yml
 *.zip
