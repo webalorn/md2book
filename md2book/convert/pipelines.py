@@ -48,7 +48,7 @@ class PipeMd(ConvertPipeline):
 class PipeMd2Html(ConvertPipeline):
 	def prepare_config(self, target):
 		self.md_extensions_conf = deepcopy(MD_CONFIG)
-		self.md_extensions = MD_EXTENSIONS
+		self.md_extensions = get_markdown_default_extensions()
 		self.md_extensions_conf['toc']['toc_depth'] = target['toc']['level']
 
 	def md2html(self, target):

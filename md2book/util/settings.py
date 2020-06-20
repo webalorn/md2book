@@ -32,8 +32,11 @@ def load_settings():
 			def_target[key] = []
 
 	# Merge settings, and save the file
-	with open(GENERATED_SETTINGS_FILE, 'w') as f:
-		yaml.dump({'default_target': DEFAULT_TARGET}, f)
+	try:
+		with open(GENERATED_SETTINGS_FILE, 'w') as f:
+			yaml.dump({'default_target': DEFAULT_TARGET}, f)
+	except: # If the user can't write to this location
+		pass
 	merge_dicts_recur(DEFAULT_TARGET, def_target)
 
 # -------------------- BOOK CONFIG -------------------- #

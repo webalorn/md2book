@@ -1,6 +1,15 @@
 from pathlib import Path
+import md2book
 
-from md2book.formats.mdhtml import MarkdownExtended, TasklistExtension
+# -------------------- MAIN -------------------- #
+
+M2B_NAME = 'md2book'
+M2B_EMAIL = 'webalorn@gmail.com'
+M2B_SHORT_DESCRIPTION = 'md2book (version {}) : Compile markdown book with a simple \
+command and a configuration file. - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  \
+Documentation available at https://github.com/webalorn/md2book/wiki - - - - -  \
+Repport bugs on https://github.com/webalorn/md2book/issues -- - - - - - - - -'.format(md2book.__version__)
+
 
 # -------------------- PATHS -------------------- #
 
@@ -12,7 +21,7 @@ DEFAULT_SETTINGS = DATA_PATH / "default_settings.yml"
 GENERATED_SETTINGS_FILE = DATA_PATH / "generated_default_settings.yml"
 EMBED_FONTS_PATH = DATA_PATH / 'fonts'
 
-# -------------------- MAIN -------------------- #
+# -------------------- TARGETS -------------------- #
 
 BOOK_FILE_NAMES = "*book.yml"
 DEFAULT_GEN_DIR = "generated"
@@ -127,10 +136,15 @@ FORMAT_ALIASES = {
 }
 ALLOWED_FORMATS = list(BASE_FORMATS) + list(FORMAT_ALIASES)
 
-MD_EXTENSIONS = [
-	'extra', 'nl2br', 'sane_lists', 'smarty', 'toc',
-	MarkdownExtended(), TasklistExtension()
-]
+def get_markdown_default_extensions():
+	# Import is done here to keep minimal depencies for this file
+	from md2book.formats.mdhtml import MarkdownExtended, TasklistExtension
+	return [
+		'extra', 'nl2br', 'sane_lists', 'smarty', 'toc',
+		MarkdownExtended(), TasklistExtension()
+	]
+
+
 MD_CONFIG = {
 	'toc' : {
 		'toc_depth' : 6,

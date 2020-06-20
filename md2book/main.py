@@ -9,14 +9,18 @@ from md2book.util.exceptions import LocatedError, ConfigError, WarningNoBookFoun
 from md2book.convert.convert import convertBook
 
 def get_cmd_args():
-	parser = argparse.ArgumentParser(description='md2book : Compile books from CLI. Full documentation at https://github.com/webalorn/md2book/wiki.')
+	parser = argparse.ArgumentParser(
+		prog=M2B_NAME,
+		description=M2B_SHORT_DESCRIPTION,
+	)
+
 	targets = " | ".join(list(ALLOWED_FORMATS))
-	parser.add_argument('-t', '--target', type=str, help='Target to be compiled [main, user defined, or {}]'.format(targets), default='main')
+	parser.add_argument('-t', '--target', type=str, help='Target to be compiled [main, defined in book.yml, or {}]'.format(targets), default='main')
 	parser.add_argument('-o', '--output', type=str, help='Output directory', default=None)
 	parser.add_argument('--open', help='Open newly created files', action='store_true', default=False)
 	parser.add_argument('--remove-images', help='Remove all images in the document', action='store_true', default=False)
 
-	parser.add_argument('path', nargs='?', type=str, help='Path from where to search for the books (optional, the default path is the current directory)', default='.')
+	parser.add_argument('path', nargs='?', type=str, help='Path from where to search for the books (optional, the default path is the current directory). Can also be a book.yml file or a markdown file.', default='.')
 
 	return parser.parse_args()
 

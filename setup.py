@@ -1,11 +1,17 @@
-import setuptools
+import setuptools, os
 from pathlib import Path
+import importlib.util
 
-with open("readme.md", "r") as readme_file:
-	readme_content = readme_file.read()
+cur_dir = Path(__file__).parent
+
+try:
+	with open("readme.md", "r") as readme_file:
+		readme_content = readme_file.read()
+except:
+	readme_content = '[error] readme.md unavailable'
 
 def find_data_files(root_path, parent_dir):
-	parent_dir = Path(parent_dir).resolve()
+	parent_dir = (cur_dir / parent_dir).resolve()
 	files = []
 	def find_sub_data(path):
 		if path.is_dir():
@@ -13,15 +19,25 @@ def find_data_files(root_path, parent_dir):
 				find_sub_data(p)
 		else:
 			files.append(path.resolve().relative_to(parent_dir))
-	find_sub_data(Path(root_path))
+	find_sub_data(cur_dir / root_path)
 
 	return [str(f) for f in files]
 
+def import_module_file(name, path):
+	path = str(cur_dir / path)
+	spec = importlib.util.spec_from_file_location(name, path)
+	mod = importlib.util.module_from_spec(spec)
+	spec.loader.exec_module(mod)
+	return mod
+
+md2book_module = import_module_file("m2b", "md2book/__init__.py")
+md2book_conf = import_module_file("conf", "md2book/config.py")
+
 setuptools.setup(
-	name="md2book",
-	version="0.1.6",
-	author="webalorn (Théophane Vallaeys)",
-	author_email="webalorn@gmail.com",
+	name=md2book_conf.M2B_NAME,
+	version=md2book_module.__version__,
+	author=md2book_module.__author__,
+	author_email=md2book_conf.M2B_EMAIL,
 	description="Convert markdown files to beautiful books using a simple configuration file",
 	long_description=readme_content,
 	long_description_content_type="text/markdown",
