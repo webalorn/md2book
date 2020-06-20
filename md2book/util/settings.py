@@ -117,6 +117,8 @@ class Target:
 	def complete(self):
 		self.resolve_format()
 		self.load_modules()
+
+	def load_linked_files(self):
 		custom_css = []
 
 		for mod in self.modules:

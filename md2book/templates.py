@@ -107,11 +107,14 @@ class TemplateEngine(string.Formatter):
 			pass
 		return '"{}"'.format(val)
 
+	def add_font(self, font):
+		pass
+
 	def set_font(self, val, prop):
-		# if prop == 'font' and val:
-		# 	val = '"' + val + '"'
 		if not prop in CSS_FONT_PROPERTIES:
 			raise TemplateError("The font property '{}' doesn't exists".format(prop))
+		if prop == 'font' and val:
+			self.add_font(val)
 		prop = CSS_FONT_PROPERTIES[prop]
 
 		val = val or 'inherit'
@@ -209,8 +212,12 @@ class TemplateEngine(string.Formatter):
 		return txt
 
 class TemplateFiller(TemplateEngine):
+	def add_font(self, font):
+		self.target.mods['font'].try_add_font(font)
+
 	def __init__(self, target):
 		values = copy(target.conf)
+		self.target = target
 
 		now = datetime.now()
 		values['date'] = now.strftime("%d/%m/%Y")

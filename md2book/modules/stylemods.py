@@ -48,19 +48,20 @@ class FontModule(BaseModule):
 
 	def __init__(self, conf, target):
 		super().__init__(conf, target)
-		default = self.conf['default']
-		
-		if default:
-			base_font_dir = DATA_PATH / 'fonts' / str(default)
-			if default not in self.conf['include'] and base_font_dir.exists():
-				self.conf['include'].append(default)
+		self.try_add_font(self.conf['default'])
 
-		self.fonts = [FontFamily(font) for font in self.conf['include']]
-		self.font_by_name = {font.name : font for font in self.fonts}
+	def get_fonts(self):
+		return [FontFamily(font) for font in self.conf['include']]
+
+	def try_add_font(self, name):
+		base_font_dir = DATA_PATH / 'fonts' / str(name)
+		if name not in self.conf['include'] and base_font_dir.exists():
+			self.conf['include'].append(name)
 
 	def get_custom_css(self):
-		css = []	
-		for font in self.fonts:
+		print('get_custom_css')
+		css = []
+		for font in self.get_fonts():
 			css.extend(font.get_css(self.format))
 		if self.conf['default']:
 			css.append(self.FONT_CSS.format(font=self.conf['default']))
@@ -72,7 +73,7 @@ class FontModule(BaseModule):
 	def pandoc_options(self, dest_format):
 		options = super().pandoc_options(dest_format)
 		if dest_format == 'epub':
-			for font in self.fonts:
+			for font in self.get_fonts():
 				path = escapePath(font.font_path / (font.name + "*"))
 				options.append("--epub-embed-font=" + path)
 		return options

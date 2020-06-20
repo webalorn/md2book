@@ -36,6 +36,9 @@ class CodeData:
 	def output(self, dest=None):
 		raise Exception("Not implemented")
 
+	def addStyle(self, path, base_path=""):
+		pass
+
 # ----- Pure code
 
 class PureCodeData(CodeData):

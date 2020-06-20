@@ -47,6 +47,8 @@ class HtmlCode(PureCodeData):
 
 	def set_conf(self, target):
 		super().set_conf(target)
+		
+		target.load_linked_files()
 		for style in target.stylesheets:
 			self.addStyle(style)
 		for script in target.scripts:
