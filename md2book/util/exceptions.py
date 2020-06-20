@@ -5,6 +5,7 @@ class BaseError(Exception):
 		'default' : '\u001b[0m',
 		'white' : '\u001b[97m',
 		'green' : '\u001b[92m',
+		'yellow' : '\u001b[93m',
 	}
 	TEMPLATE = "{red}[ERROR]"
 
@@ -54,12 +55,18 @@ class ParsingError(LocatedError):
 	
 # -------------------- WARNING -------------------- #
 
-class Warning(BaseError):
+class BaseWarning(BaseError):
 	def show(self):
 		print(str(self))
 
-class WarningNoBookFound(BaseError):
-	TEMPLATE = "{red}[WARNING] No book found under: {white}{path}"
+class SimpleWarning(BaseWarning):
+	TEMPLATE = "{yellow}[WARNING] {path} : {message}"
+
+	def __init__(self, message, path=''):
+		super().__init__(message=str(message), path=str(path))
+
+class WarningNoBookFound(BaseWarning):
+	TEMPLATE = "{yellow}[WARNING] No book found under: {white}{path}"
 
 	def __init__(self, path):
 		super().__init__(path=str(path))

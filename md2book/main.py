@@ -5,7 +5,7 @@ from md2book.config import *
 from md2book.formats.mdhtml import md_make_paths_absolute
 from md2book.util.common import sys_open, load_yaml_file, find_files_matching
 from md2book.util.settings import Target, create_default_book_config, load_settings
-from md2book.util.exceptions import LocatedError, ConfigError, WarningNoBookFound
+from md2book.util.exceptions import LocatedError, ConfigError, WarningNoBookFound, SimpleWarning
 from md2book.convert.convert import convertBook
 
 def get_cmd_args():
@@ -15,10 +15,11 @@ def get_cmd_args():
 	)
 
 	targets = " | ".join(list(ALLOWED_FORMATS))
-	parser.add_argument('-t', '--target', type=str, help='Target to be compiled [main, defined in book.yml, or {}]'.format(targets), default='main')
+	parser.add_argument('-t', '--target', action='append', type=str, help='Target to be compiled [main, defined in book.yml, or {}]'.format(targets), default=[])
 	parser.add_argument('-o', '--output', type=str, help='Output directory', default=None)
 	parser.add_argument('--open', help='Open newly created files', action='store_true', default=False)
 	parser.add_argument('--remove-images', help='Remove all images in the document', action='store_true', default=False)
+	parser.add_argument('-a', '--all', help='Build all targets defined in the "all" field in the configuration file', action='store_true', default=False)
 
 	parser.add_argument('path', nargs='?', type=str, help='Path from where to search for the books (optional, the default path is the current directory). Can also be a book.yml file or a markdown file.', default='.')
 
@@ -54,6 +55,20 @@ def get_target_md_code(target):
 		chapters.append(content)
 	md_code = target['between-chapters'].join(chapters)
 	return md_code
+
+def get_all_targets(book_path):
+	config = load_yaml_file(book_path)
+	all_targets = config.get('all', None)
+
+	if all_targets is None or not isinstance(all_targets, list):
+		raise ConfigError(
+			'The field "all" must be defined in the configuration file and be a list to use -a or --all',
+			book_path
+		)
+	if all_targets == []:
+		raise SimpleWarning('The "all" field is empty', book_path)
+
+	return [str(t) for t in all_targets]
 
 # -------------------- COMPILE -------------------- #
 
@@ -105,6 +120,7 @@ def main():
 		args = get_cmd_args()
 		path = get_real_book_path(args.path)
 		books = find_all_books(path)
+		target_list = args.target or ['main']
 
 		if not books:
 			raise WarningNoBookFound(path)
@@ -114,10 +130,15 @@ def main():
 			overwrite_target['remove-images'] = True
 
 		for book in books:
-			try:
-				filepath = compile_book(book, args.target, args.output, overwrite_target)
-				if args.open:
-					sys_open(filepath)
-			except LocatedError as e:
-				e.set_location(book)
-				raise e
+			if args.all:
+				target_list = get_all_targets(book)
+				print('ompile all targets for {} : {}'.format(str(book), ', '.join(target_list)))
+
+			for target in target_list:
+				try:
+					filepath = compile_book(book, target, args.output, overwrite_target)
+					if args.open:
+						sys_open(filepath)
+				except LocatedError as e:
+					e.set_location(book)
+					raise e
