@@ -137,14 +137,14 @@ class TemplateEngine(string.Formatter):
 		return code
 
 	def format_field(self, val, spec):
-		params = [s.strip() for s in spec.split(':')][::-1]
+		params = [s for s in spec.split(':')][::-1]
 		action = params.pop().lower().strip() if params else ''
 		
 		if action == 'call':
 			return str(self.get_value_of(val)(*params))
 
 		elif action == 'set':
-			self.values[val] = params.pop()
+			self.values[val] = params.pop().strip()
 
 		elif action == 'get':
 			return str(self.guess_type_convert(self.get_value_of(val)))

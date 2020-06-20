@@ -1,3 +1,4 @@
+/* Theme : splendor */
 /* Adapted from https://github.com/markdowncss  */
 
 @media print {
@@ -128,7 +129,7 @@ li {
   margin-left: 2rem;
 }
 div.toc li {
-  margin-left: 0px;
+  margin-left: 1em;
 }
 
 p {

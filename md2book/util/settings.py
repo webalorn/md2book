@@ -1,4 +1,5 @@
 import yaml, re
+from copy import deepcopy
 
 from md2book.config import *
 from .common import merge_dicts_recur, load_yaml_file
@@ -13,7 +14,7 @@ def merge_settings(settings, overrride):
 		if isinstance(val, dict) and isinstance(settings.get(key, None), dict):
 			merge_settings(settings[key], val)
 		else:
-			settings[key] = val
+			settings[key] = deecopy(val)
 	return settings
 
 def load_settings():
@@ -63,7 +64,7 @@ def create_default_book_config(path, conf_path):
 
 class Target:
 	def __init__(self, conf=None, path='.', compile_dir='.'):
-		self.conf = conf or DEFAULT_TARGET
+		self.conf = conf or deepcopy(DEFAULT_TARGET)
 		self.loaded = set()
 		self.path = Path(path)
 		self.compile_dir = Path(compile_dir)

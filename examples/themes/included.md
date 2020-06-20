@@ -1,0 +1,1 @@
+This is an included document in the document showing the theme {{theme}}. It can use templates : written by {{by}}.

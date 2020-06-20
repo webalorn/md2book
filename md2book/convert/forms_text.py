@@ -40,10 +40,10 @@ class TxtCode(PureCodeData):
 
 class HtmlCode(PureCodeData):
 	EXT = "html"
-	def __init__(self, code, title, headers=[]):
+	def __init__(self, code, title, headers=None):
 		self.code = code
 		self.title = title
-		self.headers = headers
+		self.headers = headers or []
 
 	def set_conf(self, target):
 		super().set_conf(target)

@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from md2book.config import *
 from md2book.util.common import escapePath
 
@@ -51,7 +53,7 @@ class MainTargetDatasModule(BaseModule):
 		conf_css = [(self.target.path.parent / p).resolve() for p in conf['css']]
 		# conf_css = conf['css']
 
-		base_styles = BASE_STYLES['default'][:]
+		base_styles = deepcopy(BASE_STYLES['default'])
 		if conf['theme']:
 			base_styles.append(self.target.theme_path)
 		if self.format in BASE_STYLES:

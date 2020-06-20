@@ -1,0 +1,67 @@
+all :
+  - minimal
+  - github
+  - splendor
+  - retro
+  - air
+  - modest
+
+targets:
+  main:
+    chapters:
+      - ../reference/book.md
+    by : webalorn
+    name : theme_?
+    title : "Theme example : ?"
+    format : pdf
+
+    titlepage:
+      image : dragon.jpg
+    font:
+      include:
+        - calligraffiti
+    metadata:
+      abstract : "Cover image by @nervum (unsplash.com/@nervum)."
+    variables:
+      names:
+        character1 : "This is a custom variable"
+      todo:
+        - item1
+        - item2
+        - item3
+
+  minimal:
+    theme : minimal
+    name : theme_minimal
+    title : "Theme example : minimal"
+
+  github:
+    theme : github
+    name : theme_github
+    title : "Theme example : github"
+
+  splendor:
+    theme : splendor
+    name : theme_splendor
+    title : "Theme example : splendor"
+    font:
+      default: no
+
+  retro:
+    theme : retro
+    name : theme_retro
+    title : "Theme example : retro"
+    font:
+      default: no
+
+  air:
+    theme : air
+    name : theme_air
+    title : "Theme example : air"
+
+  modest:
+    theme : modest
+    name : theme_modest
+    title : "Theme example : modest"
+    font:
+      default: no

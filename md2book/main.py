@@ -132,7 +132,7 @@ def main():
 		for book in books:
 			if args.all:
 				target_list = get_all_targets(book)
-				print('ompile all targets for {} : {}'.format(str(book), ', '.join(target_list)))
+				print('=> Compile all targets for {} : {}'.format(str(book), ', '.join(target_list)))
 
 			for target in target_list:
 				try:

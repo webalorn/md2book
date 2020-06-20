@@ -31,7 +31,6 @@ import re
 
 RE_CHECKBOX = re.compile(r"^(?P<checkbox> *\[(?P<state>(?:x|X| ){1})\] +)(?P<line>.*)", re.DOTALL)
 
-
 def get_checkbox(state, custom_checkbox=False, clickable_checkbox=False):
     """Get checkbox tag."""
 
