@@ -128,6 +128,7 @@ class LatexModule(BaseModule):
 		super().__init__(conf, target)
 		self.enabled = bool(self.conf)
 		self.download_status = None
+		self.equations_names = set()
 
 		if self.enabled:
 			self.download_dir = target.compile_dir / 'latex'
@@ -137,9 +138,11 @@ class LatexModule(BaseModule):
 		with open(str(path)) as f:
 			xml = f.readlines()
 			return xml[2]
-		# groups = re.match(self.XML_PROP_RE, xml)
-		# width, height = groups.group(1), groups.group(2)
-		# return self.IMAGE_TEMPLATE.format(url=str(path))
+
+	def clean_cache(self):
+		for file in self.download_dir.iterdir():
+			if not file.name in self.equations_names:
+				file.unlink()
 
 	def get_inserter(self, argname):
 		def match_latex(match):
@@ -164,16 +167,10 @@ class LatexModule(BaseModule):
 
 			# path = path.relative_to(self.target.compile_dir)
 			path = path.resolve()
+			self.equations_names.add(path.name)
 			return self.get_latex_image_code(path)
 
 		return match_latex
-
-	def try_access_api(self):
-		try:
-			urllib.request.urlopen('https://math.now.sh/home')
-			return True
-		except:
-			return False
 
 	def alter_md(self, code):
 		if self.enabled:
@@ -184,3 +181,5 @@ class LatexModule(BaseModule):
 				SimpleWarning('The math.now.sh API is not accessible, LaTeX may not be rendered').show()
 			elif self.download_status == 'ok':
 				print("LaTeX download complete")
+			if self.download_status != 'offline':
+				self.clean_cache()

@@ -18,7 +18,7 @@ def find_data_files(root_path, parent_dir):
 		if path.is_dir():
 			for p in path.iterdir():
 				find_sub_data(p)
-		else:
+		elif not path.name.startswith('.'):
 			files.append(path.resolve().relative_to(parent_dir))
 	find_sub_data(cur_dir / root_path)
 
@@ -62,6 +62,6 @@ setuptools.setup(
 	},
 	include_package_data=True,
  	package_data={'md2book': find_data_files('md2book/data', 'md2book')},
-	install_requires=['pyyaml', 'markdown', 'pdfkit', 'python-docx'],
+	install_requires=['pyyaml>=5.2', 'markdown>=3.2', 'pdfkit>=0.6.1', 'python-docx>-0.8.10'],
 	python_requires='>=3',
 )

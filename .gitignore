@@ -1,7 +1,6 @@
 *.DS_Store
 *__/*
 *.pyc
-default_settings.yml
 *.zip
 dist/*
 build/*

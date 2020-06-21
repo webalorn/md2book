@@ -12,6 +12,7 @@ def get_cmd_args():
 	parser = argparse.ArgumentParser(
 		prog=M2B_NAME,
 		description=M2B_SHORT_DESCRIPTION,
+		epilog=M2B_EPILOG,
 	)
 
 	targets = " | ".join(list(ALLOWED_FORMATS))
@@ -113,11 +114,11 @@ def compile_book(book_path, target_name='main', output_dir=None, overwrite_targe
 # -------------------- MAIN -------------------- #
 
 def main():
+	args = get_cmd_args()
 	with tempfile.TemporaryDirectory() as tmpdirname:
 		TMP_DIRS.append(Path(tmpdirname).resolve())
 
 		load_settings()
-		args = get_cmd_args()
 		path = get_real_book_path(args.path)
 		books = find_all_books(path)
 		target_list = args.target or ['main']

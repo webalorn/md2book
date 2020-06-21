@@ -1,6 +1,6 @@
 # Md2book
 
-Md2book converts books written with markdown within multiple files into a single, standalone file, and allows exporting to pdf, ebook (epub), docx, odt, markdown or text This projects makes it easy by simply using configuration files written in yaml. You can add your own stylesheets, but the most usefull styles can be directly configured with the configuration file (eg the space between paragraphs, the font and the size of the text, etc...).
+Md2book converts books written with markdown within multiple files into a single, standalone file, and allows exporting to pdf, ebook (epub), docx, odt, markdown or text. This projects makes it easy by using simple configuration files written in yaml. It supports markdown syntax, LaTeX equations, themes, css, fonts, and settings to easily configure the style.
 
 Because an example is better than words, [here is a document generated](https://github.com/webalorn/md2book/blob/master/examples/reference/generated/reference.pdf) using md2book.
 
