@@ -118,7 +118,7 @@ class LatexModule(BaseModule):
 	def __init__(self, conf, target):
 		super().__init__(conf, target)
 		self.enabled = bool(self.conf)
-		self.images = []
+		self.download_status = None
 
 		if self.enabled:
 			self.download_dir = target.compile_dir / 'latex'
@@ -134,10 +134,8 @@ class LatexModule(BaseModule):
 
 	def get_inserter(self, argname):
 		def match_latex(match):
-			if self.images is None:
+			if self.download_status == 'offline':
 				return ''
-			elif not self.images:
-				print("Download LaTeX images from math.now.sh...")
 
 			texcode = match.group(1).strip()
 			args = urllib.parse.urlencode({argname : texcode})
@@ -146,13 +144,17 @@ class LatexModule(BaseModule):
 
 			path = self.download_dir / (filename + '.svg')
 			if not path.resolve().is_file():
+				if self.download_status is None:
+					print("Download LaTeX images from math.now.sh...")
 				result_path = download_url(url, path=str(path))
 				if result_path is None:
-					self.images = None # API is offline
+					self.download_status = 'offline'
 					return ''
+				else:
+					self.download_status = 'ok'
+
 			# path = path.relative_to(self.target.compile_dir)
 			path = path.resolve()
-			self.images.append(path)
 			return self.get_latex_image_code(path)
 
 		return match_latex
@@ -169,7 +171,7 @@ class LatexModule(BaseModule):
 			code.code = re.sub(self.TEX_BLOCKS, self.get_inserter('from'), code.code)
 			code.code = re.sub(self.TEX_INLINE, self.get_inserter('inline'), code.code)
 
-			if self.images is None:
+			if self.download_status == 'offline':
 				SimpleWarning('The math.now.sh API is not accessible, LaTeX may not be rendered').show()
-			elif self.images:
-				print("LaTeX complete")
+			elif self.download_status == 'ok':
+				print("LaTeX download complete")

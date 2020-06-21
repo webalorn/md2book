@@ -19,25 +19,25 @@ CSS_FONT_PROPERTIES = {
 
 class TemplateEngine(string.Formatter):
 	"""
-		Template engine : replace things like {{...}}
+		Template engine : replace things like {% ... %}
 			- "?" indicates an optional parameter
 			- <...> indicates an arbitrary value <=int>, <=str>, <=function> if there is a type
 
 		Syntax :
-			{{<var_name>}} -> python default behavior, prints the variable
-			{{<fct=function>:call:?param1:?...}} -> call the function 'fct'
-			{{<var_name>:set:<value>}} -> set the variable "var_name" with "value"
-			{{<var_name>:counter:?start-value}} -> Print the counter value and add 1.
+			{%<var_name>%} -> python default behavior, prints the variable
+			{%<fct=function>:call:?param1:?...%} -> call the function 'fct'
+			{%<var_name>:set:<value>%} -> set the variable "var_name" with "value"
+			{%<var_name>:counter:?start-value%} -> Print the counter value and add 1.
 					If is doesnt exists, create a variable containing 1, or "start-value"
-			{{<file_path>:include} -> Include the file located at file_path
+			{%<file_path>:include%} -> Include the file located at file_path
 
-			{{<var_name>:get}} Try to guess the type and return the value with a good type
-			{{?<var_name>:eval:<expr>}} -> eval the expression, store it if <var_name> is non-empty. Otherwise, return the value
-			{{?<var_name>:if:<cond>:<expr>}}, {{<var_name>:if:<cond>:<expr>:else:<expr>}}
-			{{<rel_path>:relpath}} -> Path relative to the target directory
-			{{<font-name>:font}} -> Change the font used
-				{{<font-name>:font}}, {{<font-size>:size}}, {{<color>:color}} [SIZE MUST HAVE A UNIT]
-			{{<var-name>?:format:<code>}} -> In <code> : replace newlines by <br/>
+			{%<var_name>:get%} Try to guess the type and return the value with a good type
+			{%?<var_name>:eval:<expr>%} -> eval the expression, store it if <var_name> is non-empty. Otherwise, return the value
+			{%?<var_name>:if:<cond>:<expr>%}, {{<var_name>:if:<cond>:<expr>:else:<expr>%}
+			{%<rel_path>:relpath%} -> Path relative to the target directory
+			{%<font-name>:font%} -> Change the font used
+				{%<font-name>:font%}, {%<font-size>:size%}, {%<color>:color%} [SIZE MUST HAVE A UNIT]
+			{%<var-name>?:format:<code>%} -> In <code> : replace newlines by <br/>
 		
 	"""
 	def __init__(self, values, path):
@@ -198,7 +198,7 @@ class TemplateEngine(string.Formatter):
 		return ''
 
 	def format(self, txt):
-		txt = txt.replace("{{", "𓀀").replace("}}", "𓀁")
+		txt = txt.replace("{%", "𓀀").replace("%}", "𓀁")
 		txt = txt.replace("{", "𓂴").replace("}", "𓂶")
 		txt = txt.replace("𓀀", "{").replace("𓀁", "}")
 		self.openedFont = None

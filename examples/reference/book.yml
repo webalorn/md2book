@@ -1,3 +1,5 @@
+all : [docx, epub, html, pdf]
+
 targets:
   main:
     chapters:
