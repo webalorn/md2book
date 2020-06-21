@@ -1,0 +1,60 @@
+/* TOC in ebook body / html / pdf */
+
+div.toc {
+  margin-bottom: 1em;
+  padding: 20px 0px;
+  border-top : 2px solid #6f6f6f;
+  border-bottom : 2px solid #6f6f6f;
+  text-align: left;
+}
+div.toc ul {
+  list-style-type: decimal;
+}
+div.toc > ul {
+  list-style-type: upper-roman;
+}
+
+/* TOC in html / pdf */
+#htmlbody div.toc {
+  margin-bottom: 5em;
+  padding: 20px 30px;
+}
+#htmlbody div.toc > ul {
+  overflow:hidden;
+}
+#htmlbody div.toc > * {
+  font-size: 1.2em;
+}
+#htmlbody div.toc ul ul {
+  font-size: 0.92em;
+}
+#htmlbody div.toc a {
+  text-decoration: none;
+  color: #022046;
+}
+#htmlbody div.toc li > a {
+    position:relative;
+    background: white;
+    padding-right: 10px;
+}
+#htmlbody div.toc li > a:after {
+    font-size: 0.4em;
+    content: "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────";
+    display:block;
+    position:absolute;
+    left: 0px;
+    top: 1.3em;
+    z-index: -1;
+}
+
+/* Main TOC in ebooks */
+
+#toc-title {
+  display: none;
+}
+#toc ol {
+  list-style-type: decimal;
+}
+#toc > ol {
+  list-style-type: upper-roman;
+}

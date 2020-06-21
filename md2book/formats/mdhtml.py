@@ -32,7 +32,7 @@ class MarkdownExtended(Extension):
 
 # -------------------- EXTRACT TOC FROM MARKDOWN CODE -------------------- #
 
-def extract_toc(code, depth):
+def extract_toc(code, depth, dest):
 	lines = code.split('\n')
 	lines = [l for l in lines if l.startswith('#')] # Keep headers
 	code = '\n\n'.join(['[TOC]'] + lines)
@@ -42,6 +42,7 @@ def extract_toc(code, depth):
 		extension_configs={ 'toc' : { 'toc_depth' : depth } }
 	)
 	lines = [l for l in html.split('\n') if not l.startswith('<h')]
+	lines[0] = '<div class="toc toc-in-{dest}">'.format(dest=dest)
 	html = '\n'.join(lines)
 	return html
 

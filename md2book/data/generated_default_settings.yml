@@ -44,5 +44,5 @@ default_target:
   toc:
     enable: true
     level: 3
-    style: null
+    style: base
   variables: {}

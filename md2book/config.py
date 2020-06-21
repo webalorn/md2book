@@ -71,7 +71,7 @@ DEFAULT_TARGET = {
 	'toc' : {
 		'enable' : True, # Generate a TOC at the begening of the file
 		'level' : 3,
-		'style' : None,
+		'style' : 'base',
 	},
 	'style' : {
 		'align' : 'justify',

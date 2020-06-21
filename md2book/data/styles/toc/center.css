@@ -1,0 +1,53 @@
+#htmlbody div.toc {
+  padding: 20px 0px;
+}
+div.toc ul {
+    /*padding-left: 1.8em;*/
+    padding-left : 0px;
+    text-align: center;
+    list-style-type: none;
+}
+
+div.toc ul ul a {
+    font-style: italic;
+}
+
+#htmlbody div.toc li > a:before {
+    font-size: 0.4em;
+    content: "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────";
+    display:block;
+    position:absolute;
+    left: -80em;
+    top: 1.3em;
+    z-index: -1;
+}
+
+#htmlbody div.toc > ul > li > a:before, #htmlbody div.toc > ul > li > a:after {
+    font-size: 1em;
+    top: 0em;
+}
+
+#htmlbody div.toc ul ul ul > li > a:before, #htmlbody div.toc ul ul ul > li > a:after {
+    content: "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄";
+    font-size: 1em;
+    top: 0em;
+    color: #a2a2a2;
+}
+
+#htmlbody div.toc li > a {
+    padding-left: 10px;
+}
+
+/* Ebooks */
+div.toc-in-epub > ul > li > a {
+    font-weight: bold;
+}
+
+div.toc-in-epub ul ul a {
+    font-size : 0.9em;
+    font-style: normal;
+}
+div.toc-in-epub ul ul ul a {
+    font-size : 0.8em;
+    font-style: italic;
+}

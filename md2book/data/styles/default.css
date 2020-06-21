@@ -22,48 +22,6 @@ img {
 }
 
 
-/* Base table of contents */
-div.toc {
-  margin-bottom: 5em;
-  /*border-left: 5px solid #d4d4d4;*/
-  /*padding-left: 20px;*/
-  padding: 20px 30px;
-  border-top : 2px solid #6f6f6f;
-  border-bottom : 2px solid #6f6f6f;
-}
-div.toc ul {
-  list-style-type: decimal;
-}
-div.toc > ul {
-  list-style-type: upper-roman;
-  overflow:hidden;
-}
-div.toc > * {
-  font-size: 1.2em;
-}
-div.toc ul ul {
-  font-size: 0.92em;
-}
-div.toc a {
-  text-decoration: none;
-  color: #022046;
-}
-div.toc li > a {
-    position:relative;
-    background: white;
-    padding-right: 10px;
-}
-div.toc li > a:after {
-    font-size: 0.4em;
-    content: "────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────";
-    display:block;
-    position:absolute;
-    left: 0px;
-    top: 1.3em;
-    z-index: -1;
-}
-
-
 /* Simple blocks */
 mark {
   background: #b6e8ff;

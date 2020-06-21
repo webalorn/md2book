@@ -1,7 +1,8 @@
 from copy import deepcopy
 
 from md2book.config import *
-from md2book.util.common import escapePath
+from md2book.util.common import escapePath, get_file_in
+from md2book.util.exceptions import ConfigError
 
 class BaseModule:
 	NAME = None # None for a module auto-loaded without configuration
@@ -48,7 +49,14 @@ class MainTargetDatasModule(BaseModule):
 			conf['title'] = conf['name']
 
 		# Stylesheets
-		conf_css = [(self.target.path.parent / p).resolve() for p in conf['css']]
+		conf_css = []
+		base_paths = ['/', self.target.path.parent, DATA_PATH / 'styles']
+		for path in  conf['css']:
+			real_path = get_file_in(path, base_paths)
+			if real_path:
+				conf_css.append(real_path)
+			else:
+				raise ConfigError("Can't find stylesheet {}".format(path))
 
 		base_styles = deepcopy(BASE_STYLES['default'])
 		base_styles.extend(self.target.mods['theme'].styles)

@@ -80,7 +80,7 @@ def download_url(url, ext='', path=None):
 def get_file_in(path, path_list=['/'], dir_ok=False):
 	for base in path_list:
 		if base:
-			complete_path = Path(base) / path
+			complete_path = (Path(base) / path).resolve()
 			if complete_path.exists() and (complete_path.is_file() or dir_ok):
 				return str(complete_path)
 	return download_url(path)

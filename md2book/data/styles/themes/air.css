@@ -188,20 +188,3 @@ table, th, td {
 th {
   color : #333;
 }
-
-div.toc {
-  text-align: center;
-  font-size : 1.1em;
-}
-div.toc ul {
-  list-style-type: none;
-  text-align: left;
-}
-div.toc > ul {
-  margin: 0px;
-  padding: 0px;
-  display: inline-block;
-}
-div.toc li > a:after {
-    content: "";
-}

@@ -96,8 +96,7 @@ class ThemeModule(BaseModule):
 			self.styles = [DATA_PATH / 'styles' / s for s in self.settings.get('css', [])]
 
 			if 'toc' in self.settings and not self.target.is_user_defined('toc.style'):
-				toc_style = DATA_PATH / 'styles' / self.settings['toc']
-				self.target.conf['toc']['style'] = toc_style
+				self.target.conf['toc']['style'] = self.settings['toc']
 
 			if 'font' in self.settings and not self.target.is_user_defined('font.default'):
 				self.target.conf['font']['default'] = self.settings['font']

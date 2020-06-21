@@ -1,0 +1,3 @@
+#htmlbody div.toc li > a:after {
+    content: "";
+}

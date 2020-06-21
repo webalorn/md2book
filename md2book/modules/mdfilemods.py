@@ -91,13 +91,22 @@ class TocModule(BaseModule):
 			code.code = '[TOC]\n\n' + code.code
 
 		if self.format in ['epub'] and '[TOC]' in code.code:
-			toc_html = extract_toc(code.code, self.conf['level'])
+			toc_html = extract_toc(code.code, self.conf['level'], self.format)
 			code.code = code.code.replace('[TOC]', toc_html)
 
 		if self.format in ['odt', 'epub', 'docx', 'html_light']:
 			if self.conf['enable'] is None:
 				self.conf['enable'] = '[TOC]' in code.code
 			code.code = code.code.replace('[TOC]', '')
+
+	def get_stylesheets(self):
+		styles = []
+		style = self.conf['style'].strip()
+		if style:
+			styles.append(DATA_PATH / 'styles/toc/base.css')
+			if style != 'base':
+				styles.append(DATA_PATH / 'styles/toc/{}.css'.format(style))
+		return styles
 
 class HtmlBlocksModule(BaseModule):
 	RE_BR = r'<br(.*?)>'

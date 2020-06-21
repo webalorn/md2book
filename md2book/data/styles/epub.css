@@ -12,16 +12,6 @@ h1, h2, h3 {
   font-size : 0.9em;
 }
 
-#toc ol {
-  list-style-type: decimal;
-}
-#toc > ol {
-  list-style-type: upper-roman;
-}
-
-#toc-title {
-	display: none;
-}
 .titlepage h1.main { /* Title */
 	
 }

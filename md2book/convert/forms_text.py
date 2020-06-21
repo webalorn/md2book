@@ -17,11 +17,10 @@ class MarkdownCode(PureCodeData):
 		self.meta_code = ""
 
 	def set_conf(self, target):
-		super().set_conf(target)
 		self.fill_template(target)
-
 		if target.mods['metadata']:
 			self.meta_code = target.mods['metadata'].get_yaml_intro()
+		super().set_conf(target)
 
 	def clear_for(self, target_format):
 		""" Remove parts that are not needed in some documents """
@@ -49,7 +48,6 @@ class HtmlCode(PureCodeData):
 	def set_conf(self, target):
 		super().set_conf(target)
 		
-		target.load_linked_files()
 		for style in target.stylesheets:
 			self.addStyle(style)
 		for script in target.scripts:

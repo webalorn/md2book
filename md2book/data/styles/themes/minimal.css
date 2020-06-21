@@ -48,6 +48,3 @@ table, th, td {
 th, td {
   padding: 4px;
 }
-div.toc li > a:after {
-    content: "";
-}

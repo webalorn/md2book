@@ -29,6 +29,7 @@ class CodeData:
 
 	def set_conf(self, target):
 		self.target = target
+		target.load_linked_files()
 
 	def load_from(self, path):
 		raise Exception("Not implemented")
