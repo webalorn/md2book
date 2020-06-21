@@ -49,11 +49,12 @@ DEFAULT_TARGET = {
 	'theme' : 'github', # Set 'no' for no theme.
 	'css' : [],
 	'js' : [],
-	'between-chapters' : "\n\n",
+	'between-chapters' : '\n\n',
 	'chapter-level' : 1, # or 2, 3 : level where to split into chapters
 
 	# Modules : 
-	'sep' : "✶   ✶   ✶",
+	'sep' : '✶   ✶   ✶',
+	'latex' : True,
 	'titlepage' : {
 		'enable' : True,
 		'image' : None,
@@ -68,8 +69,9 @@ DEFAULT_TARGET = {
 		'size' : None,
 	},
 	'toc' : {
-		'enable' : None, # If not set, enabled if [TOC] is found in the document
+		'enable' : True, # Generate a TOC at the begening of the file
 		'level' : 3,
+		'style' : None,
 	},
 	'style' : {
 		'align' : 'justify',

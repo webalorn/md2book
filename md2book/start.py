@@ -1,5 +1,9 @@
 import importlib, traceback
-from shutil import which
+# from shutil import which
+import distutils.spawn
+
+def which(name):
+	return distutils.spawn.find_executable(name)
 
 from md2book.util.exceptions import BaseError, ModuleImportError, MissingDependencyError
 

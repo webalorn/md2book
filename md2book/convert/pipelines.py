@@ -142,3 +142,27 @@ class PipeMd2txtPandoc(PandocPipeline):
 	def convert_steps(self, target):
 		super().convert_steps(target)
 		self.code.code = post_process_txt(self.code.code, target)
+
+class PipeMd2htmlPandoc(PandocPipeline):
+	DEST_FORMAT = HtmlCode
+
+	def md2html(self, target):
+		# First we transform the markdown into html
+		html = markdown.markdown(self.code.get_base_code_only(),
+			extensions=self.md_extensions,
+			extension_configs=self.md_extensions_conf)
+
+		self.code = HtmlCode(html, target['title'])
+
+		for mod in target.modules:
+			mod.alter_html(self.code)
+		self.code.set_conf(target)
+
+	def convert_steps(self, target):
+		dest = self.DEST_FORMAT('', target['title'])
+		dest.set_conf(target)
+		self.pandoc(dest)
+
+		for mod in target.modules:
+			mod.alter_html(self.code)
+		self.code.set_conf(target)

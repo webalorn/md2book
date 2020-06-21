@@ -2,6 +2,7 @@ import subprocess, os, platform, fnmatch, yaml
 import random, string
 from copy import deepcopy
 from urllib.request import urlretrieve
+from pathlib import Path
 
 from .exceptions import ConfigError
 from md2book.config import *
@@ -57,7 +58,7 @@ def find_files_matching(path, pattern):
 def load_yaml_file(filepath, default=None):
 	filepath = str(filepath)
 	try:
-		with open(filepath, "r") as f:
+		with open(filepath, "r", encoding="utf-8") as f:
 			try:
 				return yaml.load(f, Loader=yaml.FullLoader)
 			except:
@@ -67,10 +68,24 @@ def load_yaml_file(filepath, default=None):
 			raise ConfigError("This file doesn't exists", filepath)
 	return default
 
-def get_document_local_path(path):
+def download_url(url, ext='', path=None):
+	if path is None:
+		path = str(TMP_DIRS[0] / (rand_str(20) + ext))
 	try:
-		p = TMP_DIRS[0] / rand_str(20)
-		urlretrieve(path, p)
-	except ValueError:
+		urlretrieve(url, path)
 		return path
-	return str(p)
+	except:
+		return None
+
+def get_file_in(path, path_list=['/'], dir_ok=False):
+	for base in path_list:
+		if base:
+			complete_path = Path(base) / path
+			if complete_path.exists() and (complete_path.is_file() or dir_ok):
+				return str(complete_path)
+	return download_url(path)
+	
+
+def get_file_local_path(path, base_path='', user_path='', dir_ok=False):
+	path_list = [base_path, user_path, '/']
+	return get_file_in(path, path_list, dir_ok)

@@ -1,7 +1,8 @@
 from .base import BaseModule
 from md2book.config import *
 from md2book.util.style import ensure_with_unit, FontFamily
-from md2book.util.common import escapePath
+from md2book.util.common import escapePath, load_yaml_file
+from md2book.util.exceptions import ConfigError
 
 class StyleModule(BaseModule):
 	NAME = 'style'
@@ -59,7 +60,6 @@ class FontModule(BaseModule):
 			self.conf['include'].append(name)
 
 	def get_custom_css(self):
-		print('get_custom_css')
 		css = []
 		for font in self.get_fonts():
 			css.extend(font.get_css(self.format))
@@ -77,3 +77,27 @@ class FontModule(BaseModule):
 				path = escapePath(font.font_path / (font.name + "*"))
 				options.append("--epub-embed-font=" + path)
 		return options
+
+class ThemeModule(BaseModule):
+	NAME = 'theme'
+
+	def __init__(self, conf, target):
+		super().__init__(conf, target)
+		self.theme = conf
+		self.styles = []
+		self.settings = {}
+
+		if self.theme:
+			theme_path = DATA_PATH / 'themes' / (self.theme + '.yml')
+			if not (theme_path.exists() and theme_path.is_file()):
+				raise ConfigError("The theme {} doesn't exists".format(self.theme))
+
+			self.settings = load_yaml_file(theme_path)
+			self.styles = [DATA_PATH / 'styles' / s for s in self.settings.get('css', [])]
+
+			if 'toc' in self.settings and not self.target.is_user_defined('toc.style'):
+				toc_style = DATA_PATH / 'styles' / self.settings['toc']
+				self.target.conf['toc']['style'] = toc_style
+
+			if 'font' in self.settings and not self.target.is_user_defined('font.default'):
+				self.target.conf['font']['default'] = self.settings['font']

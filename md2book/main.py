@@ -97,7 +97,7 @@ def compile_book(book_path, target_name='main', output_dir=None, overwrite_targe
 	check_targets_validity(targets_dict, target_name)
 
 	# Load the target
-	target = Target(path=book_path, compile_dir=compile_dir)
+	target = Target(path=book_path, compile_dir=compile_dir, conf={})
 	target.load_from_settings(targets_dict, target_name)
 	target.merge(overwrite_target)
 	target.complete()

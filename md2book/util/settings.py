@@ -65,13 +65,13 @@ def create_default_book_config(path, conf_path):
 class Target:
 	def __init__(self, conf=None, path='.', compile_dir='.'):
 		self.conf = conf or deepcopy(DEFAULT_TARGET)
+		self.loaded_conf = {}
 		self.loaded = set()
 		self.path = Path(path)
 		self.compile_dir = Path(compile_dir)
 
 		self.modules = []
 		self.mods = {} # Modules with a name
-		self.theme_path = None
 
 		self.stylesheets = []
 		self.scripts = []
@@ -80,6 +80,12 @@ class Target:
 		return self.conf.get(key)
 
 	def load_from_settings(self, config, form):
+		self.conf = {}
+		self._load_settings_recur(config, form)
+		self.loaded_conf = deepcopy(self.conf)
+		self.conf = merge_dicts_recur(deepcopy(DEFAULT_TARGET), self.conf)
+
+	def _load_settings_recur(self, config, form):
 		if form in ALLOWED_FORMATS:
 			config[form] = config.get(form, {})
 			config[form]['format'] = form
@@ -90,9 +96,18 @@ class Target:
 
 		inherit = ['main'] + config.get('inherit', [])
 		for subtarget in inherit:
-			self.load_from_settings(config, subtarget)
+			self._load_settings_recur(config, subtarget)
 
 		self.merge(config[form])
+
+	def is_user_defined(self, key):
+		if isinstance(key, str):
+			key = key.split('.')
+		key = key[::-1]
+		arg = self.loaded_conf
+		while key and arg is not None:
+			arg = arg.get(key.pop(), None)
+		return (arg is not None)
 
 	def merge(self, overrride):
 		self.conf = merge_dicts_recur(self.conf, overrride)

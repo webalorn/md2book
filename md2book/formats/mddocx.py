@@ -5,7 +5,7 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_BREAK
 from docx.enum.style import WD_STYLE_TYPE
 from docx.shared import Pt, Cm
 
-from md2book.util.common import get_document_local_path
+from md2book.util.common import get_file_local_path
 from .mdhtml import purify_remove_html
 
 ALIGMENTS = {
@@ -65,7 +65,9 @@ def post_process_docx(docx_file, target):
 			p.text = re.sub(REGEX_IMAGES, detect_image, p.text)
 			r = p.add_run()
 			for url in images:
-				img = r.add_picture(get_document_local_path(url))
+				url = get_file_local_path(url)
+				if url:
+					img = r.add_picture(url)
 			if image_alignment in ALIGMENTS:
 				p.alignment = ALIGMENTS[image_alignment]
 

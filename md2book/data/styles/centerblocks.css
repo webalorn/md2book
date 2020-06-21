@@ -1,4 +1,4 @@
-p img:only-child {
+p > img:only-child, p > svg:only-child {
 	display: block;
 	margin: auto;
 }

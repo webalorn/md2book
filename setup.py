@@ -3,6 +3,7 @@ from pathlib import Path
 import importlib.util
 
 cur_dir = Path(__file__).parent
+FILES_BLACK_LIST = ['data/default_settings.yml']
 
 try:
 	with open("readme.md", "r") as readme_file:
@@ -21,7 +22,9 @@ def find_data_files(root_path, parent_dir):
 			files.append(path.resolve().relative_to(parent_dir))
 	find_sub_data(cur_dir / root_path)
 
-	return [str(f) for f in files]
+	files = [str(f) for f in files]
+	files = [f for f in files if f not in FILES_BLACK_LIST]
+	return files
 
 def import_module_file(name, path):
 	path = str(cur_dir / path)

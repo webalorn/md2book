@@ -1,6 +1,7 @@
 from pathlib import Path
 import re
 
+import markdown
 from markdown.treeprocessors import Treeprocessor
 from markdown.inlinepatterns import SimpleTagPattern
 from markdown.extensions import Extension
@@ -28,6 +29,21 @@ class MarkdownExtended(Extension):
 
 		sub_tag = SimpleTagPattern(self.REGEX_SUB, 'sub')
 		md.inlinePatterns.register(sub_tag, 'sub', 10)
+
+# -------------------- EXTRACT TOC FROM MARKDOWN CODE -------------------- #
+
+def extract_toc(code, depth):
+	lines = code.split('\n')
+	lines = [l for l in lines if l.startswith('#')] # Keep headers
+	code = '\n\n'.join(['[TOC]'] + lines)
+
+	html = markdown.markdown(code,
+		extensions=['toc'],
+		extension_configs={ 'toc' : { 'toc_depth' : depth } }
+	)
+	lines = [l for l in html.split('\n') if not l.startswith('<h')]
+	html = '\n'.join(lines)
+	return html
 
 # -------------------- PRE-PROCESS MARKDOWN -------------------- #
 

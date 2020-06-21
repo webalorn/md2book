@@ -1,2 +1,2 @@
-__version__ = '0.0.0'
-__author__ = 'webalorn (Théophane Vallaeys)'
+__version__ = '0.0.1'
+__author__ = 'webalorn'

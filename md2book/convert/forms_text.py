@@ -4,6 +4,7 @@ from urllib.request import urlopen
 
 from .forms import PureCodeData
 from md2book.util.exceptions import ParsingError
+from md2book.util.common import get_file_local_path
 from md2book.config import *
 from md2book.formats.mddocx import purify_for_docx
 from md2book.formats.mdtxt import purify_for_txt
@@ -66,30 +67,21 @@ class HtmlCode(PureCodeData):
 		self.headers.append(self.getHtmlTag(tag, content, **keys_vals))
 
 	def addStyle(self, path, base_path=""):
-		path = str(path)
-		try:
-			f = urlopen(path)
-		except ValueError:
-			try:
-				f = open(str(Path(base_path) / path))
-			except:
-				if 'styles/themes/' in path:
-					theme = path.split('/')[-1].split('.')[0]
-					raise ParsingError('The theme "{}" doesn\'t exists'.format(theme))
-				raise ParsingError('Can\'t find the stylesheet {}'.format(path))
-		self.addHeader('style', f.read())
+		base_path = Path(base_path or self.target.path.parent)
+		real_path = get_file_local_path(path, base_path=base_path)
+		
+		if real_path is None:
+			raise ParsingError('Can\'t find the stylesheet {}'.format(str(path)))
+		with open(real_path) as f:
+			self.addHeader('style', f.read())
 
 	def addScript(self, path, base_path=""):
 		base_path = Path(base_path or self.target.path.parent)
-		path = str(path)
-		try:
-			f = urlopen(path)
-			self.addHeader('script', '', src=path)
-		except ValueError:
-			try:
-				f = open(str(base_path / path))
-			except:
-				raise ParsingError('Can\'t find the script {}'.format(path))
+		real_path = get_file_local_path(path, base_path=base_path)
+
+		if real_path is None:
+			raise ParsingError('Can\'t find the script {}'.format(str(path)))
+		with open(real_path) as f:
 			self.addHeader('script', f.read())
 
 	def get(self):

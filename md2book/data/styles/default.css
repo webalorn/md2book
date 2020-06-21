@@ -38,7 +38,7 @@ div.toc > ul {
   list-style-type: upper-roman;
   overflow:hidden;
 }
-div.toc {
+div.toc > * {
   font-size: 1.2em;
 }
 div.toc ul ul {

@@ -46,16 +46,12 @@ class MainTargetDatasModule(BaseModule):
 		conf = self.target.conf
 		if conf.get('title', None) is None:
 			conf['title'] = conf['name']
-		if conf['theme']:
-			self.target.theme_path = DATA_PATH / 'styles' / 'themes' / '{}.css'.format(conf['theme'])
 
 		# Stylesheets
 		conf_css = [(self.target.path.parent / p).resolve() for p in conf['css']]
-		# conf_css = conf['css']
 
 		base_styles = deepcopy(BASE_STYLES['default'])
-		if conf['theme']:
-			base_styles.append(self.target.theme_path)
+		base_styles.extend(self.target.mods['theme'].styles)
 		if self.format in BASE_STYLES:
 			base_styles.extend(BASE_STYLES[self.format])
 
