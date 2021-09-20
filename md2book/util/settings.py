@@ -69,6 +69,7 @@ class Target:
 		self.loaded = set()
 		self.path = Path(path)
 		self.compile_dir = Path(compile_dir)
+		self.is_linked_loaded = False
 
 		self.modules = []
 		self.mods = {} # Modules with a name
@@ -135,6 +136,9 @@ class Target:
 
 	def load_linked_files(self):
 		custom_css = []
+		if self.is_linked_loaded:
+			return
+		self.is_linked_loaded = True
 
 		for mod in self.modules:
 			if mod.get_conf_name():

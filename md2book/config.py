@@ -174,5 +174,6 @@ PDF_OPTIONS = { # https://wkhtmltopdf.org/usage/wkhtmltopdf.txt
 	'margin-left': '0.75in',
 	'encoding': "UTF-8",
 	'quiet': '',
-    'no-outline': None,
+	'enable-local-file-access': None,
+  'no-outline': None,
 }
