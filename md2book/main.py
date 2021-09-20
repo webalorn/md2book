@@ -1,4 +1,4 @@
-import argparse, tempfile
+import argparse, tempfile, glob
 from pathlib import Path
 
 from md2book.config import *
@@ -46,14 +46,20 @@ def get_target_md_code(target):
 	path = target.path.resolve().parent
 	chapters = []
 	for chap_name in target['chapters']:
-		try:
-			with open(str(path / chap_name), "r", encoding="utf-8") as f:
-				content = f.read().strip()
-		except FileNotFoundError as e:
-			raise ConfigError("Chapter {} not found".format(chap_name))
+		chap_path = str(path / chap_name)
+		files = [chap_path]
+		if not Path(chap_path).exists():
+			files = glob.glob(chap_path)
+			if not files:
+				raise ConfigError("Chapter(s) {} not found(s)".format(chap_name))
+			# TODO : sort
 
-		content = md_make_paths_absolute(content, (path / chap_name).parent.resolve())
-		chapters.append(content)
+		for file_path in files:
+			with open(file_path, "r", encoding="utf-8") as f:
+				content = f.read().strip()
+
+			content = md_make_paths_absolute(content, (path / chap_name).parent.resolve())
+			chapters.append(content)
 	md_code = target['between-chapters'].join(chapters)
 	return md_code
 
