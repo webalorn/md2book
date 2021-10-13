@@ -111,38 +111,73 @@ class TocModule(BaseModule):
 class HtmlBlocksModule(BaseModule):
 	RE_BR = r'<br(.*?)>'
 	REGEX_COMMENTS = r"<!--([\s\S]*?)-->"
+	RE_SVG_IMAGE = r'(<img .*?src="(.*?\.svg)".*?>)'
+
+	def __init__(self, conf, target):
+		super().__init__(conf, target)
+		self.alter_svg = target.format in ['html', 'pdf']
 
 	def alter_html(self, code):
 		code.code = re.sub(self.REGEX_COMMENTS, '', code.code)
 		code.code = re.sub(self.RE_BR, '<br />', code.code)
+		if self.alter_svg:
+			code.code = re.sub(self.RE_SVG_IMAGE, self.svg_inserter, code.code)
+
+	def svg_inserter(self, match):
+		path = match.group(2)
+		if path.startswith('http://') or path.startswith('https://'):
+			return math.group(1)
+		with open(str(path)) as f:
+			xml = f.readlines()[2:]
+		xml = ''.join(xml)
+		return xml
+
 
 class LatexModule(BaseModule):
 	NAME = 'latex'
-	TEX_BLOCKS = r'\$\$\$([\s\S]*?)\$\$\$'
+	TEX_BLOCKS = r'\$\$([\s\S]*?)\$\$'
 	TEX_INLINE = r'\$(.*?)\$'
+	SVG_SIZE= r'width="(.*?)" height="(.*?)"'
 	# XML_PROP_RE = r'[\s\S]*?<svg.*?width="(.*?)".*?height="(.*?)".*?role="img"[\s\S]*?'
 	# IMAGE_TEMPLATE = '![]({url})'
-	IMAGE_TEMPLATE = '![]({url})'
+	IMAGE_INLINE = '<img src="{}" style="width:{}; height: {};" />'
+	IMAGE_BLOCK = '<p class="centerblock"><img src="{}" style="width:{}; height: {};" /></p>'
+	ALIASES = {
+		r'\\R' : r'\\mathbb{R}',
+		r'\\infin' : r'\\infty',
+	}
 
 	def __init__(self, conf, target):
 		super().__init__(conf, target)
 		self.enabled = bool(self.conf)
 		self.download_status = None
 		self.equations_names = set()
+		self.relative_path = target.format in ['md']
 
 		if self.enabled:
 			self.download_dir = target.compile_dir / 'latex'
 			self.download_dir.mkdir(parents=True, exist_ok=True)
 
-	def get_latex_image_code(self, path):
+	def get_latex_image_code(self, path, inline=True):
 		with open(str(path)) as f:
 			xml = f.readlines()
-			return xml[2]
+		xml = ''.join(xml)
+		sizes = re.search(self.SVG_SIZE, xml)
+
+		template = self.IMAGE_INLINE if inline else self.IMAGE_BLOCK
+		path = ('latex/' + path.name) if self.relative_path else str(path)
+		return template.format(path, sizes.group(1), sizes.group(2))
 
 	def clean_cache(self):
 		for file in self.download_dir.iterdir():
 			if not file.name in self.equations_names:
 				file.unlink()
+
+	def preprocess_text(self, texcode):
+		a = texcode
+		for alias in self.ALIASES:
+			texcode = re.sub(alias + r'(?=([^a-zA-Z\d]|$))', self.ALIASES[alias], texcode)
+		return texcode
 
 	def get_inserter(self, argname):
 		def match_latex(match):
@@ -150,8 +185,9 @@ class LatexModule(BaseModule):
 				return ''
 
 			texcode = match.group(1).strip()
-			args = urllib.parse.urlencode({argname : texcode})
-			url = 'https://math.now.sh?' + args
+			texcode = self.preprocess_text(texcode)
+			args = urllib.parse.urlencode({'color' : 'black', argname : texcode})
+			url = 'https://math.vercel.app?' + args
 			filename = hashlib.md5(url.encode('utf-8')).hexdigest()
 
 			path = self.download_dir / (filename + '.svg')
@@ -168,7 +204,7 @@ class LatexModule(BaseModule):
 			# path = path.relative_to(self.target.compile_dir)
 			path = path.resolve()
 			self.equations_names.add(path.name)
-			return self.get_latex_image_code(path)
+			return self.get_latex_image_code(path, inline=(argname == 'inline'))
 
 		return match_latex
 

@@ -1,6 +1,8 @@
-p > img:only-child, p > svg:only-child {
+/*p > img:only-child, p > svg:only-child {*/
+.centerblock {
 	display: block;
 	margin: auto;
+	text-align: center;
 }
 table {
 	margin-left: auto;

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <!-- <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap" rel="stylesheet"> -->
-<title>Reference document</title>
+<title>Theme example : ?</title>
 <style>body {
   max-width: 860px;
   padding: 30px;
@@ -1305,13 +1305,12 @@ body { font-family: "opensans","Clear Sans","Helvetica Neue",Helvetica,Arial,san
 <span style="font-family: 'opensans';"></span> 
 <div id="titlePage">
 	
-	<div id="bookTitle">Reference document</div>
+	<div id="bookTitle">Theme example : ?</div>
 	
 	 <div id="bookAuthor">webalorn</div> 
-	 <img id="bookTitleImage" src="/Users/webalorn/Documents/info/projects/md2book/examples/reference/dragon.jpg" alt="Title image" /> 
+	 <img id="bookTitleImage" src="/Users/webalorn/Documents/info/projects/md2book/examples/themes/dragon.jpg" alt="Title image" /> 
 	
-	 <div id="bookAbstract"> This document contains examples for many of the functionalities of md2book.
-<br /> Cover image by @nervum (unsplash.com/@nervum). </div> 
+	 <div id="bookAbstract"> Cover image by @nervum (unsplash.com/@nervum). </div> 
 
 </div>
 <div class="toc">
@@ -1337,35 +1336,34 @@ body { font-family: "opensans","Clear Sans","Helvetica Neue",Helvetica,Arial,san
 <li><a href="#conditions">Conditions</a></li>
 </ul>
 </li>
-<li><a href="#second-markdown-document">Second markdown document</a></li>
 </ul>
 </div>
 <h1 id="introduction">Introduction</h1>
 <p>This document contains various styles and formating options. The links may not be clickable on the github pdf viewer, so you can download the pdf. You can look at the source code <a href="https://raw.githubusercontent.com/webalorn/md2book/master/examples/reference/book.md">in the repository</a>, and the rendered document <a href="https://github.com/webalorn/md2book/blob/master/examples/reference/generated/reference.pdf">here in pdf</a>. Any valid html can be inserted into the markdown code, and it will be rendered. The configuration file used here is :</p>
-<pre><code class="language-yaml">all : [docx, epub, html, pdf]
+<pre><code class="language-yaml">all :
+  - minimal
+  - github
+  - splendor
+  - retro
+  - air
+  - modest
 
 targets:
   main:
     chapters:
-      - book.md
-      - next_chapter.md
+      - ../reference/book.md
     by : webalorn
-    name : reference
-    title : &quot;Reference document&quot;
+    name : theme_?
+    title : &quot;Theme example : ?&quot;
+    format : pdf
 
     titlepage:
       image : dragon.jpg
-    images:
-      cover : dragon.jpg
-
     font:
       include:
         - calligraffiti
-
     metadata:
-      abstract : &quot;This document contains examples for many of the functionalities of md2book.\n
-Cover image by @nervum (unsplash.com/@nervum).&quot;
-
+      abstract : &quot;Cover image by @nervum (unsplash.com/@nervum).&quot;
     variables:
       names:
         character1 : &quot;This is a custom variable&quot;
@@ -1373,6 +1371,42 @@ Cover image by @nervum (unsplash.com/@nervum).&quot;
         - item1
         - item2
         - item3
+
+  minimal:
+    theme : minimal
+    name : theme_minimal
+    title : &quot;Theme example : minimal&quot;
+
+  github:
+    theme : github
+    name : theme_github
+    title : &quot;Theme example : github&quot;
+
+  splendor:
+    theme : splendor
+    name : theme_splendor
+    title : &quot;Theme example : splendor&quot;
+    font:
+      default: no
+
+  retro:
+    theme : retro
+    name : theme_retro
+    title : &quot;Theme example : retro&quot;
+    font:
+      default: no
+
+  air:
+    theme : air
+    name : theme_air
+    title : &quot;Theme example : air&quot;
+
+  modest:
+    theme : modest
+    name : theme_modest
+    title : &quot;Theme example : modest&quot;
+    font:
+      default: no
 </code></pre>
 <p>Some other formats are supported :</p>
 <ul>
@@ -1487,8 +1521,8 @@ code block
 <p>A template system is used by <code>md2boook</code>, and allow inserting variables, and special html elements. The variables names must be writen like this : <code>{</code> <code>{</code> <code>variable_name</code> <code>}</code> <code>}</code>.</p>
 <ul>
 <li><strong>Date</strong> : 13/10/2021</li>
-<li><strong>Datetime</strong> : 13/10/2021 09:25:38</li>
-<li><strong>Time</strong> : 09:25:38</li>
+<li><strong>Datetime</strong> : 13/10/2021 09:25:34</li>
+<li><strong>Time</strong> : 09:25:34</li>
 <li><strong>Hour</strong> : 09:25</li>
 </ul>
 <h2 id="counters">Counters</h2>
@@ -1502,7 +1536,7 @@ code block
 <h2 id="variables">Variables</h2>
 <p>You can defines a variable using <code>{</code> <code>%</code> <code>var_name:set:value</code> <code>%</code> <code>}</code>. In this example, we will use is to store a name with <code>{</code> <code>%</code> <code>name1:set:The Great Warrior Kron</code> <code>%</code> <code>}</code>. </p>
 <p>It can then be used multiple times : <strong>The Great Warrior Kron</strong> is great, and The Great Warrior Kron is a warrior. And this paragraph doesn&rsquo;t even used the name of <em>The Great Warrior Kron</em>.</p>
-<p>All the variables defined in the configuration file can be used in the document : This document used the font opensans, with the theme github, and is writen by webalorn. The chapters are <code>book.md, next_chapter.md</code>. Keywords are not set in the configuration file : <code>None</code>.</p>
+<p>All the variables defined in the configuration file can be used in the document : This document used the font opensans, with the theme github, and is writen by webalorn. The chapters are <code>../reference/book.md</code>. Keywords are not set in the configuration file : <code>None</code>.</p>
 <p>You can use your own variables, by setting them under <code>variables</code> in the configuraiton file : This is a custom variable, and <code>item1, item2, item3</code>.</p>
 <h2 id="sep">Sep</h2>
 <p>It create a separation than can be customized with the configuration file.</p>
@@ -1518,28 +1552,28 @@ code block
 <p>Ut id tempor ut duis qui ut officia cillu. Consectetur sunt exercitation exercitation officia esse dolore laborum dolore cupidatat sed in sed magna enim nostrud velit dolor eu nisi adipisicing in elit dolor sit mollit anim labore. Cupidatat dolor ex excepteur aute officia nostrud ex culpa elit officia eiusmod nisi sint amet excepteur deserunt in dolore est sint.</p>
 <h2 id="include">Include</h2>
 <p>We can include a file multiple time. This template is useful for inserting small blocks without copy-pasting. But we recommend using the chapters to split your text into multiple main files.</p>
-<p>This is an included document. It can use templates : written by webalorn.</p>
-<p>This is an included document. It can use templates : written by webalorn.</p>
+<p>This is an included document in the document showing the theme github. It can use templates : written by webalorn.</p>
+<p>This is an included document in the document showing the theme github. It can use templates : written by webalorn.</p>
 <h2 id="font-size-and-color">Font, size and color</h2>
 <p>I want to use a more funny font. The text will now use the <code>calligraffiti</code> font. Do not insert templates to change the font, the color or the size in the middle of a paragraph, it can cause bugs. Use pure html if you really want to do it. Font template must be used on a line without leading or trailing spaces and without any other template, include font templates.</p>
-<style>#ojdsoghbvbudroa { display : none; }#ojdsoghbvbudroa ~ * { font-family : calligraffiti; }</style>
-<div id='ojdsoghbvbudroa'></div>
+<style>#pngoxibkgcgzchw { display : none; }#pngoxibkgcgzchw ~ * { font-family : calligraffiti; }</style>
+<div id='pngoxibkgcgzchw'></div>
 
 <p>Wow, this paragraph uses <code>calligraffiti</code> ! Now I can change the color.</p>
-<style>#cjlottmnybjuyzz { display : none; }#cjlottmnybjuyzz ~ * { color : #031594; }</style>
-<div id='cjlottmnybjuyzz'></div>
+<style>#jmnekjiernhudsn { display : none; }#jmnekjiernhudsn ~ * { color : #031594; }</style>
+<div id='jmnekjiernhudsn'></div>
 
 <p>This text is now in blue. But I can make it bigger.</p>
-<style>#hzvropzdxiqacdr { display : none; }#hzvropzdxiqacdr ~ * { font-size : 2em; }</style>
-<div id='hzvropzdxiqacdr'></div>
+<style>#vqmpgvnievkkhsr { display : none; }#vqmpgvnievkkhsr ~ * { font-size : 2em; }</style>
+<div id='vqmpgvnievkkhsr'></div>
 
 <p>This is a bigger text, indeed. But before going to the next section, I will reset all the text properties.</p>
-<style>#iipuwddopgzbudb { display : none; }#iipuwddopgzbudb ~ * { font-family : inherit; }</style>
-<div id='iipuwddopgzbudb'></div>
-<style>#ekdbtmefsqdywtv { display : none; }#ekdbtmefsqdywtv ~ * { color : inherit; }</style>
-<div id='ekdbtmefsqdywtv'></div>
-<style>#xhmdxkigkhicdki { display : none; }#xhmdxkigkhicdki ~ * { font-size : inherit; }</style>
-<div id='xhmdxkigkhicdki'></div>
+<style>#efhxjskbkhcdfol { display : none; }#efhxjskbkhcdfol ~ * { font-family : inherit; }</style>
+<div id='efhxjskbkhcdfol'></div>
+<style>#lyaxcpadbatyysw { display : none; }#lyaxcpadbatyysw ~ * { color : inherit; }</style>
+<div id='lyaxcpadbatyysw'></div>
+<style>#qqqefxqigxlpzrj { display : none; }#qqqefxqigxlpzrj ~ * { font-size : inherit; }</style>
+<div id='qqqefxqigxlpzrj'></div>
 
 <h2 id="conditions">Conditions</h2>
 <p>This code will display the subtitle only if it extists : .</p>
@@ -1547,7 +1581,5 @@ code block
 <li>2 + 2 = 2 ? </li>
 <li>2 + 2 = 4 ?  OUI ! : else : Non&hellip;</li>
 </ul>
-<h1 id="second-markdown-document">Second markdown document</h1>
-<p>This document is merged with the first one.</p>
 </body>
 </html>
