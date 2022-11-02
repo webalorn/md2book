@@ -87,9 +87,13 @@ Content Cell  | Content Cell
 
 You can insert $inline-latex$ inside the text : $3+4=5=\sum_{i=0}^4 \frac{1}{2}\times 2$. For bigger equations, math blocks can be used :
 
-$$$
+$$
 	\frac{1}{\Gamma(s)}\int_{0}^{\infty}\frac{u^{s-1}}{e^{u}-1}\mathrm{d}u
-$$$
+$$
+
+### LaTeX aliases
+
+This is a default alias: $\O$. Default aliases can be disabled. But this is using a custom alias set in the `aliases-latex.yml` file: $\then$.
 
 # Templates
 

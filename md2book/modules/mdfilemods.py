@@ -5,8 +5,8 @@ from .base import BaseModule
 from md2book.config import *
 from md2book.templates import TemplateFiller
 from md2book.formats.mdhtml import extract_toc
-from md2book.util.exceptions import SimpleWarning
-from md2book.util.common import download_url
+from md2book.util.exceptions import SimpleWarning, ConfigError
+from md2book.util.common import download_url, load_yaml_file
 
 class MetadataModule(BaseModule):
 	NAME = 'metadata'
@@ -126,7 +126,7 @@ class HtmlBlocksModule(BaseModule):
 	def svg_inserter(self, match):
 		path = match.group(2)
 		if path.startswith('http://') or path.startswith('https://'):
-			return math.group(1)
+			return match.group(1)
 		with open(str(path)) as f:
 			xml = f.readlines()[2:]
 		xml = ''.join(xml)
@@ -142,14 +142,10 @@ class LatexModule(BaseModule):
 	# IMAGE_TEMPLATE = '![]({url})'
 	IMAGE_INLINE = '<img src="{}" style="width:{}; height: {};" />'
 	IMAGE_BLOCK = '<p class="centerblock"><img src="{}" style="width:{}; height: {};" /></p>'
-	ALIASES = {
-		r'\\R' : r'\\mathbb{R}',
-		r'\\infin' : r'\\infty',
-	}
 
 	def __init__(self, conf, target):
 		super().__init__(conf, target)
-		self.enabled = bool(self.conf)
+		self.enabled = self.conf['enable']
 		self.download_status = None
 		self.equations_names = set()
 		self.relative_path = target.format in ['md']
@@ -172,11 +168,29 @@ class LatexModule(BaseModule):
 		for file in self.download_dir.iterdir():
 			if not file.name in self.equations_names:
 				file.unlink()
+	
+	def load_aliases(self, filepath):
+		aliases = load_yaml_file(filepath)
+		if type(aliases) is not dict:
+			raise ConfigError("LaTeX alias file should be a dict", where=filepath)
+		for key, val in aliases.items():
+			if type(key) is not str or type(val) is not str:
+				raise ConfigError("LaTeX aliases should be strings", where=filepath)
+		
+		return list(aliases.items())
 
 	def preprocess_text(self, texcode):
 		a = texcode
-		for alias in self.ALIASES:
-			texcode = re.sub(alias + r'(?=([^a-zA-Z\d]|$))', self.ALIASES[alias], texcode)
+		aliases = []
+		if self.conf['aliases_file']:
+			aliases.extend(self.load_aliases(self.conf['aliases_file']))
+		if self.conf['default_aliases']:
+			aliases.extend(self.load_aliases(DATA_PATH / 'default_aliases.yml'))
+		
+		for alias_from, alias_to in aliases:
+			alias_from = alias_from.replace('\\', '\\\\')
+			alias_to = alias_to.replace('\\', '\\\\')
+			texcode = re.sub(alias_from + r'(?=([^a-zA-Z\d]|$))', alias_to, texcode)
 		return texcode
 
 	def get_inserter(self, argname):
@@ -193,7 +207,7 @@ class LatexModule(BaseModule):
 			path = self.download_dir / (filename + '.svg')
 			if not path.resolve().is_file():
 				if self.download_status is None:
-					print("Download LaTeX images from math.now.sh...")
+					print("Download LaTeX images from math.vercel.app...")
 				result_path = download_url(url, path=str(path))
 				if result_path is None:
 					self.download_status = 'offline'
@@ -214,7 +228,7 @@ class LatexModule(BaseModule):
 			code.code = re.sub(self.TEX_INLINE, self.get_inserter('inline'), code.code)
 
 			if self.download_status == 'offline':
-				SimpleWarning('The math.now.sh API is not accessible, LaTeX may not be rendered').show()
+				SimpleWarning('The math.vercel.app API is not accessible, LaTeX may not be rendered').show()
 			elif self.download_status == 'ok':
 				print("LaTeX download complete")
 			if self.download_status != 'offline':

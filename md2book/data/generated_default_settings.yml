@@ -17,7 +17,10 @@ default_target:
     remove: false
   inherit: []
   js: []
-  latex: true
+  latex:
+    aliases_file: null
+    default_aliases: true
+    enable: true
   metadata:
     abstract: null
     author: null

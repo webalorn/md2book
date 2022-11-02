@@ -66,6 +66,14 @@ def load_yaml_file(filepath, default=None):
         with open(filepath, "r", encoding="utf-8") as f:
             try:
                 return yaml.load(f, Loader=yaml.FullLoader)
+            except yaml.error.YAMLError as e:
+                details = []
+                for arg in e.args:
+                    if isinstance(arg, yaml.error.Mark):
+                        arg = f'(line {arg.line}, column {arg.column})'
+                    details.append(arg)
+                details = ' '.join(details)
+                raise ConfigError(f"Invalid yaml format. {details}", filepath)
             except:
                 raise ConfigError("Invalid yaml format", filepath)
     except FileNotFoundError:

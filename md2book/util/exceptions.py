@@ -25,10 +25,10 @@ class BaseError(Exception):
 # -------------------- CUSTOM EXCEPTIONS -------------------- #
 
 class ModuleImportError(BaseError):
-	TEMPLATE = "{red}[ERROR] The following python module is not installed : {name}"
+	TEMPLATE = "{red}[ERROR] The following python module is not installed: {name}"
 
 class MissingDependencyError(BaseError):
-	TEMPLATE = "{red}[ERROR] The following command is required but has not been found : {name}"
+	TEMPLATE = "{red}[ERROR] The following command is required but has not been found: {name}"
 
 class TemplateError(BaseError):
 	TEMPLATE = "{red}[ERROR IN TEMPLATE] {white}{error}"
@@ -60,7 +60,7 @@ class BaseWarning(BaseError):
 		print(str(self))
 
 class SimpleWarning(BaseWarning):
-	TEMPLATE = "{yellow}[WARNING] {path} : {message}"
+	TEMPLATE = "{yellow}[WARNING] {path}: {message}"
 
 	def __init__(self, message, path=''):
 		super().__init__(message=str(message), path=str(path))

@@ -68,7 +68,11 @@ DEFAULT_TARGET = {
 
 	# Modules : 
 	'sep' : '✶   ✶   ✶',
-	'latex' : True,
+	'latex' : {
+		'enable': True,
+		'aliases_file': None,
+		'default_aliases': True,
+	},
 	'titlepage' : {
 		'enable' : True,
 		'image' : None,

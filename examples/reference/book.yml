@@ -17,6 +17,9 @@ targets:
     font:
       include:
         - calligraffiti
+    
+    latex:
+      aliases_file: aliases-latex.yml
 
     metadata:
       abstract : "This document contains examples for many of the functionalities of md2book.\n
